@@ -37,7 +37,7 @@ const Home = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to the JLPT App</Text>
       <View style={styles.buttonContainer}>
-        <Link to="/vocabularytest" style={styles.buttonShape} >
+        <Link to="/vocabularytestmenu" style={styles.buttonShape} >
             <Text style={styles.buttonText}>Vocabulary Test</Text>
         </Link>
       </View>

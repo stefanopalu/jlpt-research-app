@@ -5,7 +5,8 @@ import { Route, Routes, Navigate } from 'react-router-native';
 import AppBar from './AppBar'
 import SignIn from './SignIn'
 import Home from './Home';
-import VocabularyTest from './VocabularyTest';
+import VocabularyTestMenu from './vocabularytestcomponents/VocabularyTestMenu';
+import VocabularyTest from './vocabularytestcomponents/VocabularyTest';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,6 +21,7 @@ const Main = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/vocabularytestmenu" element={<VocabularyTestMenu />} />
         <Route path="/vocabularytest" element={<VocabularyTest />} />
       </Routes>
     </SafeAreaView>

@@ -20,7 +20,11 @@ const resolvers = {
 
   Query: {
     allWords: async (root, args ) => {
-      const words = await Word.find();
+      const filter = {}
+      if (args.level) {
+        filter.level = args.level;
+      }
+      const words = await Word.find(filter);
       return words.map(word => ({
         ...word.toObject(),
         id: word._id.toString(),

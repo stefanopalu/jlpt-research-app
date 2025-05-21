@@ -32,7 +32,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    allWords: [Word!]!
+    allWords(level: String): [Word!]!
     me: User
     getUserProgress(userId: ID!): [UserProgress!]!
   }
