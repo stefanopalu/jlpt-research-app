@@ -18,6 +18,12 @@ const resolvers = {
     },
   },
 
+  Question: {
+    id: (parent) => {
+      return parent._id ? parent._id.toString() : null;
+    },
+  },
+
   Query: {
     allWords: async (root, args ) => {
       const filter = {}
@@ -28,6 +34,20 @@ const resolvers = {
       return words.map(word => ({
         ...word.toObject(),
         id: word._id.toString(),
+      }));
+    },
+    allQuestions: async (root, args) => {
+      const { level, type } = args
+      const filter = {
+        level,
+        type
+      };
+
+      const questions = await Question.find(filter);
+
+      return questions.map(q => ({
+        ...q.toObject(),
+        id: q._id.toString(),
       }));
     },
     me: (root, args, context) => {

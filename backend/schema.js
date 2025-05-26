@@ -10,6 +10,15 @@ const typeDefs = gql`
     type: String!
   }
 
+  type Question {
+    id: ID!
+    questionText: String!
+    answers: [String!]!
+    correctAnswers: Int!
+    level: String!
+    type: String!
+  }
+
   type User {
     username: String!
     id: ID!
@@ -33,6 +42,7 @@ const typeDefs = gql`
 
   type Query {
     allWords(level: String): [Word!]!
+    allQuestions(level: String!, type: String!): [Question!]!
     me: User
     getUserProgress(userId: ID!): [UserProgress!]!
   }

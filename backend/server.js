@@ -38,7 +38,7 @@ mongoose.connect(MONGODB_URI)
     const httpServer = http.createServer(app)
 
     try {
-      const words = await Word.find({})
+      const words = await Words.find({})
       console.log('Words fetched from MongoDB:', words)
     } catch (error) {
       console.error('Error fetching words from MongoDB:', error)
