@@ -14,7 +14,7 @@ const typeDefs = gql`
     id: ID!
     questionText: String!
     answers: [String!]!
-    correctAnswers: Int!
+    correctAnswer: Int!
     level: String!
     type: String!
   }
@@ -41,12 +41,13 @@ const typeDefs = gql`
   }
 
   type Query {
-    allWords(level: String): [Word!]!
+    allWords(level: String!): [Word!]!
     allQuestions(level: String!, type: String!): [Question!]!
     me: User
     getUserProgress(userId: ID!): [UserProgress!]!
   }
 
+  
   type Mutation {
     login(
         username: String!

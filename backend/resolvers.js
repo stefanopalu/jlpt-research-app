@@ -1,5 +1,6 @@
 const Word = require('./models/word');
 const User = require('./models/user');
+const Question = require('./models/question')
 const UserProgress = require('./models/userProgress');
 const jwt = require('jsonwebtoken');
 

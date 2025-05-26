@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Link } from 'react-router-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { Link, useNavigate } from 'react-router-native';
 import theme from '../../theme';
 
 const styles = StyleSheet.create({
@@ -33,14 +33,65 @@ const styles = StyleSheet.create({
 });
 
 const Home = () => {
+  const navigate = useNavigate();
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to the JLPT App</Text>
       <View style={styles.buttonContainer}>
-        <Link to="/vocabularytestmenu" style={styles.buttonShape} >
-            <Text style={styles.buttonText}>Vocabulary Test</Text>
-        </Link>
+        <Pressable
+          onPress={() => navigate('/levelmenu?exerciseType=vocabulary')}
+          style={styles.buttonShape}
+        >
+          <Text style={styles.buttonText}>Vocabulary Flashcards</Text>
+        </Pressable>
       </View>
+
+      <View style={styles.buttonContainer}>
+        <Pressable
+          onPress={() => navigate('/levelmenu?exerciseType=kanjireading')}
+          style={styles.buttonShape}
+        >
+          <Text style={styles.buttonText}>Kanji Reading</Text>
+        </Pressable>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <Pressable
+          onPress={() => navigate('/levelmenu?exerciseType=orthography')}
+          style={styles.buttonShape}
+        >
+          <Text style={styles.buttonText}>Orthography</Text>
+        </Pressable>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <Pressable
+          onPress={() => navigate('/levelmenu?exerciseType=contextexpression')}
+          style={styles.buttonShape}
+        >
+          <Text style={styles.buttonText}>Contextually-defined expressions</Text>
+        </Pressable>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <Pressable
+          onPress={() => navigate('/levelmenu?exerciseType=paraphrases')}
+          style={styles.buttonShape}
+        >
+          <Text style={styles.buttonText}>Paraphrases</Text>
+        </Pressable>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <Pressable
+          onPress={() => navigate('/levelmenu?exerciseType=usage')}
+          style={styles.buttonShape}
+        >
+          <Text style={styles.buttonText}>Usage</Text>
+        </Pressable>
+      </View>
+
     </View>
   );
 };

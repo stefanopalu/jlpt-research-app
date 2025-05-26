@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { useNavigate } from 'react-router-native';
-import theme from '../../../theme';
-import VocabularyTest from './VocabularyTest';
+import { useNavigate, useLocation } from 'react-router-native';
+import theme from '../../theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -36,16 +35,23 @@ const styles = StyleSheet.create({
 
 const levels = ['N5', 'N4', 'N3', 'N2', 'N1'];
 
-const VocabularyTestMenu = () => {
+const LevelMenu = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const exerciseType = params.get('exerciseType') || 'vocabulary';
 
   const handleSelectLevel = (level) => {
-    navigate(`/vocabularytest?level=${level}`);
+    if (exerciseType === 'vocabulary') {
+        navigate(`/vocabularytest?level=${level}`);
+    } else {
+        navigate(`/questions?exerciseType=${exerciseType}&level=${level}`);
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Select Your JLPT Level</Text>
+      <Text style={styles.title}>Select Your JLPT Level for {exerciseType}</Text>
       {levels.map((level) => (
         <View key={level} style={styles.buttonContainer}>
           <Pressable
@@ -60,4 +66,4 @@ const VocabularyTestMenu = () => {
   );
 };
 
-export default VocabularyTestMenu;
+export default LevelMenu;

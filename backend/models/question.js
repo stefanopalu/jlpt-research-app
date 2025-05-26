@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
     type: [String],
     required: true,
   },
-  correctAnswers: {
+  correctAnswer: {
     type: Number,
     required: true,
   },

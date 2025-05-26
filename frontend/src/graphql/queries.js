@@ -1,12 +1,25 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL_WORDS = gql`
-  query GetAllWords($level: String) {
+  query GetAllWords($level: String!) {
     allWords(level: $level) {
       id
       kanji
       hiragana
       english
+      level
+      type
+    }
+  }
+`;
+
+export const GET_ALL_QUESTIONS = gql`
+  query GetAllQuestions($level: String!, $type: String!) {
+    allQuestions(level: $level, type: $type) {
+      id
+      questionText
+      answers
+      correctAnswer
       level
       type
     }
