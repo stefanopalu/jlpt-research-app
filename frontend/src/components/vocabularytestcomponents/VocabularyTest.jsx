@@ -2,11 +2,12 @@ import React from "react";
 import { useState } from "react";
 import { KeyboardAvoidingView, Platform, View, TextInput, Pressable, StyleSheet, Text, ScrollView} from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
-import { useWords } from "../../hooks/useWords";
+import { useStudySession } from "../../hooks/useStudySession";
 import { useMutation } from "@apollo/client";
-import { UPDATE_USER_PROGRESS } from "../../graphql/mutations";
+import { UPDATE_USER_VOCABULARY_PROGRESS } from "../../graphql/mutations";
 import { useDebounce } from 'use-debounce';
 import { useLocation } from 'react-router-native';
+import { romajiToHiragana } from "../../utils/romajiToHiragana";
 
 import WordCard from '../study/WordCard'
 import theme from '../../../theme';
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-    kanjitext: {
+  kanjitext: {
     fontSize: 60,
     fontWeight: 'bold',
     color: 'white',
@@ -61,132 +62,251 @@ const styles = StyleSheet.create({
   inputWrong: {
     color: '#dc3545',     // red
   },
+  progressContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#f8f9fa',
+  },
+  progressText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  newWordBadge: {
+    backgroundColor: '#007bff',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  newWordText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
 });
 
 const VocabularyTest = () => {
-    const location = useLocation();
-    const params = new URLSearchParams(location.search);
-    const level = params.get('level');
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const level = params.get('level');
 
-    const { words, loading, error } = useWords(level);
-    const [index, setIndex] = useState(0);
-    const [step, setStep] = useState('english')
-    const [answer, setAnswer] = useState('');
-    const [result, setResult] = useState(null)
-    const [showWordCard, setShowWordCard] = useState(false);
+  const { words, loading, error, refetch } = useStudySession(level, 100);
+  const [index, setIndex] = useState(0);
+  const [step, setStep] = useState('english')
+  const [answer, setAnswer] = useState('');
+  const [rawAnswer, setRawAnswer] = useState(''); // Store the raw romaji input
+  const [result, setResult] = useState(null)
+  const [showWordCard, setShowWordCard] = useState(false);
+  const [completedWords, setCompletedWords] = useState(0);
+  
+  // Track if progress has been updated for current word
+  const [progressUpdated, setProgressUpdated] = useState(false);
 
-    const [debouncedAnswer] = useDebounce(answer, 500);
-    const [updateUserProgress] = useMutation(UPDATE_USER_PROGRESS);
+  const [debouncedAnswer] = useDebounce(answer, 500);
+  const [updateUserVocabularyProgress] = useMutation(UPDATE_USER_VOCABULARY_PROGRESS);
 
-    if (loading) return <Text>Loading words...</Text>;
-    if (error) return <Text>Error loading words.</Text>;
+  const handleInputChange = (text) => {
+    if (step === 'hiragana') {
+      // For hiragana step, convert romaji to hiragana
+      setRawAnswer(text);
+      setAnswer(romajiToHiragana(text));
+    } else {
+      // For English step, use text as-is
+      setAnswer(text);
+      setRawAnswer(text);
+    }
+  };
 
-    const currentWord = words[index];
+  if (loading) return <Text>Loading study session...</Text>;
+  if (error) return <Text>Error loading study session: {error.message}</Text>;
+  if (!words || words.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text>No words available for study. Great job - you're up to date!</Text>
+        <Pressable onPress={() => refetch()}>
+          <Text>Refresh</Text>
+        </Pressable>
+      </View>
+    );
+  }
 
-    const handleSubmit = async () => {
-      if (step === 'english') {
-        const isCorrectEnglish = currentWord.english.some(
-          e => e.toLowerCase() === debouncedAnswer.trim().toLowerCase()
-        );
-        setResult(isCorrectEnglish ? 'correct' : 'wrong');
+  const currentWord = words[index];
 
-        if (isCorrectEnglish) {
-          // reset input and result and move to hiragana step on correct English answer
-          setAnswer('');
-          setResult(null);
-          setStep('hiragana');
-        }
-        
+  const handleSubmit = async () => {
+    if (step === 'english') {
+      const isCorrectEnglish = currentWord.english.some(
+        e => e.toLowerCase() === debouncedAnswer.trim().toLowerCase()
+      );
       
-      } else if (step === 'hiragana') {
-        const isCorrectHiragana = currentWord.hiragana === debouncedAnswer.trim();
-        setResult(isCorrectHiragana ? 'correct' : 'wrong');
+      setResult(isCorrectEnglish ? 'correct' : 'wrong');
 
-        if (isCorrectHiragana) {
+      if (isCorrectEnglish) {
+        // English correct - move to hiragana step
+        setAnswer('');
+        setRawAnswer('');
+        setResult(null);
+        setStep('hiragana');
+      } else {
+        // English wrong - record failure immediately
+        if (!progressUpdated) {
           try {
-            await updateUserProgress({
+            await updateUserVocabularyProgress({
+              variables: {
+                wordId: currentWord.id,
+                success: false,
+              },
+            });
+            setProgressUpdated(true);
+            console.log('Progress updated: failure (English wrong)');
+          } catch (err) {
+            console.error('Mutation error:', err.message);
+          }
+        }
+      }
+      
+    } else if (step === 'hiragana') {
+      const isCorrectHiragana = currentWord.hiragana === debouncedAnswer.trim();
+      setResult(isCorrectHiragana ? 'correct' : 'wrong');
+
+      if (isCorrectHiragana) {
+        // Hiragana correct - check if we can record success
+        if (!progressUpdated) {
+          // No previous mistakes - record success
+          try {
+            await updateUserVocabularyProgress({
               variables: {
                 wordId: currentWord.id,
                 success: true,
               },
             });
-            console.log('Mutation success!');
+            console.log('Progress updated: success (both correct)');
           } catch (err) {
             console.error('Mutation error:', err.message);
           }
-          // move to next word and reset to English step
-          setIndex((prev) => (prev + 1) % words.length);
-          setStep('english');
-          setAnswer('');
-          setResult(null);
+        }
+        
+        // Move to next word (regardless of whether success was recorded)
+        moveToNextWord();
+        
+      } else {
+        // Hiragana wrong - record failure if not already done
+        if (!progressUpdated) {
+          try {
+            await updateUserVocabularyProgress({
+              variables: {
+                wordId: currentWord.id,
+                success: false,
+              },
+            });
+            setProgressUpdated(true);
+            console.log('Progress updated: failure (Hiragana wrong)');
+          } catch (err) {
+            console.error('Mutation error:', err.message);
+          }
         }
       }
-    };
+    }
+  };
 
-    const handleNext = () => {
-      // On clicking "next" after wrong answer, reset input & result to allow retry
+  const moveToNextWord = () => {
+    setCompletedWords(prev => prev + 1);
+    
+    if (index + 1 < words.length) {
+      setIndex(prev => prev + 1);
+      setStep('english');
+      // Reset state for new word
       setAnswer('');
+      setRawAnswer('');
       setResult(null);
       setShowWordCard(false);
-    };
+      setProgressUpdated(false);
+    } else {
+      // Finished all words
+      alert(`Session complete! You studied ${completedWords + 1} words.`);
+    }
+  };
 
-    const isInputEditable = result !== 'wrong';
+  const handleNext = () => {
+    // On clicking "next" after wrong answer, reset input & result to allow retry
+    setAnswer('');
+    setRawAnswer('');
+    setResult(null);
+    setShowWordCard(false);
+  };
 
-    return (
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-      >
-      <View style={styles.container}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <View style={styles.wordcontainer}>
-              <Text style={styles.kanjitext}> {currentWord.kanji} </Text>
-            </View>
-            <View style={styles.labelContainer}>
-              <Text style={styles.labelText}>
-                {step === 'english' ? 'English meaning:' : 'Hiragana reading:'}
-              </Text>
-            </View>
-            <View style={styles.inputRow}>
-              {result === 'wrong' && (
-                <Pressable style={styles.iconButton} onPress={() => setShowWordCard(true)}>
-                  <FontAwesome name="info-circle" size={24} color={theme.colors.primary} />
-                </Pressable>
-              )}
-              <TextInput 
-                  editable={isInputEditable}
-                  autoCorrect={false}   
-                  autoComplete="off"
-                  spellCheck={false}
-                  keyboardType="default"
-                  style={[
-                    styles.input,
-                    result === 'correct' ? styles.inputCorrect :
-                    result === 'wrong' ? styles.inputWrong : null
-                  ]}
-                  value={answer}
-                  onChangeText={setAnswer}
-                  placeholder={step === 'english' ? "Enter the English meaning" : "Enter the hiragana reading"}
-              />
-              {result === 'wrong' ? (
-                <Pressable style={styles.iconButton} onPress={handleNext}>
-                  <FontAwesome name="arrow-right" size={24} color={theme.colors.primary} />
-                </Pressable>
-              ) : (
-                <Pressable style={styles.iconButton} onPress={handleSubmit}>
-                  <FontAwesome name="check" size={24} color={theme.colors.primary} />
-                </Pressable>
-              )}
-            </View>
+  const isInputEditable = result !== 'wrong';
 
-            {showWordCard && (
-              <View style={styles.solutionContainer}>
-                <WordCard word={currentWord} />
-              </View>
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+    <View style={styles.container}>
+        {/* Progress indicator */}
+        <View style={styles.progressContainer}>
+          <Text style={styles.progressText}>
+            {index + 1} / {words.length} ({completedWords} completed)
+          </Text>
+          {currentWord.isNew && (
+            <View style={styles.newWordBadge}>
+              <Text style={styles.newWordText}>NEW</Text>
+            </View>
+          )}
+          <Text style={styles.progressText}>
+            SRS Level: {currentWord.srsLevel || 0}
+          </Text>
+        </View>
+
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={styles.wordcontainer}>
+            <Text style={styles.kanjitext}> {currentWord.kanji} </Text>
+          </View>
+          <View style={styles.labelContainer}>
+            <Text style={styles.labelText}>
+              {step === 'english' ? 'English meaning:' : 'Hiragana reading:'}
+            </Text>
+          </View>
+          <View style={styles.inputRow}>
+            {result === 'wrong' && (
+              <Pressable style={styles.iconButton} onPress={() => setShowWordCard(true)}>
+                <FontAwesome name="info-circle" size={24} color={theme.colors.primary} />
+              </Pressable>
             )}
+            <TextInput 
+                editable={isInputEditable}
+                autoCorrect={false}   
+                autoComplete="off"
+                spellCheck={false}
+                keyboardType={step === 'hiragana' ? 'ascii-capable' : 'default'}
+                style={[
+                  styles.input,
+                  result === 'correct' ? styles.inputCorrect :
+                  result === 'wrong' ? styles.inputWrong : null
+                ]}
+                value={answer}
+                onChangeText={handleInputChange}
+                placeholder="Your response"
+            />
+            {result === 'wrong' ? (
+              <Pressable style={styles.iconButton} onPress={handleNext}>
+                <FontAwesome name="arrow-right" size={24} color={theme.colors.primary} />
+              </Pressable>
+            ) : (
+              <Pressable style={styles.iconButton} onPress={handleSubmit}>
+                <FontAwesome name="check" size={24} color={theme.colors.primary} />
+              </Pressable>
+            )}
+          </View>
 
-          </ScrollView>
-      </View>
+          {showWordCard && (
+            <View style={styles.solutionContainer}>
+              <WordCard word={currentWord} />
+            </View>
+          )}
+
+        </ScrollView>
+    </View>
     </KeyboardAvoidingView>
   );
 };
