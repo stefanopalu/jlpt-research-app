@@ -1,6 +1,7 @@
 const Word = require('./models/word');
 const User = require('./models/user');
 const Question = require('./models/question')
+const ReadingContent = require('./models/readingContent')
 const UserVocabularyProgress = require('./models/userVocabularyProgress');
 const jwt = require('jsonwebtoken');
 
@@ -29,6 +30,12 @@ const resolvers = {
     },
   },
 
+  ReadingContent: {
+    id: (parent) => {
+      return parent._id ? parent._id.toString() : null;
+    }
+  },
+
   UserVocabularyProgress: {
     id: (parent) => {
       return parent._id ? parent._id.toString() : null;
@@ -50,17 +57,17 @@ const resolvers = {
 
     allQuestions: async (root, args) => {
       const { level, type } = args
-      const filter = {
-        level,
-        type
-      };
+      const filter = { level, type };
 
-      const questions = await Question.find(filter);
+      const questions = await Question.find(filter)
+      
+      // For each question call the method to get the populated data 
+      const populatedQuestions = await Promise.all(
+        questions.map(q => q.populateByNames())
+      );
 
-      return questions.map(q => ({
-        ...q.toObject(),
-        id: q._id.toString(),
-      }));
+      // directly return populatedQuestions (plain objects with the needed data about words and grammar points)
+      return populatedQuestions; 
     },
 
     me: (root, args, context) => {

@@ -8,6 +8,8 @@ const jwt = require('jsonwebtoken');
 const Word = require('./models/word')
 const User = require('./models/user')
 const Question = require('./models/question')
+const GrammarPoint = require('./models/grammarPoint');
+const ReadingContent = require('./models/readingContent');
 
 const { WebSocketServer } = require('ws')
 const { useServer } = require('graphql-ws/lib/use/ws')
@@ -39,7 +41,7 @@ mongoose.connect(MONGODB_URI)
     const httpServer = http.createServer(app)
 
     try {
-      const questions = await Question.find({ level: "N4", type: "kanjireading" });
+      const questions = await Question.find({ level: "N4", type: "textgrammar" });
       console.log('Questions fetched from MongoDB:', questions);
     } catch (error) {
       console.error('Error fetching questions from MongoDB:', error);

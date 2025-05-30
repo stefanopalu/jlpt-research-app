@@ -17,6 +17,9 @@ const typeDefs = gql`
     correctAnswer: Int!
     level: String!
     type: String!
+    words: [Word!]
+    grammarPoints: [GrammarPoint!]
+    readingContent: ReadingContent
   }
 
   type User {
@@ -43,6 +46,21 @@ const typeDefs = gql`
     successCount: Int!
     failureCount: Int!
     isNew: Boolean!
+  }
+
+  type GrammarPoint {
+    id: ID!
+    name: String!
+    explanation: String
+    structure: String
+    examples: [String!]
+  }
+
+  type ReadingContent {
+    id: ID!
+    content: String!
+    contentType: String!
+    level: String!
   }
 
   type LoginResponse {

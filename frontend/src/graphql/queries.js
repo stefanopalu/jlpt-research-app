@@ -30,8 +30,25 @@ export const GET_ALL_QUESTIONS = gql`
       correctAnswer
       level
       type
+      words {
+        ...WordFields
+      }
+      grammarPoints {
+        id
+        name
+        explanation
+        structure
+        examples
+      }
+      readingContent {
+        id
+        content
+        contentType
+        level
+      }
     }
   }
+  ${WORD_FRAGMENT}
 `;
 
 export const GET_CURRENT_USER = gql`

@@ -1,13 +1,9 @@
-import React from 'react';
 import Markdown from 'react-native-markdown-display';
 import { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useLocation } from 'react-router-native';
 import { useQuestions } from "../../hooks/useQuestions";
-import { useMutation } from "@apollo/client";
-import { UPDATE_USER_PROGRESS } from "../../graphql/mutations";
 import theme from '../../../theme';
-
 
 const styles = StyleSheet.create({
   container: {
@@ -19,7 +15,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-　questionText: {
+  questionText: {
     fontSize: 20,
     color: 'white',
     marginBottom: 8,
@@ -28,8 +24,8 @@ const styles = StyleSheet.create({
   },
   answersContainer: {
     padding: 10,
-    gap: 10, 
-    },
+    gap: 10,
+  },
   answerButton: {
     backgroundColor: 'white',
     padding: 12,
@@ -52,11 +48,17 @@ const MultipleChoiceQuestions = () => {
   const type = params.get('exerciseType');
   const level = params.get('level');
 
+  console.log('URL params:', { type, level });
+
   const { questions, loading, error } = useQuestions(level, type);
+
+  console.log('Hook results:', { questions, loading, error });
+  
   const [index, setIndex] = useState(0);
 
-  const [updateUserProgress] = useMutation(UPDATE_USER_PROGRESS);
-  
+  const READING_CONTENT_TYPES = ['textgrammar', 'shortpass', 'mediumpass', 'inforetrieval'];
+  const needsReadingContent = READING_CONTENT_TYPES.includes(type);
+
   if (loading) return <Text>Loading questions...</Text>;
   if (error) return <Text>Error loading questions: {error.message}</Text>;
   
@@ -76,15 +78,16 @@ const MultipleChoiceQuestions = () => {
     <View style={styles.container}>
       <View style={styles.questionContainer}>
         <Markdown style={{ body: styles.questionText }}>
-            {currentQuestion.questionText}
+          {currentQuestion.questionText}
         </Markdown>
       </View>
+      
       <View style={styles.answersContainer}>
-      {currentQuestion.answers.map((answer, i) => (
-        <TouchableOpacity key={i} style={styles.answerButton} onPress={() => handleAnswer(i)}>
-          <Text style={styles.answerText}>{answer}</Text>
-        </TouchableOpacity>
-      ))}
+        {currentQuestion.answers.map((answer, i) => (
+          <TouchableOpacity key={i} style={styles.answerButton} onPress={() => handleAnswer(i)}>
+            <Text style={styles.answerText}>{answer}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );
