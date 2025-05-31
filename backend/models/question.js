@@ -35,7 +35,6 @@ const questionSchema = new mongoose.Schema({
   }
 })
 
-
 questionSchema.index({ type: 1, level: 1 });
 
 questionSchema.methods.populateByNames = async function() {

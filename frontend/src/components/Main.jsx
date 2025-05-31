@@ -7,7 +7,7 @@ import SignIn from './SignIn'
 import Home from './Home';
 import VocabularyTest from './testcomponents/VocabularyTest';
 import LevelMenu from './LevelMenu';
-import MultipleChoiceQuestions from './testcomponents/MultipleChoiceComponent';
+import QuestionManager from './testcomponents/QuestionManager';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,7 +24,7 @@ const Main = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/levelmenu" element={<LevelMenu />} />
         <Route path="/vocabularytest" element={<VocabularyTest />} />
-        <Route path="/questions" element={<MultipleChoiceQuestions />} />
+        <Route path="/questions" element={<QuestionManager />} />
       </Routes>
     </SafeAreaView>
   );

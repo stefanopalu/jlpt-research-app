@@ -101,6 +101,15 @@ const Home = () => {
         </Pressable>
       </View>
 
+      <View style={styles.buttonContainer}>
+        <Pressable
+          onPress={() => navigate('/levelmenu?exerciseType=shortpass')}
+          style={styles.buttonShape}
+        >
+          <Text style={styles.buttonText}>Short Passage</Text>
+        </Pressable>
+      </View>
+
     </View>
   );
 };
