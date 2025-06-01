@@ -1,83 +1,80 @@
-const { ApolloServer } = require('@apollo/server')
-const { expressMiddleware } = require('@apollo/server/express4')
-const { ApolloServerPluginDrainHttpServer } = require('@apollo/server/plugin/drainHttpServer')
-const { makeExecutableSchema } = require('@graphql-tools/schema')
-const mongoose = require('mongoose')
+const { ApolloServer } = require('@apollo/server');
+const { expressMiddleware } = require('@apollo/server/express4');
+const { ApolloServerPluginDrainHttpServer } = require('@apollo/server/plugin/drainHttpServer');
+const { makeExecutableSchema } = require('@graphql-tools/schema');
+const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
-const Word = require('./models/word')
-const User = require('./models/user')
-const Question = require('./models/question')
-const GrammarPoint = require('./models/grammarPoint');
-const ReadingContent = require('./models/readingContent');
+const User = require('./models/user');
+const Question = require('./models/question');
 
-const { WebSocketServer } = require('ws')
-const { useServer } = require('graphql-ws/lib/use/ws')
+const { WebSocketServer } = require('ws');
+const { useServer } = require('graphql-ws/lib/use/ws');
 
-const http = require('http')
-const express = require('express')
-const cors = require('cors')
+const http = require('http');
+const express = require('express');
+const cors = require('cors');
 
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
 
-require('dotenv').config()
+require('dotenv').config();
 
-const MONGODB_URI = process.env.MONGODB_URI
+const MONGODB_URI = process.env.MONGODB_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
 
-console.log('connecting to', MONGODB_URI)
+console.log('connecting to', MONGODB_URI);
 
 mongoose.connect(MONGODB_URI)
   .then(() => {
-    console.log('connected to MongoDB')
+    console.log('connected to MongoDB');
   })
   .catch((error) => {
-    console.log('error connection to MongoDB:', error.message)
-  })
+    console.log('error connection to MongoDB:', error.message);
+  });
 
-  const start = async () => {
-    const app = express()
-    const httpServer = http.createServer(app)
+const start = async () => {
+  const app = express();
+  const httpServer = http.createServer(app);
 
-    try {
-      const questions = await Question.find({ level: "N4", type: "textgrammar" });
-      console.log('Questions fetched from MongoDB:', questions);
-    } catch (error) {
-      console.error('Error fetching questions from MongoDB:', error);
-    }
+  try {
+    const questions = await Question.find({ level: 'N4', type: 'textgrammar' });
+    console.log('Questions fetched from MongoDB:', questions);
+  } catch (error) {
+    console.error('Error fetching questions from MongoDB:', error);
+  }
 
-    const wsServer = new WebSocketServer({
-      server: httpServer,
-      path: '/graphql',
-    })
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: '/graphql',
+  });
     
-    const schema = makeExecutableSchema({ typeDefs, resolvers })
-    const serverCleanup = useServer({ schema }, wsServer)
+  const schema = makeExecutableSchema({ typeDefs, resolvers });
+  const serverCleanup = useServer({ schema }, wsServer);
   
-    const server = new ApolloServer({
-      schema,
-      plugins: [
-        ApolloServerPluginDrainHttpServer({ httpServer }),
-        {
-          async serverWillStart() {
-            return {
-              async drainServer() {
-                await serverCleanup.dispose();
-              },
-            };
-          },
+  const server = new ApolloServer({
+    schema,
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose();
+            },
+          };
         },
-      ],
-    })
+      },
+    ],
+  });
   
-    await server.start()
+  await server.start();
   
-    app.use(
-      '/graphql',
-      cors(),
-      express.json(),
-      expressMiddleware(server, {
+  app.use(
+    '/graphql',
+    cors(),
+    express.json(),
+    expressMiddleware(server, {
       context: async ({ req }) => {
         const auth = req.headers.authorization || '';
         const token = auth.toLowerCase().startsWith('bearer ')
@@ -97,15 +94,15 @@ mongoose.connect(MONGODB_URI)
           console.error('Invalid token:', err.message);
           return { currentUser: null };
         }
-      }
+      },
     }),
-    )
+  );
   
-    const PORT = 4000
+  const PORT = 4000;
   
-    httpServer.listen(PORT, () =>
-      console.log(`Server is now running on http://localhost:${PORT}/graphql`)
-    )
-  }
+  httpServer.listen(PORT, () =>
+    console.log(`Server is now running on http://localhost:${PORT}/graphql`),
+  );
+};
   
-  start()
+start();

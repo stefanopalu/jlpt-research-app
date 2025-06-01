@@ -1,5 +1,4 @@
-const mongoose = require('mongoose')
-const uniqueValidator = require('mongoose-unique-validator')
+const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
   hiragana: {
@@ -22,10 +21,8 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
-})
+});
 
 schema.index({ kanji: 1, hiragana: 1 }, { unique: true });
 
-schema.plugin(uniqueValidator)
-
-module.exports = mongoose.model('Word', schema)
+module.exports = mongoose.model('Word', schema);

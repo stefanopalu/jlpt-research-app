@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const questionSchema = new mongoose.Schema({
   questionText: {
@@ -23,17 +23,17 @@ const questionSchema = new mongoose.Schema({
   },
   readingContentId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'ReadingContent'
+    ref: 'ReadingContent',
   },
   words: {
     type: [String],
-    default: []
+    default: [],
   },
   grammarPoints: {
     type: [String],
-    default: []
-  }
-})
+    default: [],
+  },
+});
 
 questionSchema.index({ type: 1, level: 1 });
 
@@ -46,25 +46,25 @@ questionSchema.methods.populateByNames = async function() {
     const Word = require('./word');
     // Find words where kanji matches the word in the word array
     const foundWords = await Word.find({ 
-      kanji: { $in: this.words }
+      kanji: { $in: this.words },
     });
     
     // Get an array of Word objects with ObjectId converted to string
     populatedWords = foundWords.map(word => ({
       ...word.toObject(),
-      id: word._id.toString()
+      id: word._id.toString(),
     }));
   }
   
   if (this.grammarPoints && this.grammarPoints.length > 0) {
     const GrammarPoint = require('./grammarPoint');
     const foundGrammar = await GrammarPoint.find({ 
-      name: { $in: this.grammarPoints }
+      name: { $in: this.grammarPoints },
     });
     
     populatedGrammarPoints = foundGrammar.map(gp => ({
       ...gp.toObject(),
-      id: gp._id.toString()
+      id: gp._id.toString(),
     }));
   }
 
@@ -75,7 +75,7 @@ questionSchema.methods.populateByNames = async function() {
     if (foundReadingContent) {
       populatedReadingContent = {
         ...foundReadingContent.toObject(),
-        id: foundReadingContent._id.toString()
+        id: foundReadingContent._id.toString(),
       };
     }
   }
@@ -86,8 +86,8 @@ questionSchema.methods.populateByNames = async function() {
     id: this._id.toString(),
     words: populatedWords,
     grammarPoints: populatedGrammarPoints,
-    readingContent: populatedReadingContent
+    readingContent: populatedReadingContent,
   };
 };
 
-module.exports = mongoose.model('Question', questionSchema)
+module.exports = mongoose.model('Question', questionSchema);

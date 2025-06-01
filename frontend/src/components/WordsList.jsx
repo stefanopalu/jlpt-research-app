@@ -1,6 +1,6 @@
 import React from 'react';
-import { FlatList, View, Text, StyleSheet } from 'react-native';
-import { gql, useQuery } from '@apollo/client';
+import { FlatList, Text, StyleSheet } from 'react-native';
+import { useQuery } from '@apollo/client';
 import WordCard from './WordCard';
 
 import { GET_ALL_WORDS } from '../graphql/queries';

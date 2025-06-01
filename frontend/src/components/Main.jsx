@@ -1,9 +1,8 @@
-import { gql, useQuery } from '@apollo/client';
-import { SafeAreaView, View, StyleSheet } from 'react-native'; 
-import { Route, Routes, Navigate } from 'react-router-native';
+import { SafeAreaView, StyleSheet } from 'react-native'; 
+import { Route, Routes } from 'react-router-native';
 
-import AppBar from './AppBar'
-import SignIn from './SignIn'
+import AppBar from './AppBar';
+import SignIn from './SignIn';
 import Home from './Home';
 import VocabularyTest from './testcomponents/VocabularyTest';
 import LevelMenu from './LevelMenu';
@@ -17,7 +16,7 @@ const styles = StyleSheet.create({
 
 const Main = () => {
   return (
-     <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <AppBar />
       <Routes>
         <Route path="/" element={<Home />} />

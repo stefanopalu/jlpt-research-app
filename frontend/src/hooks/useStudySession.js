@@ -1,12 +1,12 @@
-import { useQuery } from "@apollo/client";
-import { GET_STUDY_SESSION } from "../graphql/queries";
+import { useQuery } from '@apollo/client';
+import { GET_STUDY_SESSION } from '../graphql/queries';
 
 const useStudySession = (level, limit = 100) => {
   const { data, error, loading, refetch } = useQuery(GET_STUDY_SESSION, {
     variables: { level, limit },
     fetchPolicy: 'cache-and-network',
     // Don't fetch automatically - let component decide when to start
-    skip: !level
+    skip: !level,
   });
 
   const studyCards = data?.getStudySession || [];
@@ -17,7 +17,7 @@ const useStudySession = (level, limit = 100) => {
     // Add SRS metadata that might be useful
     srsLevel: card.srsLevel,
     isNew: card.isNew,
-    progressId: card.id // For tracking progress updates
+    progressId: card.id, // For tracking progress updates
   }));
 
   return { 
@@ -25,7 +25,7 @@ const useStudySession = (level, limit = 100) => {
     studyCards, // Raw data if you need SRS info
     error, 
     loading, 
-    refetch 
+    refetch, 
   };
 };
 

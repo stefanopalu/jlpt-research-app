@@ -8,14 +8,14 @@ const grammarPointProgressService = {
     const grammarPoint = await GrammarPoint.findOne({ name: GPname });
     
     if (!grammarPoint) {
-        throw new Error(`Grammar point not found with kanji: ${GPname}`);
+      throw new Error(`Grammar point not found with name: ${GPname}`);
     }
 
     console.log('GrammarPoint ObjectId:', grammarPoint._id);
     
     let progress = await UserGrammarPointProgress.findOne({
       user: userId, 
-      grammarPoint: grammarPoint._id
+      grammarPoint: grammarPoint._id,
     });
 
     if (progress) {
@@ -24,7 +24,7 @@ const grammarPointProgressService = {
     } else {
       progress = new UserGrammarPointProgress({
         user: userId,
-        grammarPoint: grammarPoint._id
+        grammarPoint: grammarPoint._id,
       });
       progress.updateProgress(isCorrect);
       await progress.save();
@@ -43,7 +43,7 @@ const grammarPointProgressService = {
   async getGrammarPointProgress(userId, grammarPointId) {
     return await UserGrammarPointProgress.findOne({  
       user: userId, 
-      grammarPoint: grammarPointId 
+      grammarPoint: grammarPointId, 
     }).populate('grammarPoint');
   },
 };

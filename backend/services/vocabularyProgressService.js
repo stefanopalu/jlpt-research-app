@@ -6,7 +6,7 @@ const vocabularyProgressService = {
   async getDueCards(userId, level = null, limit = 30) {
     const query = {
       user: userId,
-      nextReview: { $lte: new Date() }
+      nextReview: { $lte: new Date() },
     };
     
     const pipeline = [
@@ -16,15 +16,15 @@ const vocabularyProgressService = {
           from: 'words',
           localField: 'word',
           foreignField: '_id',
-          as: 'wordData'
-        }
+          as: 'wordData',
+        },
       },
-      { $unwind: '$wordData' }
+      { $unwind: '$wordData' },
     ];
     
     if (level) {
       pipeline.push({
-        $match: { 'wordData.level': level }
+        $match: { 'wordData.level': level },
       });
     }
     
@@ -38,7 +38,7 @@ const vocabularyProgressService = {
     const userProgressWordIds = await UserVocabularyProgress.distinct('word', { user: userId });
     
     const query = {
-      _id: { $nin: userProgressWordIds }
+      _id: { $nin: userProgressWordIds },
     };
     
     if (level) {
@@ -54,7 +54,7 @@ const vocabularyProgressService = {
     
     const [dueCards, newWords] = await Promise.all([
       this.getDueCards(userId, level, totalLimit),
-      this.getNewWords(userId, level, newLimit)
+      this.getNewWords(userId, level, newLimit),
     ]);
     
     // Convert new words to consistent format with due cards
@@ -68,12 +68,12 @@ const vocabularyProgressService = {
         hiragana: word.hiragana,
         english: word.english,
         level: word.level,
-        type: word.type
+        type: word.type,
       },
       srsLevel: 0,
       successCount: 0,
       failureCount: 0,
-      isNew: true
+      isNew: true,
     }));
     
     // Combine and shuffle
@@ -94,7 +94,7 @@ const vocabularyProgressService = {
       progress = new UserVocabularyProgress({
         user: userId,
         word: wordId,
-        srsLevel: 0
+        srsLevel: 0,
       });
       progress.updateProgress(isCorrect);
       await progress.save();
@@ -108,7 +108,7 @@ const vocabularyProgressService = {
   // Get user's vocabulary progress
   async getUserProgress(userId) {
     return await UserVocabularyProgress.find({ user: userId }).populate('word');
-  }
+  },
 };
 
 module.exports = vocabularyProgressService;

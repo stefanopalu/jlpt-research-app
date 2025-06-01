@@ -131,6 +131,6 @@ const typeDefs = gql`
       isCorrect: Boolean!
     ): UserGrammarPointProgress!
   }
-`
+`;
 
 module.exports = typeDefs;

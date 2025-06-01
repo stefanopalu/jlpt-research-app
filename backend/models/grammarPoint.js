@@ -3,20 +3,20 @@ const mongoose = require('mongoose');
 const grammarPointSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   explanation: {
     type: String,
-    default: ""
+    default: '',
   },
   structure: {
     type: String,
-    default: ""
+    default: '',
   },
   examples: {
     type: [String],
-    default: []
-  }
+    default: [],
+  },
 });
 
 grammarPointSchema.index({ name: 1 });

@@ -8,14 +8,14 @@ const wordProgressService = {
     const word = await Word.findOne({ kanji: wordKanji });
     
     if (!word) {
-        throw new Error(`Word not found with kanji: ${wordKanji}`);
+      throw new Error(`Word not found with kanji: ${wordKanji}`);
     }
 
     console.log('Word ObjectId:', word._id);
     
     let progress = await UserWordProgress.findOne({
       user: userId, 
-      word: word._id
+      word: word._id,
     });
 
     if (progress) {
@@ -24,7 +24,7 @@ const wordProgressService = {
     } else {
       progress = new UserWordProgress({
         user: userId,
-        word: word._id
+        word: word._id,
       });
       progress.updateProgress(isCorrect);
       await progress.save();
@@ -43,7 +43,7 @@ const wordProgressService = {
   async getWordProgress(userId, wordId) {
     return await UserWordProgress.findOne({  
       user: userId, 
-      word: wordId 
+      word: wordId, 
     }).populate('word');
   },
 };

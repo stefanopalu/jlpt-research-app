@@ -4,31 +4,31 @@ const userWordProgressSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
   },
   word: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Word',
-    required: true
+    required: true,
   },
   
   // Statistics
   successCount: {
     type: Number,
-    default: 0
+    default: 0,
   },
   failureCount: {
     type: Number,
-    default: 0
+    default: 0,
   },
   
   // Timing
   lastReviewed: {
     type: Date,
-    default: null
-  }
+    default: null,
+  },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
 userWordProgressSchema.index({ user: 1, word: 1 }, { unique: true });

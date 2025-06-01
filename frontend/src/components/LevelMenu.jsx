@@ -43,9 +43,9 @@ const LevelMenu = () => {
 
   const handleSelectLevel = (level) => {
     if (exerciseType === 'vocabulary') {
-        navigate(`/vocabularytest?level=${level}`);
+      navigate(`/vocabularytest?level=${level}`);
     } else {
-        navigate(`/questions?exerciseType=${exerciseType}&level=${level}`);
+      navigate(`/questions?exerciseType=${exerciseType}&level=${level}`);
     }
   };
 

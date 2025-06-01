@@ -4,31 +4,31 @@ const userGrammarPointProgressSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
   },
   grammarPoint: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'GrammarPoint',
-    required: true
+    required: true,
   },
   
   // Statistics
   successCount: {
     type: Number,
-    default: 0
+    default: 0,
   },
   failureCount: {
     type: Number,
-    default: 0
+    default: 0,
   },
   
   // Timing
   lastReviewed: {
     type: Date,
-    default: null
-  }
+    default: null,
+  },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
 userGrammarPointProgressSchema.index({ user: 1, grammarPoint: 1 }, { unique: true });

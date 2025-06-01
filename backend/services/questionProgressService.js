@@ -6,7 +6,7 @@ const questionProgressService = {
   async updateProgress(userId, questionId, isCorrect) {
     let progress = await UserQuestionProgress.findOne({ 
       user: userId, 
-      question: questionId 
+      question: questionId, 
     });
 
     if (progress) {
@@ -17,7 +17,7 @@ const questionProgressService = {
       // If not exists, create new progress entry and save
       progress = new UserQuestionProgress({
         user: userId,
-        question: questionId
+        question: questionId,
       });
       progress.updateProgress(isCorrect);
       await progress.save();
@@ -35,7 +35,7 @@ const questionProgressService = {
   async getQuestionProgress(userId, questionId) {
     return await UserQuestionProgress.findOne({ 
       user: userId, 
-      question: questionId 
+      question: questionId, 
     }).populate('question');
   },
 };

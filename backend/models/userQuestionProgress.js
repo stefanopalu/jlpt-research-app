@@ -4,31 +4,31 @@ const userQuestionProgressSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
   },
   question: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Question',
-    required: true
+    required: true,
   },
   
   // Statistics
   successCount: {
     type: Number,
-    default: 0
+    default: 0,
   },
   failureCount: {
     type: Number,
-    default: 0
+    default: 0,
   },
   
   // Timing
   lastReviewed: {
     type: Date,
-    default: null
+    default: null,
   },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
 userQuestionProgressSchema.index({ user: 1, question: 1 }, { unique: true });

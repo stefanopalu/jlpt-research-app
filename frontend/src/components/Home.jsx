@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Link, useNavigate } from 'react-router-native';
+import { useNavigate } from 'react-router-native';
 import theme from '../../theme';
 
 const styles = StyleSheet.create({
@@ -19,17 +19,17 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   buttonShape: {
-      paddingVertical: 20,
-      backgroundColor: theme.colors.primary,
-      borderRadius: 8,
-      justifyContent: 'center',
-    },
-    buttonText: {
-      color: 'white',
-      fontSize: theme.fontSizes.body,
-      fontWeight: theme.fontWeights.bold,
-      textAlign: 'center',
-    },
+    paddingVertical: 20,
+    backgroundColor: theme.colors.primary,
+    borderRadius: 8,
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: theme.fontSizes.body,
+    fontWeight: theme.fontWeights.bold,
+    textAlign: 'center',
+  },
 });
 
 const Home = () => {
