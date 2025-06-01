@@ -13,8 +13,8 @@ export const LOGIN = gql`
 `;
 
 export const UPDATE_USER_VOCABULARY_PROGRESS = gql`
-  mutation UpdateUserVocabularyProgress($wordId: ID!, $success: Boolean!) {
-    updateUserVocabularyProgress(wordId: $wordId, success: $success) {
+  mutation UpdateUserVocabularyProgress($wordId: ID!, $isCorrect: Boolean!) {
+    updateUserVocabularyProgress(wordId: $wordId, isCorrect: $isCorrect) {
       id
       srsLevel
       successCount
@@ -22,6 +22,20 @@ export const UPDATE_USER_VOCABULARY_PROGRESS = gql`
       lastReviewed
       nextReview
       word {
+        id
+      }
+    }
+  }
+`;
+
+export const UPDATE_USER_QUESTION_PROGRESS = gql`
+  mutation UpdateUserQuestionProgress($questionId: ID!, $isCorrect: Boolean!) {
+    updateUserQuestionProgress(questionId: $questionId, isCorrect: $isCorrect) {
+      id
+      successCount
+      failureCount
+      lastReviewed
+      question {
         id
       }
     }

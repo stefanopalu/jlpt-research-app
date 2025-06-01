@@ -154,7 +154,7 @@ const VocabularyTest = () => {
             await updateUserVocabularyProgress({
               variables: {
                 wordId: currentWord.id,
-                success: false,
+                isCorrect: false,
               },
             });
             setProgressUpdated(true);
@@ -177,7 +177,7 @@ const VocabularyTest = () => {
             await updateUserVocabularyProgress({
               variables: {
                 wordId: currentWord.id,
-                success: true,
+                isCorrect: true,
               },
             });
             console.log('Progress updated: success (both correct)');
@@ -196,7 +196,7 @@ const VocabularyTest = () => {
             await updateUserVocabularyProgress({
               variables: {
                 wordId: currentWord.id,
-                success: false,
+                isCorrect: false,
               },
             });
             setProgressUpdated(true);

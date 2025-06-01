@@ -3,6 +3,8 @@ const User = require('./models/user');
 const Question = require('./models/question')
 const ReadingContent = require('./models/readingContent')
 const UserVocabularyProgress = require('./models/userVocabularyProgress');
+const vocabularyProgressService = require('./services/vocabularyProgressService');
+const questionProgressService = require('./services/questionProgressService');
 const jwt = require('jsonwebtoken');
 
 const { GraphQLError } = require('graphql');
@@ -10,8 +12,11 @@ const { GraphQLError } = require('graphql');
 const resolvers = {
   User: {
     userVocabularyProgress: async (parent) => {
-      return await UserVocabularyProgress.find({ user: parent.id }).populate('word');
-    }
+      return await vocabularyProgressService.getUserProgress(parent.id);
+    },
+    userQuestionProgress: async (parent) => {
+      return await questionProgressService.getUserProgress(parent.id);
+    },
   },
 
   Word: {
@@ -42,6 +47,12 @@ const resolvers = {
     },
   },
 
+  UserQuestionProgress: {
+    id: (parent) => {
+      return parent._id ? parent._id.toString() : null;
+    },
+  },
+
   Query: {
     allWords: async (root, args) => {
       const filter = {}
@@ -65,7 +76,7 @@ const resolvers = {
       const populatedQuestions = await Promise.all(
         questions.map(q => q.populateByNames())
       );
-
+      
       // directly return populatedQuestions (plain objects with the needed data about words and grammar points)
       return populatedQuestions; 
     },
@@ -76,7 +87,7 @@ const resolvers = {
     },
 
     getUserVocabularyProgress: async (_, { userId }) => {
-      return UserVocabularyProgress.find({ user: userId }).populate('word');
+      return await vocabularyProgressService.getUserProgress(userId);
     },
 
     getStudySession: async (root, { level, limit }, context) => {
@@ -89,7 +100,7 @@ const resolvers = {
       }
 
       try {
-        const session = await UserVocabularyProgress.getStudySession(userId, level, limit);
+        const session = await vocabularyProgressService.getStudySession(userId, level, limit);
         
         // Transform the data for GraphQL
         // convert objectId to string and restructure the data returned by mongo
@@ -124,7 +135,11 @@ const resolvers = {
         console.error('Error getting study session:', error);
         throw new GraphQLError(`Failed to get study session: ${error.message}`);
       }
-    }
+    },
+
+    getUserQuestionProgress: async (_, { userId }) => {
+      return await questionProgressService.getUserProgress(userId);
+    } 
   },
 
   Mutation: {
@@ -155,9 +170,9 @@ const resolvers = {
       }
     },
 
-    updateUserVocabularyProgress: async (root, { wordId, success }, context) => {
+    updateUserVocabularyProgress: async (root, { wordId, isCorrect }, context) => {
       const userId = context.currentUser?._id;
-      console.log("updateUserProgress called with userId:", context.currentUser?._id);
+      console.log("updateUserVocabularyProgress called with userId:", context.currentUser?._id);
       
       if (!userId) {
         throw new GraphQLError('Not authenticated', {
@@ -166,30 +181,27 @@ const resolvers = {
       }
 
       try {
-        // Find existing progress for this user+word combination
-        let progress = await UserVocabularyProgress.findOne({ user: userId, word: wordId });
-
-        if (progress) {
-          // Update existing progress using SRS logic with updateProgress method
-          // Set new SRS level, increment success or failure counters, set nextReview date and lastReviewed date
-          progress.updateProgress(success);
-          await progress.save();
-        } else {
-          // Create new progress entry and update progress with updateProgress method
-          progress = new UserVocabularyProgress({
-            user: userId,
-            word: wordId,
-            srsLevel: 0
-          });
-          progress.updateProgress(success);
-          await progress.save();
-        }
-
-        // Populate the 'word' field before returning to match what the frontend expects
-        await progress.populate('word');
-        return progress;
+        return await vocabularyProgressService.updateProgress(userId, wordId, isCorrect);
       } catch (error) {
         console.error('Error updating vocabulary progress:', error);
+        throw new GraphQLError('Failed to update progress');
+      }
+    },
+
+    updateUserQuestionProgress: async (root, { questionId, isCorrect }, context) => {
+      const userId = context.currentUser?._id;
+      console.log("updateUserQuestionProgress called with userId:", context.currentUser?._id);
+      
+      if (!userId) {
+        throw new GraphQLError('Not authenticated', {
+          extensions: { code: 'UNAUTHENTICATED' }
+        });
+      }
+
+      try {
+        return await  questionProgressService.updateProgress(userId, questionId, isCorrect);
+      } catch (error) {
+        console.error('Error updating question progress:', error);
         throw new GraphQLError('Failed to update progress');
       }
     },

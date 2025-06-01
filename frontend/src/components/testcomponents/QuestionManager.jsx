@@ -4,7 +4,8 @@ import { useLocation } from 'react-router-native';
 import { useQuestions } from "../../hooks/useQuestions";
 import QuestionsWithReading from './QuestionsWithReading';
 import SimpleQuestions from './SimpleQuestions';
-import theme from '../../../theme';
+import { useMutation } from "@apollo/client";
+import { UPDATE_USER_QUESTION_PROGRESS } from "../../graphql/mutations";
 
 const styles = StyleSheet.create({
   container: {
@@ -18,10 +19,9 @@ const QuestionManager = () => {
   const type = params.get('exerciseType');
   const level = params.get('level');
 
-  console.log('URL params:', { type, level });
-
   const { questions, loading, error } = useQuestions(level, type);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [updateUserQuestionProgress] = useMutation(UPDATE_USER_QUESTION_PROGRESS);
 
   console.log('Hook results:', { questions, loading, error });
 
@@ -42,18 +42,31 @@ const QuestionManager = () => {
 
   const currentQuestion = questions[currentIndex];
 
-  const handleAnswerSelected = (selectedAnswer) => {
-    console.log(`Answer selected: ${selectedAnswer}`);
-    
+  const handleAnswerSelected = async (selectedAnswer) => {
+    const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+
+    try {
+      const result = await updateUserQuestionProgress({
+        variables: {
+          questionId: currentQuestion.id,
+          isCorrect: isCorrect,  
+        },
+      });
+      console.log(`Progress updated: ${isCorrect ? 'correct' : 'incorrect'}`);
+    } catch (err) {
+      console.error('Mutation error:', err);
+    }
+
     // Short delay and then move to next question
     setTimeout(() => {
-        if (currentIndex + 1 < questions.length) {
-            setCurrentIndex(currentIndex + 1);
-        } else {
-            console.log('Quiz completed!');
-        }
-      }, 1500);
-    };
+      if (currentIndex + 1 < questions.length) {
+        setCurrentIndex(currentIndex + 1);
+      } else {
+        //No more questions
+        console.log('Quiz completed!');
+      }
+    }, 1500);
+  };
 
   // Props to pass to child components
   const questionProps = {

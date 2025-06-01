@@ -67,6 +67,15 @@ export const GET_CURRENT_USER = gql`
           ...WordFields
         }
       }
+      userQuestionProgress {  
+        id
+        successCount
+        failureCount
+        lastReviewed
+        question {
+          id
+        }
+      }
     }
   }
   ${WORD_FRAGMENT}

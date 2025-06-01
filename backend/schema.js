@@ -26,6 +26,7 @@ const typeDefs = gql`
     username: String!
     id: ID!
     userVocabularyProgress: [UserVocabularyProgress!]!
+    userQuestionProgress: [UserQuestionProgress!]!
   }
 
   type UserVocabularyProgress {
@@ -68,12 +69,23 @@ const typeDefs = gql`
     user: User
   }
 
+  type UserQuestionProgress {
+    id: ID!
+    user: User!
+    question: Question!
+    successCount: Int!
+    failureCount: Int!
+    lastReviewed: String
+  }
+
   type Query {
     allWords(level: String!): [Word!]!
     allQuestions(level: String!, type: String!): [Question!]!
     me: User
     getUserVocabularyProgress(userId: ID!): [UserVocabularyProgress!]!
     getStudySession(level: String!, limit: Int = 100): [StudyCard!]!
+    getUserQuestionProgress(userId: ID!): [UserQuestionProgress!]!
+    getQuestionProgress(userId: ID!, questionId: ID!): UserQuestionProgress
   }
 
   type Mutation {
@@ -83,8 +95,12 @@ const typeDefs = gql`
     ): LoginResponse
     updateUserVocabularyProgress(
       wordId: ID!
-      success: Boolean!
+      isCorrect: Boolean!
     ): UserVocabularyProgress!
+    updateUserQuestionProgress(
+      questionId: ID!
+      isCorrect: Boolean!
+    ): UserQuestionProgress!
   }
 `
 
