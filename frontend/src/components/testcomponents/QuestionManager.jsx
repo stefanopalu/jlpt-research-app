@@ -5,7 +5,7 @@ import { useQuestions } from "../../hooks/useQuestions";
 import QuestionsWithReading from './QuestionsWithReading';
 import SimpleQuestions from './SimpleQuestions';
 import { useMutation } from "@apollo/client";
-import { UPDATE_USER_QUESTION_PROGRESS } from "../../graphql/mutations";
+import { UPDATE_USER_QUESTION_PROGRESS, UPDATE_USER_GRAMMAR_POINT_PROGRESS, UPDATE_USER_WORD_PROGRESS } from "../../graphql/mutations";
 
 const styles = StyleSheet.create({
   container: {
@@ -22,6 +22,8 @@ const QuestionManager = () => {
   const { questions, loading, error } = useQuestions(level, type);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [updateUserQuestionProgress] = useMutation(UPDATE_USER_QUESTION_PROGRESS);
+  const [updateUserGrammarPointProgress] = useMutation(UPDATE_USER_GRAMMAR_POINT_PROGRESS);
+  const [updateUserWordProgress] = useMutation(UPDATE_USER_WORD_PROGRESS);
 
   console.log('Hook results:', { questions, loading, error });
 
@@ -46,15 +48,43 @@ const QuestionManager = () => {
     const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
 
     try {
-      const result = await updateUserQuestionProgress({
+      // Update question progress 
+      await updateUserQuestionProgress({
         variables: {
           questionId: currentQuestion.id,
-          isCorrect: isCorrect,  
+          isCorrect: isCorrect,
         },
       });
-      console.log(`Progress updated: ${isCorrect ? 'correct' : 'incorrect'}`);
+      console.log(`Question progress updated: ${isCorrect ? 'correct' : 'incorrect'}`);
+
+      // Update word progress for ALL words in the question
+      if (currentQuestion.words && currentQuestion.words.length > 0) {
+        for (const word of currentQuestion.words) {
+          await updateUserWordProgress({
+            variables: {
+              wordKanji: word.kanji,
+              isCorrect: isCorrect,
+            },
+          });
+          console.log(`Word progress updated for: ${word.kanji}`);
+        }
+      }
+
+      // Update grammar point progress for ALL grammar points in the question
+      if (currentQuestion.grammarPoints && currentQuestion.grammarPoints.length > 0) {
+        for (const grammarPoint of currentQuestion.grammarPoints) {
+          await updateUserGrammarPointProgress({
+            variables: {
+              GPname: grammarPoint.name,
+              isCorrect: isCorrect,
+            },
+          });
+          console.log(`Grammar point progress updated for: ${grammarPoint.name}`);
+        }
+      }
+
     } catch (err) {
-      console.error('Mutation error:', err);
+      console.error('Error updating progress:', err.message);
     }
 
     // Short delay and then move to next question

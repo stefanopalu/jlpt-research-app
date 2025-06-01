@@ -19,4 +19,6 @@ const grammarPointSchema = new mongoose.Schema({
   }
 });
 
+grammarPointSchema.index({ name: 1 });
+
 module.exports = mongoose.model('GrammarPoint', grammarPointSchema);

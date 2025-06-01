@@ -6,6 +6,7 @@ const UserVocabularyProgress = require('./models/userVocabularyProgress');
 const vocabularyProgressService = require('./services/vocabularyProgressService');
 const questionProgressService = require('./services/questionProgressService');
 const wordProgressService = require('./services/wordProgressService');
+const grammarPointProgressService = require('./services/grammarPointProgressService');
 const jwt = require('jsonwebtoken');
 
 const { GraphQLError } = require('graphql');
@@ -20,6 +21,9 @@ const resolvers = {
     },
     userWordProgress: async (parent) => {
       return await wordProgressService.getUserProgress(parent.id);
+    },
+    userGrammarPointProgress: async (parent) => {
+      return await grammarPointProgressService.getUserProgress(parent.id);
     },
   },
 
@@ -58,6 +62,12 @@ const resolvers = {
   },
 
   UserWordProgress: {
+    id: (parent) => {
+      return parent._id ? parent._id.toString() : null;
+    },
+  },
+
+  UserGrammarPointProgress: {
     id: (parent) => {
       return parent._id ? parent._id.toString() : null;
     },
@@ -153,6 +163,9 @@ const resolvers = {
     getUserWordProgress: async (_, { userId }) => {
       return await wordProgressService.getUserProgress(userId);
     },
+    getUserGrammarPointProgress: async (_, { userId }) => {
+      return await grammarPointProgressService.getUserProgress(userId);
+    },
   },
 
   Mutation: {
@@ -218,22 +231,33 @@ const resolvers = {
     },
     updateUserWordProgress: async (root, { wordKanji, isCorrect }, context) => {
       const userId = context.currentUser?._id;
-      console.log("Backend received:", { wordKanji, isCorrect, userId });
 
       if (!userId) {
         throw new GraphQLError('Not authenticated');
       }
 
       try {
-    console.log("About to call wordProgressService...");
-    const result = await wordProgressService.updateProgress(userId, wordKanji, isCorrect);
-    console.log("Service returned:", result);
-    return result;
-  } catch (error) {
-    console.error('Actual backend error:', error); // This will show the real error
-    console.error('Error message:', error.message);
-    throw new GraphQLError('Failed to update progress');
-  }
+        const result = await wordProgressService.updateProgress(userId, wordKanji, isCorrect);
+        return result;
+      } catch (error) {
+        console.error('Error message:', error.message);
+        throw new GraphQLError('Failed to update progress');
+      }
+    },
+    updateUserGrammarPointProgress: async (root, { GPname, isCorrect }, context) => {
+      const userId = context.currentUser?._id;
+
+      if (!userId) {
+        throw new GraphQLError('Not authenticated');
+      }
+
+      try {
+        const result = await grammarPointProgressService.updateProgress(userId, GPname, isCorrect);
+        return result;
+      } catch (error) {
+        console.error('Error message:', error.message);
+        throw new GraphQLError('Failed to update progress');
+      }
     },
   },
 };

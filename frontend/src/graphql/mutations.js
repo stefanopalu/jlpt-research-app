@@ -41,3 +41,34 @@ export const UPDATE_USER_QUESTION_PROGRESS = gql`
     }
   }
 `;
+
+export const UPDATE_USER_WORD_PROGRESS = gql`
+  mutation UpdateUserWordProgress($wordKanji: String!, $isCorrect: Boolean!) {
+    updateUserWordProgress(wordKanji: $wordKanji, isCorrect: $isCorrect) {
+      id
+      successCount
+      failureCount
+      lastReviewed
+      word {
+        id
+        kanji
+        hiragana
+      }
+    }
+  }
+`;
+
+export const UPDATE_USER_GRAMMAR_POINT_PROGRESS = gql`
+  mutation UpdateUserGrammarPointProgress($GPname: String!, $isCorrect: Boolean!) {
+    updateUserGrammarPointProgress(GPname: $GPname, isCorrect: $isCorrect) {
+      id
+      successCount
+      failureCount
+      lastReviewed
+      grammarPoint {
+        id
+        name
+      }
+    }
+  }
+`;

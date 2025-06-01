@@ -94,6 +94,15 @@ const Home = () => {
 
       <View style={styles.buttonContainer}>
         <Pressable
+          onPress={() => navigate('/levelmenu?exerciseType=grammarform')}
+          style={styles.buttonShape}
+        >
+          <Text style={styles.buttonText}>Grammar Form</Text>
+        </Pressable>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <Pressable
           onPress={() => navigate('/levelmenu?exerciseType=textgrammar')}
           style={styles.buttonShape}
         >
