@@ -5,6 +5,7 @@ const ReadingContent = require('./models/readingContent')
 const UserVocabularyProgress = require('./models/userVocabularyProgress');
 const vocabularyProgressService = require('./services/vocabularyProgressService');
 const questionProgressService = require('./services/questionProgressService');
+const wordProgressService = require('./services/wordProgressService');
 const jwt = require('jsonwebtoken');
 
 const { GraphQLError } = require('graphql');
@@ -16,6 +17,9 @@ const resolvers = {
     },
     userQuestionProgress: async (parent) => {
       return await questionProgressService.getUserProgress(parent.id);
+    },
+    userWordProgress: async (parent) => {
+      return await wordProgressService.getUserProgress(parent.id);
     },
   },
 
@@ -48,6 +52,12 @@ const resolvers = {
   },
 
   UserQuestionProgress: {
+    id: (parent) => {
+      return parent._id ? parent._id.toString() : null;
+    },
+  },
+
+  UserWordProgress: {
     id: (parent) => {
       return parent._id ? parent._id.toString() : null;
     },
@@ -139,7 +149,10 @@ const resolvers = {
 
     getUserQuestionProgress: async (_, { userId }) => {
       return await questionProgressService.getUserProgress(userId);
-    } 
+    },
+    getUserWordProgress: async (_, { userId }) => {
+      return await wordProgressService.getUserProgress(userId);
+    },
   },
 
   Mutation: {
@@ -169,7 +182,6 @@ const resolvers = {
         }
       }
     },
-
     updateUserVocabularyProgress: async (root, { wordId, isCorrect }, context) => {
       const userId = context.currentUser?._id;
       console.log("updateUserVocabularyProgress called with userId:", context.currentUser?._id);
@@ -187,7 +199,6 @@ const resolvers = {
         throw new GraphQLError('Failed to update progress');
       }
     },
-
     updateUserQuestionProgress: async (root, { questionId, isCorrect }, context) => {
       const userId = context.currentUser?._id;
       console.log("updateUserQuestionProgress called with userId:", context.currentUser?._id);
@@ -204,6 +215,25 @@ const resolvers = {
         console.error('Error updating question progress:', error);
         throw new GraphQLError('Failed to update progress');
       }
+    },
+    updateUserWordProgress: async (root, { wordKanji, isCorrect }, context) => {
+      const userId = context.currentUser?._id;
+      console.log("Backend received:", { wordKanji, isCorrect, userId });
+
+      if (!userId) {
+        throw new GraphQLError('Not authenticated');
+      }
+
+      try {
+    console.log("About to call wordProgressService...");
+    const result = await wordProgressService.updateProgress(userId, wordKanji, isCorrect);
+    console.log("Service returned:", result);
+    return result;
+  } catch (error) {
+    console.error('Actual backend error:', error); // This will show the real error
+    console.error('Error message:', error.message);
+    throw new GraphQLError('Failed to update progress');
+  }
     },
   },
 };

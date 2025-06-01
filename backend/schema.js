@@ -27,6 +27,7 @@ const typeDefs = gql`
     id: ID!
     userVocabularyProgress: [UserVocabularyProgress!]!
     userQuestionProgress: [UserQuestionProgress!]!
+    userWordProgress: [UserWordProgress!]!
   }
 
   type UserVocabularyProgress {
@@ -78,6 +79,15 @@ const typeDefs = gql`
     lastReviewed: String
   }
 
+  type UserWordProgress {
+    id: ID!
+    user: User!
+    word: Word!
+    successCount: Int!
+    failureCount: Int!
+    lastReviewed: String
+  }
+
   type Query {
     allWords(level: String!): [Word!]!
     allQuestions(level: String!, type: String!): [Question!]!
@@ -85,7 +95,7 @@ const typeDefs = gql`
     getUserVocabularyProgress(userId: ID!): [UserVocabularyProgress!]!
     getStudySession(level: String!, limit: Int = 100): [StudyCard!]!
     getUserQuestionProgress(userId: ID!): [UserQuestionProgress!]!
-    getQuestionProgress(userId: ID!, questionId: ID!): UserQuestionProgress
+    getUserWordProgress(userId: ID!): [UserWordProgress!]!
   }
 
   type Mutation {
@@ -101,6 +111,10 @@ const typeDefs = gql`
       questionId: ID!
       isCorrect: Boolean!
     ): UserQuestionProgress!
+    updateUserWordProgress(
+      wordKanji: String!
+      isCorrect: Boolean!
+    ): UserWordProgress!
   }
 `
 
