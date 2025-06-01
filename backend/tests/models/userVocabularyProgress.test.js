@@ -9,7 +9,7 @@ describe('UserVocabularyProgress Model', () => {
         word: new mongoose.Types.ObjectId(),
         srsLevel: 3,
         successCount: 5,
-        failureCount: 2
+        failureCount: 2,
       });
 
       progress.updateProgress(true);
@@ -27,7 +27,7 @@ describe('UserVocabularyProgress Model', () => {
         word: new mongoose.Types.ObjectId(),
         srsLevel: 3,
         successCount: 5,
-        failureCount: 2
+        failureCount: 2,
       });
 
       progress.updateProgress(false);
@@ -43,7 +43,7 @@ describe('UserVocabularyProgress Model', () => {
       const progress = new UserVocabularyProgress({
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
-        srsLevel: 0
+        srsLevel: 0,
       });
 
       progress.updateProgress(false);
@@ -55,7 +55,7 @@ describe('UserVocabularyProgress Model', () => {
       const progress = new UserVocabularyProgress({
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
-        srsLevel: 9
+        srsLevel: 9,
       });
 
       progress.updateProgress(true);
@@ -67,7 +67,7 @@ describe('UserVocabularyProgress Model', () => {
       const progress = new UserVocabularyProgress({
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
-        srsLevel: 2
+        srsLevel: 2,
       });
 
       const beforeTime = new Date();
@@ -86,7 +86,7 @@ describe('UserVocabularyProgress Model', () => {
       const progress = new UserVocabularyProgress({
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
-        nextReview: new Date(Date.now() - 1000) // 1 second ago
+        nextReview: new Date(Date.now() - 1000), // 1 second ago
       });
 
       expect(progress.isDue()).toBe(true);
@@ -96,7 +96,7 @@ describe('UserVocabularyProgress Model', () => {
       const progress = new UserVocabularyProgress({
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
-        nextReview: new Date(Date.now() + 1000) // 1 second from now
+        nextReview: new Date(Date.now() + 1000), // 1 second from now
       });
 
       expect(progress.isDue()).toBe(false);

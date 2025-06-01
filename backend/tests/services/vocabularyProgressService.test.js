@@ -16,7 +16,7 @@ describe('vocabularyProgressService', () => {
       const mockProgress = {
         updateProgress: jest.fn(),
         save: jest.fn(),
-        populate: jest.fn().mockResolvedValue({})
+        populate: jest.fn().mockResolvedValue({}),
       };
       UserVocabularyProgress.findOne.mockResolvedValue(mockProgress);
 
@@ -24,7 +24,7 @@ describe('vocabularyProgressService', () => {
 
       expect(UserVocabularyProgress.findOne).toHaveBeenCalledWith({
         user: 'user123',
-        word: 'word123'
+        word: 'word123',
       });
       expect(mockProgress.updateProgress).toHaveBeenCalledWith(true);
       expect(mockProgress.save).toHaveBeenCalled();
@@ -37,7 +37,7 @@ describe('vocabularyProgressService', () => {
       const mockProgress = {
         updateProgress: jest.fn(),
         save: jest.fn(),
-        populate: jest.fn().mockResolvedValue({})
+        populate: jest.fn().mockResolvedValue({}),
       };
       UserVocabularyProgress.mockImplementation(() => mockProgress);
 
@@ -46,7 +46,7 @@ describe('vocabularyProgressService', () => {
       expect(UserVocabularyProgress).toHaveBeenCalledWith({
         user: 'user123',
         word: 'word123',
-        srsLevel: 0
+        srsLevel: 0,
       });
       expect(mockProgress.updateProgress).toHaveBeenCalledWith(false);
       expect(mockProgress.save).toHaveBeenCalled();
@@ -56,7 +56,7 @@ describe('vocabularyProgressService', () => {
   describe('getDueCards', () => {
     test('should return due cards with correct aggregation', async () => {
       const mockDueCards = [
-        { _id: 'progress1', user: 'user123', wordData: { kanji: '猫' } }
+        { _id: 'progress1', user: 'user123', wordData: { kanji: '猫' } },
       ];
       UserVocabularyProgress.aggregate.mockResolvedValue(mockDueCards);
 
@@ -67,7 +67,7 @@ describe('vocabularyProgressService', () => {
         { $lookup: { from: 'words', localField: 'word', foreignField: '_id', as: 'wordData' } },
         { $unwind: '$wordData' },
         { $match: { 'wordData.level': 'N5' } },
-        { $limit: 10 }
+        { $limit: 10 },
       ]);
       expect(result).toEqual(mockDueCards);
     });
@@ -80,7 +80,7 @@ describe('vocabularyProgressService', () => {
 
       UserVocabularyProgress.distinct.mockResolvedValue(mockWordIds);
       Word.find.mockReturnValue({
-        limit: jest.fn().mockResolvedValue(mockNewWords)
+        limit: jest.fn().mockResolvedValue(mockNewWords),
       });
 
       const result = await vocabularyProgressService.getNewWords('user123', 'N5', 5);
@@ -88,7 +88,7 @@ describe('vocabularyProgressService', () => {
       expect(UserVocabularyProgress.distinct).toHaveBeenCalledWith('word', { user: 'user123' });
       expect(Word.find).toHaveBeenCalledWith({
         _id: { $nin: mockWordIds },
-        level: 'N5'
+        level: 'N5',
       });
       expect(result).toEqual(mockNewWords);
     });

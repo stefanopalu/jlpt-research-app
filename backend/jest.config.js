@@ -4,10 +4,10 @@ module.exports = {
   collectCoverageFrom: [
     'services/**/*.js',
     'models/**/*.js',
-    'resolvers.js'
+    'resolvers.js',
   ],
   testMatch: [
-    '<rootDir>/tests/**/*.test.js'
+    '<rootDir>/tests/**/*.test.js',
   ],
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.js']
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
 };

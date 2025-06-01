@@ -21,7 +21,7 @@ describe('grammarPointProgressService', () => {
       const mockProgress = {
         updateProgress: jest.fn(),
         save: jest.fn(),
-        populate: jest.fn().mockResolvedValue({})
+        populate: jest.fn().mockResolvedValue({}),
       };
       UserGrammarPointProgress.mockImplementation(() => mockProgress);
 
@@ -30,7 +30,7 @@ describe('grammarPointProgressService', () => {
       expect(GrammarPoint.findOne).toHaveBeenCalledWith({ name: 'past tense' });
       expect(UserGrammarPointProgress).toHaveBeenCalledWith({
         user: 'user123',
-        grammarPoint: mockGrammarPoint._id
+        grammarPoint: mockGrammarPoint._id,
       });
       expect(mockProgress.updateProgress).toHaveBeenCalledWith(true);
       expect(mockProgress.save).toHaveBeenCalled();
@@ -41,7 +41,7 @@ describe('grammarPointProgressService', () => {
       GrammarPoint.findOne.mockResolvedValue(null);
 
       await expect(
-        grammarPointProgressService.updateProgress('user123', 'nonexistent', true)
+        grammarPointProgressService.updateProgress('user123', 'nonexistent', true),
       ).rejects.toThrow('Grammar point not found with name: nonexistent');
     });
   });

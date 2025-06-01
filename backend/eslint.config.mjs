@@ -12,31 +12,25 @@ export default defineConfig([
     files: ["**/*.js"],
     languageOptions: { 
       sourceType: "commonjs",
-      globals: globals.node
+      globals: {
+        ...globals.node,
+        // Add Jest globals for test files
+        describe: "readonly",
+        test: "readonly",
+        expect: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        jest: "readonly"
+      }
     },
     rules: {
-      // Allow console.log for development/debugging
       "no-console": "off",
-      
-      // Require semicolons
       "semi": ["error", "always"],
-      
-      // Consistent quotes (single quotes)
       "quotes": ["error", "single"],
-      
-      // No unused variables (but allow unused function parameters with _)
       "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-      
-      // Consistent indentation (2 spaces)
       "indent": ["error", 2],
-      
-      // Require trailing commas (helps with git diffs)
       "comma-dangle": ["error", "always-multiline"],
-      
-      // No extra spaces
       "no-multi-spaces": "error",
-      
-      // Consistent object spacing
       "object-curly-spacing": ["error", "always"]
     }
   }

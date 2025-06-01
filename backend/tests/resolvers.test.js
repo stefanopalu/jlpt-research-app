@@ -25,19 +25,19 @@ describe('GraphQL Resolvers', () => {
         questionProgressService.updateProgress.mockResolvedValue(mockProgress);
 
         const context = {
-          currentUser: { _id: 'user123' }
+          currentUser: { _id: 'user123' },
         };
 
         const result = await resolvers.Mutation.updateUserQuestionProgress(
           null,
           { questionId: 'question123', isCorrect: true },
-          context
+          context,
         );
 
         expect(questionProgressService.updateProgress).toHaveBeenCalledWith(
           'user123',
           'question123',
-          true
+          true,
         );
         expect(result).toEqual(mockProgress);
       });
@@ -49,8 +49,8 @@ describe('GraphQL Resolvers', () => {
           resolvers.Mutation.updateUserQuestionProgress(
             null,
             { questionId: 'question123', isCorrect: true },
-            context
-          )
+            context,
+          ),
         ).rejects.toThrow(GraphQLError);
 
         expect(questionProgressService.updateProgress).not.toHaveBeenCalled();
@@ -60,15 +60,15 @@ describe('GraphQL Resolvers', () => {
         questionProgressService.updateProgress.mockRejectedValue(new Error('Database error'));
 
         const context = {
-          currentUser: { _id: 'user123' }
+          currentUser: { _id: 'user123' },
         };
 
         await expect(
           resolvers.Mutation.updateUserQuestionProgress(
             null,
             { questionId: 'question123', isCorrect: true },
-            context
-          )
+            context,
+          ),
         ).rejects.toThrow(GraphQLError);
       });
     });
@@ -79,44 +79,44 @@ describe('GraphQL Resolvers', () => {
         wordProgressService.updateProgress.mockResolvedValue(mockProgress);
 
         const context = {
-          currentUser: { _id: 'user123' }
+          currentUser: { _id: 'user123' },
         };
 
         const result = await resolvers.Mutation.updateUserWordProgress(
           null,
           { wordKanji: '猫', isCorrect: false },
-          context
+          context,
         );
 
         expect(wordProgressService.updateProgress).toHaveBeenCalledWith(
           'user123',
           '猫',
-          false
+          false,
         );
         expect(result).toEqual(mockProgress);
       });
     });
 
     describe('login', () => {
-        test('should login successfully', async () => {
-            const mockLoginResult = {
-            value: 'jwt-token',
-            user: { username: 'testuser', id: 'user123' }
-            };
-            authService.login.mockResolvedValue(mockLoginResult);
+      test('should login successfully', async () => {
+        const mockLoginResult = {
+          value: 'jwt-token',
+          user: { username: 'testuser', id: 'user123' },
+        };
+        authService.login.mockResolvedValue(mockLoginResult);
 
-            const result = await resolvers.Mutation.login(
-            null,
-            { username: 'testuser', password: 'password123' },
-            {} // Add empty context - login doesn't need it
-            );
+        const result = await resolvers.Mutation.login(
+          null,
+          { username: 'testuser', password: 'password123' },
+          {}, // Add empty context - login doesn't need it
+        );
 
-            expect(authService.login).toHaveBeenCalledWith({
-            username: 'testuser',
-            password: 'password123'
-            });
-            expect(result).toEqual(mockLoginResult);
-        }, 10000); // Add 10 second timeout
+        expect(authService.login).toHaveBeenCalledWith({
+          username: 'testuser',
+          password: 'password123',
+        });
+        expect(result).toEqual(mockLoginResult);
+      }, 10000); // Add 10 second timeout
     });
   });
 
@@ -128,7 +128,7 @@ describe('GraphQL Resolvers', () => {
 
         const result = await resolvers.Query.getUserQuestionProgress(
           null,
-          { userId: 'user123' }
+          { userId: 'user123' },
         );
 
         expect(questionProgressService.getUserProgress).toHaveBeenCalledWith('user123');

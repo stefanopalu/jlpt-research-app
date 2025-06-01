@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint . --ignore-pattern 'tests/**'",
+    "lint:fix": "eslint . --fix --ignore-pattern 'tests/**'",
     "test": "jest",
     "test:watch": "jest --watch"
   },

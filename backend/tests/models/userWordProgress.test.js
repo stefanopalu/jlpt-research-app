@@ -8,7 +8,7 @@ describe('UserWordProgress Model', () => {
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
         successCount: 5,
-        failureCount: 2
+        failureCount: 2,
       });
 
       progress.updateProgress(true);
@@ -23,7 +23,7 @@ describe('UserWordProgress Model', () => {
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
         successCount: 5,
-        failureCount: 2
+        failureCount: 2,
       });
 
       progress.updateProgress(false);
@@ -36,7 +36,7 @@ describe('UserWordProgress Model', () => {
     test('should set lastReviewed to current date', () => {
       const progress = new UserWordProgress({
         user: new mongoose.Types.ObjectId(),
-        word: new mongoose.Types.ObjectId()
+        word: new mongoose.Types.ObjectId(),
       });
 
       const beforeTime = new Date();

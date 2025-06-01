@@ -22,7 +22,7 @@ describe('authService', () => {
       const mockUser = {
         _id: 'user123',
         username: 'testuser',
-        password: 'password123'
+        password: 'password123',
       };
       
       User.findOne.mockResolvedValue(mockUser);
@@ -30,20 +30,20 @@ describe('authService', () => {
 
       const result = await authService.login({
         username: 'testuser',
-        password: 'password123'
+        password: 'password123',
       });
 
       expect(User.findOne).toHaveBeenCalledWith({ username: 'testuser' });
       expect(jwt.sign).toHaveBeenCalledWith(
         { username: 'testuser', id: 'user123' },
-        'test-secret'
+        'test-secret',
       );
       expect(result).toEqual({
         value: 'mock-jwt-token',
         user: {
           username: 'testuser',
-          id: 'user123'
-        }
+          id: 'user123',
+        },
       });
     });
 
@@ -51,17 +51,17 @@ describe('authService', () => {
       const mockUser = {
         _id: 'user123',
         username: 'testuser',
-        password: 'correct-password'
+        password: 'correct-password',
       };
       
       User.findOne.mockResolvedValue(mockUser);
 
       await expect(
-        authService.login({ username: 'testuser', password: 'wrong-password' })
+        authService.login({ username: 'testuser', password: 'wrong-password' }),
       ).rejects.toThrow(GraphQLError);
 
       await expect(
-        authService.login({ username: 'testuser', password: 'wrong-password' })
+        authService.login({ username: 'testuser', password: 'wrong-password' }),
       ).rejects.toThrow('wrong credentials');
     });
 
@@ -69,7 +69,7 @@ describe('authService', () => {
       User.findOne.mockResolvedValue(null);
 
       await expect(
-        authService.login({ username: 'nonexistent', password: 'password' })
+        authService.login({ username: 'nonexistent', password: 'password' }),
       ).rejects.toThrow(GraphQLError);
     });
 
@@ -79,7 +79,7 @@ describe('authService', () => {
       const mockUser = {
         _id: 'user123',
         username: 'testuser',
-        password: 'password123'
+        password: 'password123',
       };
       
       User.findOne.mockResolvedValue(mockUser);
@@ -88,7 +88,7 @@ describe('authService', () => {
       });
 
       await expect(
-        authService.login({ username: 'testuser', password: 'password123' })
+        authService.login({ username: 'testuser', password: 'password123' }),
       ).rejects.toThrow();
     });
   });

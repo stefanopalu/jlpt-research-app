@@ -25,7 +25,7 @@ describe('wordProgressService', () => {
       const mockProgress = {
         updateProgress: jest.fn(),
         save: jest.fn(),
-        populate: jest.fn().mockResolvedValue({})
+        populate: jest.fn().mockResolvedValue({}),
       };
       UserWordProgress.mockImplementation(() => mockProgress);
 
@@ -41,7 +41,7 @@ describe('wordProgressService', () => {
       // Verify progress creation
       expect(UserWordProgress).toHaveBeenCalledWith({
         user: userId,
-        word: mockWord._id
+        word: mockWord._id,
       });
       
       // Verify progress update
@@ -54,7 +54,7 @@ describe('wordProgressService', () => {
       Word.findOne.mockResolvedValue(null);
 
       await expect(
-        wordProgressService.updateProgress('user123', '存在しない', true)
+        wordProgressService.updateProgress('user123', '存在しない', true),
       ).rejects.toThrow('Word not found with kanji: 存在しない');
     });
   });

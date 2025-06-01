@@ -1,13 +1,10 @@
 const Word = require('./models/word');
-const User = require('./models/user');
 const Question = require('./models/question');
 const vocabularyProgressService = require('./services/vocabularyProgressService');
 const questionProgressService = require('./services/questionProgressService');
 const wordProgressService = require('./services/wordProgressService');
 const grammarPointProgressService = require('./services/grammarPointProgressService');
 const authService = require('./services/authService');
-
-const jwt = require('jsonwebtoken');
 
 const { GraphQLError } = require('graphql');
 

@@ -13,7 +13,7 @@ describe('questionProgressService', () => {
       // Mock existing progress
       const mockProgress = {
         updateProgress: jest.fn(),
-        save: jest.fn()
+        save: jest.fn(),
       };
       UserQuestionProgress.findOne.mockResolvedValue(mockProgress);
 
@@ -25,7 +25,7 @@ describe('questionProgressService', () => {
 
       expect(UserQuestionProgress.findOne).toHaveBeenCalledWith({
         user: userId,
-        question: questionId
+        question: questionId,
       });
       expect(mockProgress.updateProgress).toHaveBeenCalledWith(isCorrect);
       expect(mockProgress.save).toHaveBeenCalled();
@@ -36,7 +36,7 @@ describe('questionProgressService', () => {
 
       const mockProgress = {
         updateProgress: jest.fn(),
-        save: jest.fn()
+        save: jest.fn(),
       };
       UserQuestionProgress.mockImplementation(() => mockProgress);
 
@@ -44,7 +44,7 @@ describe('questionProgressService', () => {
 
       expect(UserQuestionProgress).toHaveBeenCalledWith({
         user: 'user123',
-        question: 'question123'
+        question: 'question123',
       });
       expect(mockProgress.updateProgress).toHaveBeenCalledWith(true);
       expect(mockProgress.save).toHaveBeenCalled();
