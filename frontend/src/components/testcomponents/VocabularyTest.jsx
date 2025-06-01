@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, View, TextInput, Pressable, StyleSheet, Text, ScrollView} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { useStudySession } from "../../hooks/useStudySession";
-import { useMutation } from "@apollo/client";
-import { UPDATE_USER_VOCABULARY_PROGRESS } from "../../graphql/mutations";
+import { useStudySession } from '../../hooks/useStudySession';
+import { useMutation } from '@apollo/client';
+import { UPDATE_USER_VOCABULARY_PROGRESS } from '../../graphql/mutations';
 import { useDebounce } from 'use-debounce';
 import { useLocation } from 'react-router-native';
-import { romajiToHiragana } from "../../utils/romajiToHiragana";
+import { romajiToHiragana } from '../../utils/romajiToHiragana';
 
-import WordCard from '../study/WordCard'
+import WordCard from '../study/WordCard';
 import theme from '../../../theme';
 
 const styles = StyleSheet.create({
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   labelContainer: {
     alignItems: 'center',
-    backgroundColor: '#f1f1f1'
+    backgroundColor: '#f1f1f1',
   },
   labelText: {
     textAlign: 'center',
@@ -93,10 +93,10 @@ const VocabularyTest = () => {
 
   const { words, loading, error, refetch } = useStudySession(level, 100);
   const [index, setIndex] = useState(0);
-  const [step, setStep] = useState('english')
+  const [step, setStep] = useState('english');
   const [answer, setAnswer] = useState('');
-  const [rawAnswer, setRawAnswer] = useState(''); // Store the raw romaji input
-  const [result, setResult] = useState(null)
+  const [rawAnswer, setRawAnswer] = useState(''); // eslint-disable-line no-unused-vars
+  const [result, setResult] = useState(null);
   const [showWordCard, setShowWordCard] = useState(false);
   const [completedWords, setCompletedWords] = useState(0);
   
@@ -123,7 +123,7 @@ const VocabularyTest = () => {
   if (!words || words.length === 0) {
     return (
       <View style={styles.container}>
-        <Text>No words available for study. Great job - you're up to date!</Text>
+        <Text>No words available for study. Great job - you are up to date!</Text>
         <Pressable onPress={() => refetch()}>
           <Text>Refresh</Text>
         </Pressable>
@@ -136,7 +136,7 @@ const VocabularyTest = () => {
   const handleSubmit = async () => {
     if (step === 'english') {
       const isCorrectEnglish = currentWord.english.some(
-        e => e.toLowerCase() === debouncedAnswer.trim().toLowerCase()
+        e => e.toLowerCase() === debouncedAnswer.trim().toLowerCase(),
       );
       
       setResult(isCorrectEnglish ? 'correct' : 'wrong');
@@ -242,7 +242,7 @@ const VocabularyTest = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-    <View style={styles.container}>
+      <View style={styles.container}>
         {/* Progress indicator */}
         <View style={styles.progressContainer}>
           <Text style={styles.progressText}>
@@ -274,19 +274,19 @@ const VocabularyTest = () => {
               </Pressable>
             )}
             <TextInput 
-                editable={isInputEditable}
-                autoCorrect={false}   
-                autoComplete="off"
-                spellCheck={false}
-                keyboardType={step === 'hiragana' ? 'ascii-capable' : 'default'}
-                style={[
-                  styles.input,
-                  result === 'correct' ? styles.inputCorrect :
-                  result === 'wrong' ? styles.inputWrong : null
-                ]}
-                value={answer}
-                onChangeText={handleInputChange}
-                placeholder="Your response"
+              editable={isInputEditable}
+              autoCorrect={false}   
+              autoComplete="off"
+              spellCheck={false}
+              keyboardType={step === 'hiragana' ? 'ascii-capable' : 'default'}
+              style={[
+                styles.input,
+                result === 'correct' ? styles.inputCorrect :
+                  result === 'wrong' ? styles.inputWrong : null,
+              ]}
+              value={answer}
+              onChangeText={handleInputChange}
+              placeholder="Your response"
             />
             {result === 'wrong' ? (
               <Pressable style={styles.iconButton} onPress={handleNext}>
@@ -306,7 +306,7 @@ const VocabularyTest = () => {
           )}
 
         </ScrollView>
-    </View>
+      </View>
     </KeyboardAvoidingView>
   );
 };

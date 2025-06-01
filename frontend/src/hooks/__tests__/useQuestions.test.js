@@ -10,8 +10,8 @@ const mocks = [
       query: GET_ALL_QUESTIONS,
       variables: {
         level: 'N5',
-        type: 'vocabulary'
-      }
+        type: 'vocabulary',
+      },
     },
     result: {
       data: {
@@ -25,12 +25,12 @@ const mocks = [
             type: 'vocabulary',
             words: [],
             grammarPoints: [],
-            readingContent: null
-          }
-        ]
-      }
-    }
-  }
+            readingContent: null,
+          },
+        ],
+      },
+    },
+  },
 ];
 
 const wrapper = ({ children }) => (
@@ -42,7 +42,7 @@ const wrapper = ({ children }) => (
 describe('useQuestions', () => {
   test('should return loading initially', () => {
     const { result } = renderHook(() => useQuestions('N5', 'vocabulary'), {
-      wrapper
+      wrapper,
     });
 
     expect(result.current.loading).toBe(true);

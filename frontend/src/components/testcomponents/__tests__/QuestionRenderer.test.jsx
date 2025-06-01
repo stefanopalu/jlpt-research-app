@@ -7,7 +7,7 @@ describe('QuestionRenderer', () => {
     id: '1',
     questionText: 'What is the Japanese word for cat?',
     answers: ['犬', '猫', '鳥', '魚'],
-    correctAnswer: 1
+    correctAnswer: 1,
   };
 
   const mockOnAnswerSelected = jest.fn();
@@ -26,7 +26,7 @@ describe('QuestionRenderer', () => {
       <QuestionRenderer 
         question={mockQuestion} 
         onAnswerSelected={mockOnAnswerSelected} 
-      />
+      />,
     );
 
     expect(getByText('What is the Japanese word for cat?')).toBeTruthy();
@@ -37,7 +37,7 @@ describe('QuestionRenderer', () => {
       <QuestionRenderer 
         question={mockQuestion} 
         onAnswerSelected={mockOnAnswerSelected} 
-      />
+      />,
     );
 
     expect(getByText('犬')).toBeTruthy();
@@ -51,7 +51,7 @@ describe('QuestionRenderer', () => {
       <QuestionRenderer 
         question={mockQuestion} 
         onAnswerSelected={mockOnAnswerSelected} 
-      />
+      />,
     );
 
     fireEvent.press(getByText('猫'));

@@ -7,8 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "eslint ./src/**/*.{js,jsx} App.js --no-error-on-unmatched-pattern",
-    "lint:fix": "eslint ./src/**/*.{js,jsx} App.js --no-error-on-unmatched-pattern --fix",
+    "lint": "eslint 'src/**/*.{js,jsx}' App.js --ignore-pattern '**/__tests__/**'",
+    "lint:fix": "eslint 'src/**/*.{js,jsx}' App.js --fix --ignore-pattern '**/__tests__/**'",
     "test": "jest"
   },
   "dependencies": {
