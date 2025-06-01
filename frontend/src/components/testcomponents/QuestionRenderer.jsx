@@ -1,7 +1,6 @@
 import Markdown from 'react-native-markdown-display';
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import theme from '../../../theme';
 
 const styles = StyleSheet.create({
   container: {

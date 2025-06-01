@@ -1,8 +1,8 @@
 import Markdown from 'react-native-markdown-display';
-import { useState } from "react";
+import { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useLocation } from 'react-router-native';
-import { useQuestions } from "../../hooks/useQuestions";
+import { useQuestions } from '../../hooks/useQuestions';
 import theme from '../../../theme';
 
 const styles = StyleSheet.create({

@@ -1,5 +1,5 @@
 import Markdown from 'react-native-markdown-display';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import QuestionRenderer from './QuestionRenderer';
 import theme from '../../../theme';
 

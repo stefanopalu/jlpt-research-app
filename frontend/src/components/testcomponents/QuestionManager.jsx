@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useLocation } from 'react-router-native';
-import { useQuestions } from "../../hooks/useQuestions";
+import { useQuestions } from '../../hooks/useQuestions';
 import QuestionsWithReading from './QuestionsWithReading';
 import SimpleQuestions from './SimpleQuestions';
-import { useMutation } from "@apollo/client";
-import { UPDATE_USER_QUESTION_PROGRESS, UPDATE_USER_GRAMMAR_POINT_PROGRESS, UPDATE_USER_WORD_PROGRESS } from "../../graphql/mutations";
+import { useMutation } from '@apollo/client';
+import { UPDATE_USER_QUESTION_PROGRESS, UPDATE_USER_GRAMMAR_POINT_PROGRESS, UPDATE_USER_WORD_PROGRESS } from '../../graphql/mutations';
 
 const styles = StyleSheet.create({
   container: {
