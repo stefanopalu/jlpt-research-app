@@ -2,10 +2,10 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 import { Route, Routes } from 'react-router-native';
 
 import AppBar from './AppBar';
-import SignIn from './SignIn';
+import SignIn from './usercomponents/SignIn';
+import SignUp from './usercomponents/SignUp';
 import Home from './Home';
-import VocabularyTest from './testcomponents/VocabularyTest';
-import LevelMenu from './LevelMenu';
+import VocabularyFlashcards from './testcomponents/VocabularyFlashcards';
 import QuestionManager from './testcomponents/QuestionManager';
 
 const styles = StyleSheet.create({
@@ -21,8 +21,8 @@ const Main = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/levelmenu" element={<LevelMenu />} />
-        <Route path="/vocabularytest" element={<VocabularyTest />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/vocabularyflashcards" element={<VocabularyFlashcards />} />
         <Route path="/questions" element={<QuestionManager />} />
       </Routes>
     </SafeAreaView>

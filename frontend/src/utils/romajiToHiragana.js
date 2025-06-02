@@ -14,56 +14,70 @@ const romajiMap = {
   'ma': 'ま', 'mi': 'み', 'mu': 'む', 'me': 'め', 'mo': 'も',
   'ya': 'や', 'yu': 'ゆ', 'yo': 'よ',
   'ra': 'ら', 'ri': 'り', 'ru': 'る', 're': 'れ', 'ro': 'ろ',
-  'wa': 'わ', 'wi': 'ゐ', 'we': 'ゑ', 'wo': 'を',
+  'wa': 'わ', 'wo': 'を',
   'n': 'ん',
-  
-  // Combinations with small ya, yu, yo
+
+  // Combinations with small ya, yu, yo - BOTH spellings
   'kya': 'きゃ', 'kyu': 'きゅ', 'kyo': 'きょ',
   'gya': 'ぎゃ', 'gyu': 'ぎゅ', 'gyo': 'ぎょ',
-  'sha': 'しゃ', 'shu': 'しゅ', 'sho': 'しょ',
-  'ja': 'じゃ', 'ju': 'じゅ', 'jo': 'じょ',
-  'cha': 'ちゃ', 'chu': 'ちゅ', 'cho': 'ちょ',
+  'sha': 'しゃ', 'sya': 'しゃ',  // Both spellings
+  'shu': 'しゅ', 'syu': 'しゅ',  // Both spellings  
+  'sho': 'しょ', 'syo': 'しょ',  // Both spellings
+  'ja': 'じゃ', 'jya': 'じゃ',   // Both spellings
+  'ju': 'じゅ', 'jyu': 'じゅ',   // Both spellings
+  'jo': 'じょ', 'jyo': 'じょ',   // Both spellings
+  'cha': 'ちゃ', 'tya': 'ちゃ',  // Both spellings
+  'chu': 'ちゅ', 'tyu': 'ちゅ',  // Both spellings
+  'cho': 'ちょ', 'tyo': 'ちょ',  // Both spellings
+  'dya': 'ぢゃ', 'dyu': 'ぢゅ', 'dyo': 'ぢょ',
   'nya': 'にゃ', 'nyu': 'にゅ', 'nyo': 'にょ',
   'hya': 'ひゃ', 'hyu': 'ひゅ', 'hyo': 'ひょ',
   'bya': 'びゃ', 'byu': 'びゅ', 'byo': 'びょ',
   'pya': 'ぴゃ', 'pyu': 'ぴゅ', 'pyo': 'ぴょ',
   'mya': 'みゃ', 'myu': 'みゅ', 'myo': 'みょ',
   'rya': 'りゃ', 'ryu': 'りゅ', 'ryo': 'りょ',
-  
-  // Double consonants
-  'kka': 'っか', 'kki': 'っき', 'kku': 'っく', 'kke': 'っけ', 'kko': 'っこ',
-  'ssa': 'っさ', 'sshi': 'っし', 'ssu': 'っす', 'sse': 'っせ', 'sso': 'っそ',
-  'tta': 'った', 'tchi': 'っち', 'ttsu': 'っつ', 'tte': 'って', 'tto': 'っと',
-  'ppa': 'っぱ', 'ppi': 'っぴ', 'ppu': 'っぷ', 'ppe': 'っぺ', 'ppo': 'っぽ',
 };
 
 export const romajiToHiragana = (input) => {
   if (!input) return '';
-  
+
   let result = '';
   let i = 0;
   const text = input.toLowerCase();
-  
+
   while (i < text.length) {
     let found = false;
-    
-    // Try longest matches first (3 chars, then 2, then 1)
-    for (let len = Math.min(4, text.length - i); len > 0; len--) {
-      const substr = text.slice(i, i + len);
-      if (romajiMap[substr]) {
-        result += romajiMap[substr];
-        i += len;
-        found = true;
-        break;
+
+    // Check for double consonants first
+    if (i < text.length - 1) {
+      const currentChar = text[i];
+      const nextChar = text[i + 1];
+      
+      if (currentChar === nextChar && 'stkpbdgzjfvhlmnrwy'.includes(currentChar) && currentChar !== 'n') {
+        result += 'っ';
+        i++;
+        continue;
       }
     }
-    
-    // If no match found, keep the original character
+
+    // Try matches from longest to shortest
+    for (let len = 3; len >= 1; len--) {
+      if (i + len <= text.length) {
+        const substr = text.slice(i, i + len);
+        if (romajiMap[substr]) {
+          result += romajiMap[substr];
+          i += len;
+          found = true;
+          break;
+        }
+      }
+    }
+
     if (!found) {
       result += text[i];
       i++;
     }
   }
-  
+
   return result;
 };

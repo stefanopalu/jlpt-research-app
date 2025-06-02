@@ -12,9 +12,40 @@ export const LOGIN = gql`
   }
 `;
 
-export const UPDATE_USER_VOCABULARY_PROGRESS = gql`
-  mutation UpdateUserVocabularyProgress($wordId: ID!, $isCorrect: Boolean!) {
-    updateUserVocabularyProgress(wordId: $wordId, isCorrect: $isCorrect) {
+export const SIGN_UP = gql`
+  mutation SignUp(
+    $username: String!
+    $password: String!
+    $email: String!
+    $firstName: String!
+    $lastName: String!
+    $studyLevel: String!
+  ) {
+    signUp(
+      username: $username
+      password: $password
+      email: $email
+      firstName: $firstName
+      lastName: $lastName
+      studyLevel: $studyLevel
+    ) {
+      value
+      user {
+        id
+        username
+        email
+        firstName
+        lastName
+        studyLevel
+        createdAt
+      }
+    }
+  }
+`;
+
+export const UPDATE_USER_FLASHCARDS_PROGRESS = gql`
+  mutation UpdateUserFlashcardsProgress($wordId: ID!, $isCorrect: Boolean!) {
+    updateUserFlashcardsProgress(wordId: $wordId, isCorrect: $isCorrect) {
       id
       srsLevel
       successCount

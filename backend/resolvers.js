@@ -1,6 +1,6 @@
 const Word = require('./models/word');
 const Question = require('./models/question');
-const vocabularyProgressService = require('./services/vocabularyProgressService');
+const flashcardsProgressService = require('./services/flashcardsProgressService');
 const questionProgressService = require('./services/questionProgressService');
 const wordProgressService = require('./services/wordProgressService');
 const grammarPointProgressService = require('./services/grammarPointProgressService');
@@ -10,8 +10,8 @@ const { GraphQLError } = require('graphql');
 
 const resolvers = {
   User: {
-    userVocabularyProgress: async (parent) => {
-      return await vocabularyProgressService.getUserProgress(parent.id);
+    userFlashcardsProgress: async (parent) => {
+      return await flashcardsProgressService.getUserProgress(parent.id);
     },
     userQuestionProgress: async (parent) => {
       return await questionProgressService.getUserProgress(parent.id);
@@ -46,7 +46,7 @@ const resolvers = {
     },
   },
 
-  UserVocabularyProgress: {
+  UserFlashcardsProgress: {
     id: (parent) => {
       return parent._id ? parent._id.toString() : null;
     },
@@ -103,8 +103,8 @@ const resolvers = {
       return context.currentUser;
     },
 
-    getUserVocabularyProgress: async (_, { userId }) => {
-      return await vocabularyProgressService.getUserProgress(userId);
+    getUserFlashcardsProgress: async (_, { userId }) => {
+      return await flashcardsProgressService.getUserProgress(userId);
     },
 
     getStudySession: async (root, { level, limit }, context) => {
@@ -117,7 +117,7 @@ const resolvers = {
       }
 
       try {
-        const session = await vocabularyProgressService.getStudySession(userId, level, limit);
+        const session = await flashcardsProgressService.getStudySession(userId, level, limit);
         
         // Transform the data for GraphQL
         // convert objectId to string and restructure the data returned by mongo
@@ -169,9 +169,14 @@ const resolvers = {
     login: async (root, args) => {
       return await authService.login(args);
     },
-    updateUserVocabularyProgress: async (root, { wordId, isCorrect }, context) => {
+
+    signUp: async (root, args) => {
+      return await authService.signUp(args);
+    },
+    
+    updateUserFlashcardsProgress: async (root, { wordId, isCorrect }, context) => {
       const userId = context.currentUser?._id;
-      console.log('updateUserVocabularyProgress called with userId:', context.currentUser?._id);
+      console.log('updateUserFlashcardsProgress called with userId:', context.currentUser?._id);
       
       if (!userId) {
         throw new GraphQLError('Not authenticated', {
@@ -180,12 +185,13 @@ const resolvers = {
       }
 
       try {
-        return await vocabularyProgressService.updateProgress(userId, wordId, isCorrect);
+        return await flashcardsProgressService.updateProgress(userId, wordId, isCorrect);
       } catch (error) {
-        console.error('Error updating vocabulary progress:', error);
+        console.error('Error updating flashcards progress:', error);
         throw new GraphQLError('Failed to update progress');
       }
     },
+
     updateUserQuestionProgress: async (root, { questionId, isCorrect }, context) => {
       const userId = context.currentUser?._id;
       console.log('updateUserQuestionProgress called with userId:', context.currentUser?._id);
@@ -203,6 +209,7 @@ const resolvers = {
         throw new GraphQLError('Failed to update progress');
       }
     },
+
     updateUserWordProgress: async (root, { wordKanji, isCorrect }, context) => {
       const userId = context.currentUser?._id;
 
@@ -218,6 +225,7 @@ const resolvers = {
         throw new GraphQLError('Failed to update progress');
       }
     },
+    
     updateUserGrammarPointProgress: async (root, { GPname, isCorrect }, context) => {
       const userId = context.currentUser?._id;
 

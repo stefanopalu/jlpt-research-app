@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, View, TextInput, Pressable, StyleSheet, Text, ScrollView} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useStudySession } from '../../hooks/useStudySession';
-import { useMutation } from '@apollo/client';
-import { UPDATE_USER_VOCABULARY_PROGRESS } from '../../graphql/mutations';
+import { useQuery, useMutation } from '@apollo/client';
+import { UPDATE_USER_FLASHCARDS_PROGRESS } from '../../graphql/mutations';
+import { GET_CURRENT_USER } from '../../graphql/queries';
 import { useDebounce } from 'use-debounce';
-import { useLocation } from 'react-router-native';
 import { romajiToHiragana } from '../../utils/romajiToHiragana';
 
 import WordCard from '../study/WordCard';
@@ -86,10 +86,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const VocabularyTest = () => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const level = params.get('level');
+const VocabularyFlashcards = () => {  
+  const { data: userData, loading: userLoading } = useQuery(GET_CURRENT_USER); // eslint-disable-line no-unused-vars
+  const user = userData?.me;
+  const level = user?.studyLevel;
 
   const { words, loading, error, refetch } = useStudySession(level, 100);
   const [index, setIndex] = useState(0);
@@ -104,7 +104,7 @@ const VocabularyTest = () => {
   const [progressUpdated, setProgressUpdated] = useState(false);
 
   const [debouncedAnswer] = useDebounce(answer, 500);
-  const [updateUserVocabularyProgress] = useMutation(UPDATE_USER_VOCABULARY_PROGRESS);
+  const [updateUserFlashcardsProgress] = useMutation(UPDATE_USER_FLASHCARDS_PROGRESS);
 
   const handleInputChange = (text) => {
     if (step === 'hiragana') {
@@ -151,7 +151,7 @@ const VocabularyTest = () => {
         // English wrong - record failure immediately
         if (!progressUpdated) {
           try {
-            await updateUserVocabularyProgress({
+            await updateUserFlashcardsProgress({
               variables: {
                 wordId: currentWord.id,
                 isCorrect: false,
@@ -174,7 +174,7 @@ const VocabularyTest = () => {
         if (!progressUpdated) {
           // No previous mistakes - record success
           try {
-            await updateUserVocabularyProgress({
+            await updateUserFlashcardsProgress({
               variables: {
                 wordId: currentWord.id,
                 isCorrect: true,
@@ -193,7 +193,7 @@ const VocabularyTest = () => {
         // Hiragana wrong - record failure if not already done
         if (!progressUpdated) {
           try {
-            await updateUserVocabularyProgress({
+            await updateUserFlashcardsProgress({
               variables: {
                 wordId: currentWord.id,
                 isCorrect: false,
@@ -228,7 +228,7 @@ const VocabularyTest = () => {
   };
 
   const handleNext = () => {
-    // On clicking "next" after wrong answer, reset input & result to allow retry
+    // On clicking "next" after wrong answer, reset input and result to allow retry
     setAnswer('');
     setRawAnswer('');
     setResult(null);
@@ -311,4 +311,4 @@ const VocabularyTest = () => {
   );
 };
 
-export default VocabularyTest;
+export default VocabularyFlashcards;

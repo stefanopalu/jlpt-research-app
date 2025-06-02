@@ -24,8 +24,8 @@ describe('QuestionRenderer', () => {
   test('renders question text', () => {
     const { getByText } = render(
       <QuestionRenderer 
-        question={mockQuestion} 
-        onAnswerSelected={mockOnAnswerSelected} 
+        question={mockQuestion}
+        onAnswerSelected={mockOnAnswerSelected}
       />,
     );
 
@@ -35,8 +35,8 @@ describe('QuestionRenderer', () => {
   test('renders all answer options', () => {
     const { getByText } = render(
       <QuestionRenderer 
-        question={mockQuestion} 
-        onAnswerSelected={mockOnAnswerSelected} 
+        question={mockQuestion}
+        onAnswerSelected={mockOnAnswerSelected}
       />,
     );
 
@@ -49,8 +49,8 @@ describe('QuestionRenderer', () => {
   test('calls onAnswerSelected when answer is pressed', () => {
     const { getByText } = render(
       <QuestionRenderer 
-        question={mockQuestion} 
-        onAnswerSelected={mockOnAnswerSelected} 
+        question={mockQuestion}
+        onAnswerSelected={mockOnAnswerSelected}
       />,
     );
 

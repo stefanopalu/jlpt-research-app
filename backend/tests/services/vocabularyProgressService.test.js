@@ -1,12 +1,12 @@
-const vocabularyProgressService = require('../../services/vocabularyProgressService');
+const flashcardsProgressService = require('../../services/flashcardsProgressService');
 
-jest.mock('../../models/userVocabularyProgress');
+jest.mock('../../models/userFlashcardsProgress');
 jest.mock('../../models/word');
 
-const UserVocabularyProgress = require('../../models/userVocabularyProgress');
+const UserFlashcardsProgress = require('../../models/userFlashcardsProgress');
 const Word = require('../../models/word');
 
-describe('vocabularyProgressService', () => {
+describe('flashcardsProgressService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -18,11 +18,11 @@ describe('vocabularyProgressService', () => {
         save: jest.fn(),
         populate: jest.fn().mockResolvedValue({}),
       };
-      UserVocabularyProgress.findOne.mockResolvedValue(mockProgress);
+      UserFlashcardsProgress.findOne.mockResolvedValue(mockProgress);
 
-      await vocabularyProgressService.updateProgress('user123', 'word123', true);
+      await flashcardsProgressService.updateProgress('user123', 'word123', true);
 
-      expect(UserVocabularyProgress.findOne).toHaveBeenCalledWith({
+      expect(UserFlashcardsProgress.findOne).toHaveBeenCalledWith({
         user: 'user123',
         word: 'word123',
       });
@@ -32,18 +32,18 @@ describe('vocabularyProgressService', () => {
     });
 
     test('should create new progress when none exists', async () => {
-      UserVocabularyProgress.findOne.mockResolvedValue(null);
+      UserFlashcardsProgress.findOne.mockResolvedValue(null);
 
       const mockProgress = {
         updateProgress: jest.fn(),
         save: jest.fn(),
         populate: jest.fn().mockResolvedValue({}),
       };
-      UserVocabularyProgress.mockImplementation(() => mockProgress);
+      UserFlashcardsProgress.mockImplementation(() => mockProgress);
 
-      await vocabularyProgressService.updateProgress('user123', 'word123', false);
+      await flashcardsProgressService.updateProgress('user123', 'word123', false);
 
-      expect(UserVocabularyProgress).toHaveBeenCalledWith({
+      expect(UserFlashcardsProgress).toHaveBeenCalledWith({
         user: 'user123',
         word: 'word123',
         srsLevel: 0,
@@ -58,11 +58,11 @@ describe('vocabularyProgressService', () => {
       const mockDueCards = [
         { _id: 'progress1', user: 'user123', wordData: { kanji: '猫' } },
       ];
-      UserVocabularyProgress.aggregate.mockResolvedValue(mockDueCards);
+      UserFlashcardsProgress.aggregate.mockResolvedValue(mockDueCards);
 
-      const result = await vocabularyProgressService.getDueCards('user123', 'N5', 10);
+      const result = await flashcardsProgressService.getDueCards('user123', 'N5', 10);
 
-      expect(UserVocabularyProgress.aggregate).toHaveBeenCalledWith([
+      expect(UserFlashcardsProgress.aggregate).toHaveBeenCalledWith([
         { $match: { user: 'user123', nextReview: { $lte: expect.any(Date) } } },
         { $lookup: { from: 'words', localField: 'word', foreignField: '_id', as: 'wordData' } },
         { $unwind: '$wordData' },
@@ -78,14 +78,14 @@ describe('vocabularyProgressService', () => {
       const mockWordIds = ['word1', 'word2'];
       const mockNewWords = [{ _id: 'word3', kanji: '犬' }];
 
-      UserVocabularyProgress.distinct.mockResolvedValue(mockWordIds);
+      UserFlashcardsProgress.distinct.mockResolvedValue(mockWordIds);
       Word.find.mockReturnValue({
         limit: jest.fn().mockResolvedValue(mockNewWords),
       });
 
-      const result = await vocabularyProgressService.getNewWords('user123', 'N5', 5);
+      const result = await flashcardsProgressService.getNewWords('user123', 'N5', 5);
 
-      expect(UserVocabularyProgress.distinct).toHaveBeenCalledWith('word', { user: 'user123' });
+      expect(UserFlashcardsProgress.distinct).toHaveBeenCalledWith('word', { user: 'user123' });
       expect(Word.find).toHaveBeenCalledWith({
         _id: { $nin: mockWordIds },
         level: 'N5',

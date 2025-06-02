@@ -4,7 +4,8 @@ import { useLocation } from 'react-router-native';
 import { useQuestions } from '../../hooks/useQuestions';
 import QuestionsWithReading from './QuestionsWithReading';
 import SimpleQuestions from './SimpleQuestions';
-import { useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
+import { GET_CURRENT_USER } from '../../graphql/queries';
 import { UPDATE_USER_QUESTION_PROGRESS, UPDATE_USER_GRAMMAR_POINT_PROGRESS, UPDATE_USER_WORD_PROGRESS } from '../../graphql/mutations';
 
 const styles = StyleSheet.create({
@@ -17,7 +18,10 @@ const QuestionManager = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const type = params.get('exerciseType');
-  const level = params.get('level');
+
+  const { data: userData, loading: userLoading } = useQuery(GET_CURRENT_USER);
+  const user = userData?.me;
+  const level = user?.studyLevel;
 
   const { questions, loading, error } = useQuestions(level, type);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -31,6 +35,9 @@ const QuestionManager = () => {
   const READING_CONTENT_TYPES = ['textgrammar', 'shortpass', 'mediumpass', 'inforetrieval'];
   const needsReadingContent = READING_CONTENT_TYPES.includes(type);
 
+  if (userLoading) return <Text>Loading user data...</Text>;
+  if (!user) return <Text>User not found...</Text>;
+  if (!level) return <Text>User study level not set...</Text>;
   if (loading) return <Text>Loading questions...</Text>;
   if (error) return <Text>Error loading questions: {error.message}</Text>;
 

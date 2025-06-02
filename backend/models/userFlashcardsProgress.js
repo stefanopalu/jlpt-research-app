@@ -14,7 +14,7 @@ const SRS_INTERVALS = [
   129600, // Level 9: 3 months
 ];
 
-const userVocabularyProgressSchema = new mongoose.Schema({
+const userFlashcardsProgressSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -58,11 +58,11 @@ const userVocabularyProgressSchema = new mongoose.Schema({
 });
 
 // Indexes
-userVocabularyProgressSchema.index({ user: 1, word: 1 }, { unique: true });
-userVocabularyProgressSchema.index({ user: 1, nextReview: 1 });
+userFlashcardsProgressSchema.index({ user: 1, word: 1 }, { unique: true });
+userFlashcardsProgressSchema.index({ user: 1, nextReview: 1 });
 
 // Method to update progress record after user answers
-userVocabularyProgressSchema.methods.updateProgress = function(isCorrect) {
+userFlashcardsProgressSchema.methods.updateProgress = function(isCorrect) {
   if (isCorrect) {
     // Move forward one level (max 9) and add one to successCount
     this.srsLevel = Math.min(9, this.srsLevel + 1);
@@ -80,9 +80,9 @@ userVocabularyProgressSchema.methods.updateProgress = function(isCorrect) {
 };
 
 // Check if card is due for review
-userVocabularyProgressSchema.methods.isDue = function() {
+userFlashcardsProgressSchema.methods.isDue = function() {
   return this.nextReview <= new Date();
 };
 
 
-module.exports = mongoose.model('UserVocabularyProgress', userVocabularyProgressSchema);
+module.exports = mongoose.model('UserFlashcardsProgress', userFlashcardsProgressSchema);

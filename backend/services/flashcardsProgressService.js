@@ -1,7 +1,7 @@
-const UserVocabularyProgress = require('../models/userVocabularyProgress');
+const UserFlashcardsProgress = require('../models/userFlashcardsProgress');
 const Word = require('../models/word');
 
-const vocabularyProgressService = {
+const flashcardsProgressService = {
   // Get due cards for a user
   async getDueCards(userId, level = null, limit = 30) {
     const query = {
@@ -30,12 +30,12 @@ const vocabularyProgressService = {
     
     pipeline.push({ $limit: limit });
     
-    return await UserVocabularyProgress.aggregate(pipeline);
+    return await UserFlashcardsProgress.aggregate(pipeline);
   },
 
   // Get words not yet in user's progress 
   async getNewWords(userId, level = null, limit = 70) {
-    const userProgressWordIds = await UserVocabularyProgress.distinct('word', { user: userId });
+    const userProgressWordIds = await UserFlashcardsProgress.distinct('word', { user: userId });
     
     const query = {
       _id: { $nin: userProgressWordIds },
@@ -83,7 +83,7 @@ const vocabularyProgressService = {
 
   // Update progress for a word
   async updateProgress(userId, wordId, isCorrect) {
-    let progress = await UserVocabularyProgress.findOne({ user: userId, word: wordId });
+    let progress = await UserFlashcardsProgress.findOne({ user: userId, word: wordId });
 
     if (progress) {
       // Update existing progress using SRS logic
@@ -91,7 +91,7 @@ const vocabularyProgressService = {
       await progress.save();
     } else {
       // Create new progress entry
-      progress = new UserVocabularyProgress({
+      progress = new UserFlashcardsProgress({
         user: userId,
         word: wordId,
         srsLevel: 0,
@@ -105,10 +105,10 @@ const vocabularyProgressService = {
     return progress;
   },
 
-  // Get user's vocabulary progress
+  // Get user's flashcards progress
   async getUserProgress(userId) {
-    return await UserVocabularyProgress.find({ user: userId }).populate('word');
+    return await UserFlashcardsProgress.find({ user: userId }).populate('word');
   },
 };
 
-module.exports = vocabularyProgressService;
+module.exports = flashcardsProgressService;

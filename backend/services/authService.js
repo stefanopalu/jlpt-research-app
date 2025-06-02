@@ -36,6 +36,54 @@ const login = async ({ username, password }) => {
   };
 };
 
+const signUp = async ({ username, password, email, firstName, lastName, studyLevel }) => {
+  // Check if user already exists
+  const existingUser = await User.findOne({ 
+    $or: [{ username }, { email }], 
+  });
+
+  if (existingUser) {
+    throw new GraphQLError('User with this username or email already exists', {
+      extensions: {
+        code: 'BAD_USER_INPUT',
+      },
+    });
+  }
+
+  // Create new user
+  const user = new User({
+    username,
+    password, 
+    email,
+    firstName,
+    lastName,
+    studyLevel,
+  });
+
+  await user.save();
+
+  // Generate JWT token
+  const JWT_SECRET = process.env.JWT_SECRET;
+  const userForToken = {
+    username: user.username,
+    id: user._id,
+  };
+
+  return {
+    value: jwt.sign(userForToken, JWT_SECRET),
+    user: {
+      username: user.username,
+      id: user._id.toString(),
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      studyLevel: user.studyLevel,
+      createdAt: user.createdAt.toISOString(),
+    },
+  };
+};
+
 module.exports = {
   login,
+  signUp,
 };

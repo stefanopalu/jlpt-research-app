@@ -5,7 +5,7 @@ const { GraphQLError } = require('graphql');
 jest.mock('../services/questionProgressService');
 jest.mock('../services/wordProgressService');
 jest.mock('../services/grammarPointProgressService');
-jest.mock('../services/vocabularyProgressService');
+jest.mock('../services/flashcardsProgressService');
 jest.mock('../services/authService');
 
 const questionProgressService = require('../services/questionProgressService');

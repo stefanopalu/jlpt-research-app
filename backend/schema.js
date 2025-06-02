@@ -25,13 +25,18 @@ const typeDefs = gql`
   type User {
     username: String!
     id: ID!
-    userVocabularyProgress: [UserVocabularyProgress!]!
+    email: String!
+    firstName: String!
+    lastName: String!
+    studyLevel: String!
+    createdAt: String!
+    userFlashcardsProgress: [UserFlashcardsProgress!]!
     userQuestionProgress: [UserQuestionProgress!]!
     userWordProgress: [UserWordProgress!]!
     userGrammarPointProgress: [UserGrammarPointProgress!]!
   }
 
-  type UserVocabularyProgress {
+  type UserFlashcardsProgress {
     id: ID!
     user: User!
     word: Word!
@@ -102,7 +107,7 @@ const typeDefs = gql`
     allWords(level: String!): [Word!]!
     allQuestions(level: String!, type: String!): [Question!]!
     me: User
-    getUserVocabularyProgress(userId: ID!): [UserVocabularyProgress!]!
+    getUserFlashcardsProgress(userId: ID!): [UserFlashcardsProgress!]!
     getStudySession(level: String!, limit: Int = 100): [StudyCard!]!
     getUserQuestionProgress(userId: ID!): [UserQuestionProgress!]!
     getUserWordProgress(userId: ID!): [UserWordProgress!]!
@@ -114,10 +119,18 @@ const typeDefs = gql`
       username: String!
       password: String!
     ): LoginResponse
-    updateUserVocabularyProgress(
+    signUp(
+      username: String!
+      password: String!
+      email: String!
+      firstName: String!
+      lastName: String!
+      studyLevel: String!
+    ): LoginResponse
+    updateUserFlashcardsProgress(
       wordId: ID!
       isCorrect: Boolean!
-    ): UserVocabularyProgress!
+    ): UserFlashcardsProgress!
     updateUserQuestionProgress(
       questionId: ID!
       isCorrect: Boolean!

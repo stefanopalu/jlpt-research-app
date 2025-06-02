@@ -1,10 +1,10 @@
-import Text from './Text';
+import Text from '../Text';
 import { TextInput, StyleSheet, Pressable, View } from 'react-native';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-native';
-import useSignIn from '../hooks/useSignIn';
+import useSignIn from '../../hooks/useSignIn';
 import * as yup from 'yup';
-import theme from '../../theme';
+import theme from '../../../theme';
 
 const initialValues = {
   username: '',

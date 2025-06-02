@@ -1,15 +1,15 @@
 import { useQuery } from '@apollo/client';
 import { GET_CURRENT_USER } from '../graphql/queries';
 
-const useUserVocabularyProgress = () => {
+const useUserFlashcardsProgress = () => {
   const { data, loading, refetch } = useQuery(GET_CURRENT_USER, {
     fetchPolicy: 'cache-and-network',
   });
 
   const user = data?.me;
-  const userVocabularyProgress = user?.userVocabularyProgress || [];
+  const userFlashcardsProgress = user?.userFlashcardsProgress || [];
 
-  return { user, userVocabularyProgress, loading, refetch };
+  return { user, userFlashcardsProgress, loading, refetch };
 };
 
-export { useUserVocabularyProgress };
+export { useUserFlashcardsProgress };

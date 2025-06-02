@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const UserVocabularyProgress = require('../../models/userVocabularyProgress');
+const UserFlashcardsProgress = require('../../models/userFlashcardsProgress');
 
-describe('UserVocabularyProgress Model', () => {
+describe('UserFlashcardsProgress Model', () => {
   describe('updateProgress method', () => {
     test('should increase srsLevel and successCount when correct', () => {
-      const progress = new UserVocabularyProgress({
+      const progress = new UserFlashcardsProgress({
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
         srsLevel: 3,
@@ -22,7 +22,7 @@ describe('UserVocabularyProgress Model', () => {
     });
 
     test('should decrease srsLevel and increase failureCount when incorrect', () => {
-      const progress = new UserVocabularyProgress({
+      const progress = new UserFlashcardsProgress({
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
         srsLevel: 3,
@@ -40,7 +40,7 @@ describe('UserVocabularyProgress Model', () => {
     });
 
     test('should not go below srsLevel 0', () => {
-      const progress = new UserVocabularyProgress({
+      const progress = new UserFlashcardsProgress({
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
         srsLevel: 0,
@@ -52,7 +52,7 @@ describe('UserVocabularyProgress Model', () => {
     });
 
     test('should not go above srsLevel 9', () => {
-      const progress = new UserVocabularyProgress({
+      const progress = new UserFlashcardsProgress({
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
         srsLevel: 9,
@@ -64,7 +64,7 @@ describe('UserVocabularyProgress Model', () => {
     });
 
     test('should set correct nextReview time based on srsLevel', () => {
-      const progress = new UserVocabularyProgress({
+      const progress = new UserFlashcardsProgress({
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
         srsLevel: 2,
@@ -83,7 +83,7 @@ describe('UserVocabularyProgress Model', () => {
 
   describe('isDue method', () => {
     test('should return true when nextReview is in the past', () => {
-      const progress = new UserVocabularyProgress({
+      const progress = new UserFlashcardsProgress({
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
         nextReview: new Date(Date.now() - 1000), // 1 second ago
@@ -93,7 +93,7 @@ describe('UserVocabularyProgress Model', () => {
     });
 
     test('should return false when nextReview is in the future', () => {
-      const progress = new UserVocabularyProgress({
+      const progress = new UserFlashcardsProgress({
         user: new mongoose.Types.ObjectId(),
         word: new mongoose.Types.ObjectId(),
         nextReview: new Date(Date.now() + 1000), // 1 second from now

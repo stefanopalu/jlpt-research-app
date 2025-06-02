@@ -56,7 +56,12 @@ export const GET_CURRENT_USER = gql`
     me {
       id
       username
-      userVocabularyProgress {
+      email
+      firstName
+      lastName
+      studyLevel
+      createdAt
+      userFlashcardsProgress {
         id
         srsLevel
         successCount
