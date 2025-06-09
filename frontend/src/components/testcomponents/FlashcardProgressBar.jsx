@@ -30,7 +30,7 @@ const FlashcardProgressBar = ({
   currentIndex, 
   totalWords, 
   completedWords, 
-  currentWord 
+  currentWord, 
 }) => {
   return (
     <View style={styles.progressContainer}>

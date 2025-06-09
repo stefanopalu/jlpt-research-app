@@ -5,7 +5,6 @@ import AppBar from './AppBar';
 import SignIn from './usercomponents/SignIn';
 import SignUp from './usercomponents/SignUp';
 import Home from './Home';
-import VocabularyFlashcards from './testcomponents/VocabularyFlashcards';
 import FlashcardsManager from './testcomponents/FlashcardsManager';
 import QuestionManager from './testcomponents/QuestionManager';
 

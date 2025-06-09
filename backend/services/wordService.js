@@ -56,5 +56,5 @@ module.exports = {
   getAllWords,
   findWords,
   updateWord,
-  deleteWord
+  deleteWord,
 };

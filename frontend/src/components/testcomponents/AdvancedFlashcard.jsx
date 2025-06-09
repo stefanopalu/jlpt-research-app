@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const AdvancedFlashcard = ({ words, user }) => {
+const AdvancedFlashcard = ({ words }) => {
   const [index, setIndex] = useState(0);
   const [step, setStep] = useState('english');
   const [answer, setAnswer] = useState('');

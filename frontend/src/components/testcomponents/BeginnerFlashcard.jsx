@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const BeginnerFlashcard = ({ words, user }) => {
+const BeginnerFlashcard = ({ words }) => {
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState('');
   const [result, setResult] = useState(null);

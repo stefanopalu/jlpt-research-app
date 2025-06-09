@@ -70,5 +70,5 @@ module.exports = {
   getAllQuestions,
   findQuestions,
   updateQuestion,
-  deleteQuestion
+  deleteQuestion,
 };
