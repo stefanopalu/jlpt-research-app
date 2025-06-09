@@ -6,6 +6,7 @@ import SignIn from './usercomponents/SignIn';
 import SignUp from './usercomponents/SignUp';
 import Home from './Home';
 import VocabularyFlashcards from './testcomponents/VocabularyFlashcards';
+import FlashcardsManager from './testcomponents/FlashcardsManager';
 import QuestionManager from './testcomponents/QuestionManager';
 
 const styles = StyleSheet.create({
@@ -22,7 +23,7 @@ const Main = () => {
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/vocabularyflashcards" element={<VocabularyFlashcards />} />
+        <Route path="/vocabularyflashcards" element={<FlashcardsManager />} />
         <Route path="/questions" element={<QuestionManager />} />
       </Routes>
     </SafeAreaView>

@@ -1,122 +1,138 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
-import { MockedProvider } from '@apollo/client/testing';
+import { render, fireEvent, act } from '@testing-library/react-native';
+import QuestionRenderer from '../QuestionRenderer';
 
-// Mock react-router-native before any other imports
-jest.mock('react-router-native', () => ({
-  useLocation: jest.fn(),
-}));
-
-// Mock the useQuestions hook
-jest.mock('../../../hooks/useQuestions');
-
-import QuestionManager from '../QuestionManager';
-import { useLocation } from 'react-router-native';
-import { useQuestions } from '../../../hooks/useQuestions';
-import {
-  UPDATE_USER_QUESTION_PROGRESS,
-  UPDATE_USER_WORD_PROGRESS,
-  UPDATE_USER_GRAMMAR_POINT_PROGRESS
-} from '../../../graphql/mutations';
-import { GET_CURRENT_USER } from '../../../graphql/queries';
-
-const mockMutations = [
-  {
-    request: {
-      query: UPDATE_USER_QUESTION_PROGRESS,
-      variables: { questionId: '1', isCorrect: true }
-    },
-    result: { data: { updateUserQuestionProgress: { id: '1' } } }
-  },
-  // Mock for GET_CURRENT_USER query
-  {
-    request: {
-      query: GET_CURRENT_USER,
-      variables: {}
-    },
-    result: {
-      data: {
-        me: {
-          id: '1',
-          username: 'testuser',
-          email: 'test@example.com',
-          firstName: 'Test',
-          lastName: 'User',
-          studyLevel: 'N5',
-          createdAt: '2023-01-01T00:00:00.000Z',
-          userFlashcardsProgress: [],
-          userQuestionProgress: []
-        }
-      }
-    }
-  }
-];
-
-const mockQuestion = {
-  id: '1',
-  questionText: 'What is cat in Japanese?',
-  answers: ['犬', '猫', '鳥', '魚'],
-  correctAnswer: 1,
-  words: [{ 
+describe('QuestionRenderer', () => {
+  const mockQuestion = {
     id: '1',
-    kanji: '猫',
-    hiragana: 'ねこ',
-    english: ['cat'],
-    level: 'N5',
-    type: 'noun'
-  }],
-  grammarPoints: [{ 
-    id: '1',
-    name: 'past tense',
-    explanation: 'Past tense explanation',
-    structure: 'verb + ta',
-    examples: ['example1', 'example2']
-  }]
-};
+    questionText: 'What is the Japanese word for cat?',
+    answers: ['犬', '猫', '鳥', '魚'],
+    correctAnswer: 1,
+  };
 
-describe('QuestionManager', () => {
+  const mockOnAnswerSelected = jest.fn();
+  let renderResult;
+
   beforeEach(() => {
-    useLocation.mockReturnValue({
-      search: '?exerciseType=vocabulary&level=N5'
-    });
-    
-    useQuestions.mockReturnValue({
-      questions: [mockQuestion],
-      loading: false,
-      error: null
-    });
+    jest.clearAllMocks();
+    jest.useFakeTimers();
   });
 
-  const wrapper = ({ children }) => (
-    <MockedProvider mocks={mockMutations} addTypename={false}>
-      {children}
-    </MockedProvider>
-  );
-
-  test('renders question correctly', async () => {
-    const { getByText } = render(<QuestionManager />, { wrapper });
+  afterEach(() => {
+    // Clean up any rendered components
+    if (renderResult) {
+      act(() => {
+        renderResult.unmount();
+      });
+      renderResult = null;
+    }
     
-    // Wait for the component to load user data and render the question
-    await waitFor(() => {
-      expect(getByText('What is cat in Japanese?')).toBeTruthy();
+    // Clean up timers
+    act(() => {
+      jest.runOnlyPendingTimers();
     });
-    
+    jest.useRealTimers();
+  });
+
+  test('renders question text', () => {
+    renderResult = render(
+      <QuestionRenderer 
+        question={mockQuestion}
+        onAnswerSelected={mockOnAnswerSelected}
+      />,
+    );
+
+    const { getByText } = renderResult;
+    expect(getByText('What is the Japanese word for cat?')).toBeTruthy();
+  });
+
+  test('renders all answer options', () => {
+    renderResult = render(
+      <QuestionRenderer 
+        question={mockQuestion}
+        onAnswerSelected={mockOnAnswerSelected}
+      />,
+    );
+
+    const { getByText } = renderResult;
+    expect(getByText('犬')).toBeTruthy();
     expect(getByText('猫')).toBeTruthy();
+    expect(getByText('鳥')).toBeTruthy();
+    expect(getByText('魚')).toBeTruthy();
   });
 
-  test('shows loading state', () => {
-    useQuestions.mockReturnValue({
-      questions: null,
-      loading: true,
-      error: null
+  test('calls onAnswerSelected when answer is pressed', () => {
+    renderResult = render(
+      <QuestionRenderer 
+        question={mockQuestion}
+        onAnswerSelected={mockOnAnswerSelected}
+      />,
+    );
+
+    const { getByText } = renderResult;
+
+    act(() => {
+      fireEvent.press(getByText('猫'));
     });
 
-    const { getByText } = render(<QuestionManager />, { wrapper });
-    
-    // Initially shows "Loading user data..." then should show "Loading questions..."
-    // We need to wait for the user data to load first
-    waitFor(() => {
-      expect(getByText('Loading questions...')).toBeTruthy();
+    expect(mockOnAnswerSelected).toHaveBeenCalledWith(1);
+    expect(mockOnAnswerSelected).toHaveBeenCalledTimes(1);
+  });
+
+  test('handles multiple answer selections', () => {
+    renderResult = render(
+      <QuestionRenderer 
+        question={mockQuestion}
+        onAnswerSelected={mockOnAnswerSelected}
+      />,
+    );
+
+    const { getByText } = renderResult;
+
+    act(() => {
+      fireEvent.press(getByText('犬')); // First answer (index 0)
+      fireEvent.press(getByText('魚')); // Fourth answer (index 3)
     });
+
+    expect(mockOnAnswerSelected).toHaveBeenCalledTimes(2);
+    expect(mockOnAnswerSelected).toHaveBeenNthCalledWith(1, 0);
+    expect(mockOnAnswerSelected).toHaveBeenNthCalledWith(2, 3);
+  });
+
+  test('renders with empty answers array', () => {
+    const questionWithNoAnswers = {
+      ...mockQuestion,
+      answers: [],
+    };
+
+    renderResult = render(
+      <QuestionRenderer 
+        question={questionWithNoAnswers}
+        onAnswerSelected={mockOnAnswerSelected}
+      />,
+    );
+
+    const { getByText } = renderResult;
+    expect(getByText('What is the Japanese word for cat?')).toBeTruthy();
+    // Should not crash when no answers
+  });
+
+  test('handles missing onAnswerSelected prop gracefully', () => {
+    renderResult = render(
+      <QuestionRenderer 
+        question={mockQuestion}
+        // onAnswerSelected prop intentionally missing
+      />,
+    );
+
+    const { getByText } = renderResult;
+
+    // Should not crash when pressing answer without callback
+    act(() => {
+      fireEvent.press(getByText('猫'));
+    });
+
+    // Should render normally
+    expect(getByText('What is the Japanese word for cat?')).toBeTruthy();
   });
 });

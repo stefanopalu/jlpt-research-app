@@ -7,11 +7,15 @@ jest.mock('../services/wordProgressService');
 jest.mock('../services/grammarPointProgressService');
 jest.mock('../services/flashcardsProgressService');
 jest.mock('../services/authService');
+jest.mock('../services/wordService');
+jest.mock('../services/questionService');
 
 const questionProgressService = require('../services/questionProgressService');
 const wordProgressService = require('../services/wordProgressService');
 const grammarPointProgressService = require('../services/grammarPointProgressService');
 const authService = require('../services/authService');
+const wordService = require('../services/wordService');
+const questionService = require('../services/questionService');
 
 describe('GraphQL Resolvers', () => {
   beforeEach(() => {
@@ -136,4 +140,299 @@ describe('GraphQL Resolvers', () => {
       });
     });
   });
+
+  describe('Word resolvers', () => {
+    describe('Query - findWords', () => {
+      test('should find words by kanji', async () => {
+        const mockWords = [
+          { id: 'word1', kanji: '本', hiragana: 'ほん', english: ['book'] }
+        ];
+        wordService.findWords.mockResolvedValue(mockWords);
+
+        const result = await resolvers.Query.findWords(
+          null,
+          { kanji: '本' }
+        );
+
+        expect(wordService.findWords).toHaveBeenCalledWith({ kanji: '本' });
+        expect(result).toEqual(mockWords);
+      });
+
+      test('should find words by hiragana', async () => {
+        const mockWords = [
+          { id: 'word1', kanji: '本', hiragana: 'ほん', english: ['book'] }
+        ];
+        wordService.findWords.mockResolvedValue(mockWords);
+
+        const result = await resolvers.Query.findWords(
+          null,
+          { hiragana: 'ほん' }
+        );
+
+        expect(wordService.findWords).toHaveBeenCalledWith({ hiragana: 'ほん' });
+        expect(result).toEqual(mockWords);
+      });
+
+      test('should find words by english', async () => {
+        const mockWords = [
+          { id: 'word1', kanji: '本', hiragana: 'ほん', english: ['book'] }
+        ];
+        wordService.findWords.mockResolvedValue(mockWords);
+
+        const result = await resolvers.Query.findWords(
+          null,
+          { english: 'book' }
+        );
+
+        expect(wordService.findWords).toHaveBeenCalledWith({ english: 'book' });
+        expect(result).toEqual(mockWords);
+      });
+
+      test('should handle service errors', async () => {
+        wordService.findWords.mockRejectedValue(new Error('Service error'));
+
+        await expect(
+          resolvers.Query.findWords(null, { kanji: '本' })
+        ).rejects.toThrow('Service error');
+      });
+    });
+
+    describe('Query - allWords', () => {
+      test('should get all words by level', async () => {
+        const mockWords = [
+          { id: 'word1', kanji: '本', level: 'N4' },
+          { id: 'word2', kanji: '猫', level: 'N4' }
+        ];
+        wordService.getAllWords.mockResolvedValue(mockWords);
+
+        const result = await resolvers.Query.allWords(
+          null,
+          { level: 'N4' }
+        );
+
+        expect(wordService.getAllWords).toHaveBeenCalledWith('N4');
+        expect(result).toEqual(mockWords);
+      });
+    });
+
+  describe('Mutation - updateWord', () => {
+    test('should update word successfully', async () => {
+      const mockUpdatedWord = {
+        id: 'word1',
+        kanji: '本',
+        hiragana: 'ほん',
+        english: ['book', 'volume']
+      };
+      wordService.updateWord.mockResolvedValue(mockUpdatedWord);
+
+      const result = await resolvers.Mutation.updateWord(
+        null,
+        { 
+          id: 'word1', 
+          english: ['book', 'volume'] 
+        }
+      );
+
+      expect(wordService.updateWord).toHaveBeenCalledWith(
+        'word1',
+        { english: ['book', 'volume'] }
+      );
+      expect(result).toEqual(mockUpdatedWord);
+    });
+
+    test('should handle partial updates', async () => {
+      const mockUpdatedWord = {
+        id: 'word1',
+        kanji: '本',
+        hiragana: 'ほん',
+        english: ['book']
+      };
+      wordService.updateWord.mockResolvedValue(mockUpdatedWord);
+
+      await resolvers.Mutation.updateWord(
+        null,
+        { 
+          id: 'word1', 
+          hiragana: 'ほん'
+        }
+      );
+
+      expect(wordService.updateWord).toHaveBeenCalledWith(
+        'word1',
+        { hiragana: 'ほん' }
+      );
+    });
+
+    test('should handle service errors', async () => {
+      wordService.updateWord.mockRejectedValue(new Error('Word not found'));
+
+      await expect(
+        resolvers.Mutation.updateWord(
+          null,
+          { id: 'nonexistent', english: ['test'] }
+        )
+      ).rejects.toThrow('Word not found');
+    });
+  });
+});
+
+describe('Question resolvers', () => {
+  describe('Query - findQuestions', () => {
+    test('should find questions by level', async () => {
+      const mockQuestions = [
+        { id: 'q1', questionText: 'Test question', level: 'N4' }
+      ];
+      questionService.findQuestions.mockResolvedValue(mockQuestions);
+
+      const result = await resolvers.Query.findQuestions(
+        null,
+        { level: 'N4' }
+      );
+
+      expect(questionService.findQuestions).toHaveBeenCalledWith({ level: 'N4' });
+      expect(result).toEqual(mockQuestions);
+    });
+
+    test('should find questions by word', async () => {
+      const mockQuestions = [
+        { id: 'q1', questionText: 'Test question', words: ['寒い'] }
+      ];
+      questionService.findQuestions.mockResolvedValue(mockQuestions);
+
+      const result = await resolvers.Query.findQuestions(
+        null,
+        { word: '寒い' }
+      );
+
+      expect(questionService.findQuestions).toHaveBeenCalledWith({ word: '寒い' });
+      expect(result).toEqual(mockQuestions);
+    });
+
+    test('should find questions by grammar point', async () => {
+      const mockQuestions = [
+        { id: 'q1', questionText: 'Test question', grammarPoints: ['〜ている'] }
+      ];
+      questionService.findQuestions.mockResolvedValue(mockQuestions);
+
+      const result = await resolvers.Query.findQuestions(
+        null,
+        { grammarPoint: '〜ている' }
+      );
+
+      expect(questionService.findQuestions).toHaveBeenCalledWith({ grammarPoint: '〜ている' });
+      expect(result).toEqual(mockQuestions);
+    });
+
+    test('should find questions by multiple parameters', async () => {
+      const mockQuestions = [
+        { id: 'q1', questionText: 'Test question', level: 'N4', type: 'vocabulary' }
+      ];
+      questionService.findQuestions.mockResolvedValue(mockQuestions);
+
+      const result = await resolvers.Query.findQuestions(
+        null,
+        { level: 'N4', type: 'vocabulary' }
+      );
+
+      expect(questionService.findQuestions).toHaveBeenCalledWith({ 
+        level: 'N4', 
+        type: 'vocabulary' 
+      });
+      expect(result).toEqual(mockQuestions);
+    });
+
+    test('should handle service errors', async () => {
+      questionService.findQuestions.mockRejectedValue(new Error('Service error'));
+
+      await expect(
+        resolvers.Query.findQuestions(null, { level: 'N4' })
+      ).rejects.toThrow('Service error');
+    });
+  });
+
+  describe('Query - allQuestions', () => {
+    test('should get all questions by level and type', async () => {
+      const mockQuestions = [
+        { id: 'q1', questionText: 'Test 1', level: 'N4', type: 'vocabulary' },
+        { id: 'q2', questionText: 'Test 2', level: 'N4', type: 'vocabulary' }
+      ];
+      questionService.getAllQuestions.mockResolvedValue(mockQuestions);
+
+      const result = await resolvers.Query.allQuestions(
+        null,
+        { level: 'N4', type: 'vocabulary' }
+      );
+
+      expect(questionService.getAllQuestions).toHaveBeenCalledWith('N4', 'vocabulary');
+      expect(result).toEqual(mockQuestions);
+    });
+  });
+
+  describe('Mutation - updateQuestion', () => {
+    test('should update question successfully', async () => {
+      const mockUpdatedQuestion = {
+        id: 'q1',
+        questionText: 'Updated question text',
+        answers: ['A', 'B', 'C', 'D'],
+        correctAnswer: 2
+      };
+      questionService.updateQuestion.mockResolvedValue(mockUpdatedQuestion);
+
+      const result = await resolvers.Mutation.updateQuestion(
+        null,
+        { 
+          id: 'q1', 
+          questionText: 'Updated question text',
+          correctAnswer: 2
+        }
+      );
+
+      expect(questionService.updateQuestion).toHaveBeenCalledWith(
+        'q1',
+        { 
+          questionText: 'Updated question text',
+          correctAnswer: 2
+        }
+      );
+      expect(result).toEqual(mockUpdatedQuestion);
+    });
+
+    test('should update question with arrays', async () => {
+      const mockUpdatedQuestion = {
+        id: 'q1',
+        answers: ['新A', '新B', '新C', '新D'],
+        words: ['新しい', '古い']
+      };
+      questionService.updateQuestion.mockResolvedValue(mockUpdatedQuestion);
+
+      await resolvers.Mutation.updateQuestion(
+        null,
+        { 
+          id: 'q1',
+          answers: ['新A', '新B', '新C', '新D'],
+          words: ['新しい', '古い']
+        }
+      );
+
+      expect(questionService.updateQuestion).toHaveBeenCalledWith(
+        'q1',
+        { 
+          answers: ['新A', '新B', '新C', '新D'],
+          words: ['新しい', '古い']
+        }
+      );
+    });
+
+    test('should handle service errors', async () => {
+      questionService.updateQuestion.mockRejectedValue(new Error('Question not found'));
+
+      await expect(
+        resolvers.Mutation.updateQuestion(
+          null,
+          { id: 'nonexistent', questionText: 'test' }
+        )
+      ).rejects.toThrow('Question not found');
+    });
+  });
+});
 });

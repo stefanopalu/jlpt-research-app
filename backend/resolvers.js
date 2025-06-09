@@ -1,5 +1,5 @@
-const Word = require('./models/word');
-const Question = require('./models/question');
+const wordService = require('./services/wordService');
+const questionService = require('./services/questionService');
 const flashcardsProgressService = require('./services/flashcardsProgressService');
 const questionProgressService = require('./services/questionProgressService');
 const wordProgressService = require('./services/wordProgressService');
@@ -72,30 +72,19 @@ const resolvers = {
 
   Query: {
     allWords: async (root, args) => {
-      const filter = {};
-      if (args.level) {
-        filter.level = args.level;
-      }
-      const words = await Word.find(filter);
-      return words.map(word => ({
-        ...word.toObject(),
-        id: word._id.toString(),
-      }));
+      return await wordService.getAllWords(args.level);
+    },
+
+    findWords: async (root, args) => {
+      return await wordService.findWords(args);
     },
 
     allQuestions: async (root, args) => {
-      const { level, type } = args;
-      const filter = { level, type };
+      return await questionService.getAllQuestions(args.level, args.type); 
+    },
 
-      const questions = await Question.find(filter);
-      
-      // For each question call the method to get the populated data 
-      const populatedQuestions = await Promise.all(
-        questions.map(q => q.populateByNames()),
-      );
-      
-      // directly return populatedQuestions (plain objects with the needed data about words and grammar points)
-      return populatedQuestions; 
+    findQuestions: async (root, args) => {
+      return await questionService.findQuestions(args);
     },
 
     me: (root, args, context) => {
@@ -240,6 +229,22 @@ const resolvers = {
         console.error('Error message:', error.message);
         throw new GraphQLError('Failed to update progress');
       }
+    },
+
+    updateWord: async (root, { id, ...updateFields }) => {
+      return await wordService.updateWord(id, updateFields);
+    },
+
+    updateQuestion: async (root, { id, ...updateFields }) => {
+      return await questionService.updateQuestion(id, updateFields);
+    },
+
+    deleteWord: async (root, { id }) => {
+      return await wordService.deleteWord(id);
+    },
+
+    deleteQuestion: async (root, { id }) => {
+      return await questionService.deleteQuestion(id);
     },
   },
 };

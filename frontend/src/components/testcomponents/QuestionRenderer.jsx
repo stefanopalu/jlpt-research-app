@@ -63,7 +63,9 @@ const QuestionRenderer = ({ question, onAnswerSelected }) => {
 
   const handleAnswerPress = (answerIndex) => {
     setSelectedAnswer(answerIndex);
-    onAnswerSelected(answerIndex);
+    if (onAnswerSelected && typeof onAnswerSelected === 'function') {
+      onAnswerSelected(answerIndex); 
+    }
   };
 
   const getButtonStyle = (answerIndex) => {

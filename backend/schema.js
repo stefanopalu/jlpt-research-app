@@ -105,7 +105,9 @@ const typeDefs = gql`
 
   type Query {
     allWords(level: String!): [Word!]!
+    findWords(kanji: String, hiragana: String, english: String): [Word!]!
     allQuestions(level: String!, type: String!): [Question!]!
+    findQuestions(level: String, type: String, word: String, grammarPoint: String, questionText: String): [Question!]!
     me: User
     getUserFlashcardsProgress(userId: ID!): [UserFlashcardsProgress!]!
     getStudySession(level: String!, limit: Int = 100): [StudyCard!]!
@@ -143,6 +145,24 @@ const typeDefs = gql`
       GPname: String!
       isCorrect: Boolean!
     ): UserGrammarPointProgress!
+    updateWord(
+      id: ID!
+      hiragana: String
+      kanji: String
+      english: [String!]
+      level: String
+      type: String
+    ): Word!
+    updateQuestion(
+      id: ID!
+      questionText: String
+      answers: [String!]
+      correctAnswer: Int
+      level: String
+      type: String
+      words: [String!]
+      grammarPoints: [String!]
+    ): Question!
   }
 `;
 
