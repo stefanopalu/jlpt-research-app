@@ -68,6 +68,7 @@ const typeDefs = gql`
     id: ID!
     content: String!
     contentType: String!
+    questionType: String!
     level: String!
   }
 
@@ -163,6 +164,8 @@ const typeDefs = gql`
       words: [String!]
       grammarPoints: [String!]
     ): Question!
+    deleteWord(id: ID!): Boolean!
+    deleteQuestion(id: ID!): Boolean!
   }
 `;
 

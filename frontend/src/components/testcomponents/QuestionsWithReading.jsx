@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 10,
     borderRadius: 10,
-    marginBottom: 0,
     maxHeight: '40%',
   },
   readingScroll: {
@@ -27,6 +26,30 @@ const styles = StyleSheet.create({
   },
 });
 
+const readingMarkdownStyles = {
+  body: {
+    fontSize: 18,        // Increase from default
+    lineHeight: 24,      // Increase line height for better readability
+    color: '#333',       // Dark text for reading on white background
+  },
+  text: {
+    fontSize: 18,
+    lineHeight: 24,
+    color: '#333',
+  },
+  paragraph: {
+    fontSize: 18,
+    lineHeight: 24,
+    marginVertical: 8,
+    color: '#333',
+  },
+  strong: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+};
+
+
 const QuestionsWithReading = ({ currentQuestion, onAnswerSelected }) => {
   return (
     <View style={styles.container}>
@@ -35,7 +58,7 @@ const QuestionsWithReading = ({ currentQuestion, onAnswerSelected }) => {
         {currentQuestion?.readingContent && (
           <View style={styles.readingContainer}>
             <ScrollView style={styles.readingScroll} nestedScrollEnabled={true}>
-              <Markdown>
+              <Markdown style={readingMarkdownStyles}>
                 {currentQuestion.readingContent.content}
               </Markdown>
             </ScrollView>

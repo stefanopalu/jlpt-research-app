@@ -1,6 +1,7 @@
 import Markdown from 'react-native-markdown-display';
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import theme from '../../../theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,13 +11,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 40,
+    paddingVertical: 10,
   },
   questionText: {
-    fontSize: 24,
+    fontSize: 26,
     color: 'white',
-    textAlign: 'center',
-    fontWeight: '600',
+    textAlign: 'left',
     lineHeight: 32,
   },
   answersContainer: {
@@ -28,27 +28,38 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 12,
     margin: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     borderRadius: 10,
     borderColor: '#ccc',
   },
   answerButtonCorrect: {
-    backgroundColor: '#4CAF50', // Green for correct
+    backgroundColor: theme.colors.success,
   },
   answerButtonIncorrect: {
-    backgroundColor: '#F44336', // Red for incorrect
+    backgroundColor: theme.colors.error,
   },
   answerText: {
-    fontSize: 18,
+    fontSize: 20,
     textAlign: 'center',
     color: '#333',
   },
   answerTextSelected: {
     fontSize: 18,
     textAlign: 'center',
-    color: 'white', // White text for selected answers
+    color: 'white', 
+  },
+  boldText: {
+    fontWeight: '900',
   },
 });
+
+const markdownStyles = {
+  body: styles.questionText,
+  strong: {
+    color: theme.colors.warning, 
+    fontWeight: 'bold',
+  },
+};
 
 const QuestionRenderer = ({ question, onAnswerSelected }) => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -94,7 +105,7 @@ const QuestionRenderer = ({ question, onAnswerSelected }) => {
     <View style={styles.container}>
       {/* Question */}
       <View style={styles.questionContainer}>
-        <Markdown style={{ body: styles.questionText }}>
+        <Markdown style={markdownStyles}>
           {question.questionText}
         </Markdown>
       </View>
