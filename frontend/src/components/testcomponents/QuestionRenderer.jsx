@@ -63,10 +63,15 @@ const markdownStyles = {
 
 const QuestionRenderer = ({ question, onAnswerSelected }) => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [questionId, setQuestionId] = useState(null);
 
   useEffect(() => {
-    setSelectedAnswer(null);
-  }, [question]);
+    // Only reset if the question ID actually changed
+    if (question?.id !== questionId) {
+      setSelectedAnswer(null);
+      setQuestionId(question?.id);
+    }
+  }, [question?.id, questionId]);
 
   if (!question) {
     return <Text>No question available</Text>;
@@ -74,22 +79,25 @@ const QuestionRenderer = ({ question, onAnswerSelected }) => {
 
   const handleAnswerPress = (answerIndex) => {
     setSelectedAnswer(answerIndex);
+    
     if (onAnswerSelected && typeof onAnswerSelected === 'function') {
-      onAnswerSelected(answerIndex); 
+      onAnswerSelected(answerIndex);
     }
   };
 
-  const getButtonStyle = (answerIndex) => {
+  const getButtonStyle = (answerIndex) => {    
     if (selectedAnswer === null) return styles.answerButton;
     
     if (answerIndex === selectedAnswer) {
-      return answerIndex === question.correctAnswer 
+      const isCorrect = answerIndex === question.correctAnswer;
+      return isCorrect 
         ? [styles.answerButton, styles.answerButtonCorrect]
         : [styles.answerButton, styles.answerButtonIncorrect];
     }
     
     return styles.answerButton;
   };
+
 
   const getTextStyle = (answerIndex) => {
     if (selectedAnswer === null) return styles.answerText;

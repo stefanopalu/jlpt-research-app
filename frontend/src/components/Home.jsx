@@ -64,6 +64,11 @@ const Home = () => {
   const [expandedCategory, setExpandedCategory] = useState(null);
 
   const categories = {
+    grammarpoints: {
+      title: 'Grammar Points',
+      directPath: '/grammarpoints',
+      color: theme.colors.primary,
+    },
     flashcards: {
       title: 'Vocabulary Flashcards',
       directPath: '/vocabularyflashcards',

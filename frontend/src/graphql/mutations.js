@@ -60,12 +60,16 @@ export const UPDATE_USER_FLASHCARDS_PROGRESS = gql`
 `;
 
 export const UPDATE_USER_QUESTION_PROGRESS = gql`
-  mutation UpdateUserQuestionProgress($questionId: ID!, $isCorrect: Boolean!) {
-    updateUserQuestionProgress(questionId: $questionId, isCorrect: $isCorrect) {
+  mutation UpdateUserQuestionProgress($questionId: ID!, $isCorrect: Boolean!, $responseTime: Int) {
+    updateUserQuestionProgress(questionId: $questionId, isCorrect: $isCorrect, responseTime: $responseTime) {
       id
+      srsLevel
       successCount
       failureCount
       lastReviewed
+      nextReview
+      responseTime
+      averageResponseTime
       question {
         id
       }
@@ -74,8 +78,8 @@ export const UPDATE_USER_QUESTION_PROGRESS = gql`
 `;
 
 export const UPDATE_USER_WORD_PROGRESS = gql`
-  mutation UpdateUserWordProgress($wordKanji: String!, $isCorrect: Boolean!) {
-    updateUserWordProgress(wordKanji: $wordKanji, isCorrect: $isCorrect) {
+  mutation UpdateUserWordProgress($word: String!, $isCorrect: Boolean!) {
+    updateUserWordProgress(word: $word, isCorrect: $isCorrect) {
       id
       successCount
       failureCount

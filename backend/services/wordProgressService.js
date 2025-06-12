@@ -3,19 +3,19 @@ const Word = require('../models/word');
 
 const wordProgressService = {
   // Update progress for a word using kanji value
-  async updateProgress(userId, wordKanji, isCorrect) {
+  async updateProgress(userId, word, isCorrect) {
     // First, find the word by kanji to get its ObjectId
-    const word = await Word.findOne({ kanji: wordKanji });
+    const wordObj = await Word.findOne({ kanji: word });
     
-    if (!word) {
-      throw new Error(`Word not found with kanji: ${wordKanji}`);
+    if (!wordObj) {
+      throw new Error(`Word not found with kanji: ${word}`);
     }
 
-    console.log('Word ObjectId:', word._id);
+    console.log('Word ObjectId:', wordObj._id);
     
     let progress = await UserWordProgress.findOne({
       user: userId, 
-      word: word._id,
+      word: wordObj._id,
     });
 
     if (progress) {
@@ -24,7 +24,7 @@ const wordProgressService = {
     } else {
       progress = new UserWordProgress({
         user: userId,
-        word: word._id,
+        word: wordObj._id,
       });
       progress.updateProgress(isCorrect);
       await progress.save();

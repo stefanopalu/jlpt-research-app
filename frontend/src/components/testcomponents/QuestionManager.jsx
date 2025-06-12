@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useLocation } from 'react-router-native';
-import { useQuestions } from '../../hooks/useQuestions';
+import { useQuestionStudySession } from '../../hooks/useQuestionStudySession';
 import QuestionsWithReading from './QuestionsWithReading';
 import SimpleQuestions from './SimpleQuestions';
 import SessionProgressBar from './SessionProgressBar';
@@ -26,86 +26,19 @@ const QuestionManager = () => {
   const user = userData?.me;
   const level = user?.studyLevel;
 
-  const { questions, loading, error } = useQuestions(level, type);
+  const { questions, loading, error } = useQuestionStudySession(level, type, QUESTIONS_PER_SESSION);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const [sessionStartTime, setSessionStartTime] = useState(null);
   const [questionStartTime, setQuestionStartTime] = useState(null);
-  const [currentQuestionTime, setCurrentQuestionTime] = useState(0);
-  const intervalRef = useRef(null);
-  const questionTimerRef = useRef(null);
 
   const [updateUserQuestionProgress] = useMutation(UPDATE_USER_QUESTION_PROGRESS);
   const [updateUserGrammarPointProgress] = useMutation(UPDATE_USER_GRAMMAR_POINT_PROGRESS);
   const [updateUserWordProgress] = useMutation(UPDATE_USER_WORD_PROGRESS);
 
-  // 1. Start SESSION timer when first question loads
-useEffect(() => {
-  if (questions && questions.length > 0 && !sessionStartTime) {
-    const startTime = Date.now();
-    setSessionStartTime(startTime);
-    
-    // Update timer every second
-    intervalRef.current = setInterval(() => {
-      const currentTime = Date.now();
-      const elapsed = Math.floor((currentTime - startTime) / 1000);
-      setElapsedTime(elapsed);
-    }, 1000);
-  }
-
-  // Cleanup interval on unmount
-  return () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
+  useEffect(() => {
+    if (questions && questions.length > 0 && currentIndex < QUESTIONS_PER_SESSION) {
+      setQuestionStartTime(Date.now());
     }
-    if (questionTimerRef.current) {
-      clearInterval(questionTimerRef.current);
-    }
-  };
-}, [questions]);
-
-// 2. Start QUESTION timer when currentIndex changes OR when questions first load
-useEffect(() => {
-  if (questions && questions.length > 0 && currentIndex < QUESTIONS_PER_SESSION) {
-    const questionStart = Date.now();
-    setQuestionStartTime(questionStart);
-    setCurrentQuestionTime(0);
-
-    // Clear any existing question timer
-    if (questionTimerRef.current) {
-      clearInterval(questionTimerRef.current);
-    }
-    
-    // Update current question timer every second
-    questionTimerRef.current = setInterval(() => {
-      const currentTime = Date.now();
-      const questionElapsed = Math.floor((currentTime - questionStart) / 1000);
-      setCurrentQuestionTime(questionElapsed);
-    }, 1000);
-  }
-
-  // Cleanup question timer when moving to next question
-  return () => {
-    if (questionTimerRef.current) {
-      clearInterval(questionTimerRef.current);
-    }
-  };
-}, [currentIndex, questions]); // This handles BOTH first question AND question changes
-
-// 3. Stop timers when session is complete
-useEffect(() => {
-  if (currentIndex >= QUESTIONS_PER_SESSION) {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-    if (questionTimerRef.current) {
-      clearInterval(questionTimerRef.current);
-      questionTimerRef.current = null;
-    }
-    console.log(`Session completed in ${elapsedTime} seconds`);
-  }
-  }, [currentIndex, elapsedTime]);
+  }, [currentIndex, questions?.length]);
 
   // Define which types need reading content
   const READING_CONTENT_TYPES = ['textgrammar', 'shortpass', 'mediumpass', 'inforetrieval'];
@@ -125,7 +58,6 @@ useEffect(() => {
     );
   }
   
-  const sessionQuestions = questions.slice(0, QUESTIONS_PER_SESSION);
   const currentQuestion = questions[currentIndex];
 
   // Check if session is complete
@@ -134,7 +66,6 @@ useEffect(() => {
       <View style={styles.container}>
         <Text style={{ textAlign: 'center', fontSize: 18, marginTop: 50 }}>
           Session Complete! 🎉{'\n'}
-          Time: {Math.floor(elapsedTime / 60)}:{(elapsedTime % 60).toString().padStart(2, '0')}
         </Text>
       </View>
     );
@@ -142,16 +73,20 @@ useEffect(() => {
 
   const handleAnswerSelected = async (selectedAnswer) => {
     const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
-
     const responseTime = questionStartTime ? Date.now() - questionStartTime : 0;
-    console.log(`Question answered in ${responseTime}ms (${Math.round(responseTime/1000)}s)`);
 
     try {
       // Update question progress 
+      console.log('About to update question progress with:', {
+        questionId: currentQuestion.id,
+        isCorrect: isCorrect,
+        responseTime: responseTime,
+      });
       await updateUserQuestionProgress({
         variables: {
           questionId: currentQuestion.id,
           isCorrect: isCorrect,
+          responseTime: responseTime,
         },
       });
       console.log(`Question progress updated: ${isCorrect ? 'correct' : 'incorrect'}`);
@@ -161,24 +96,26 @@ useEffect(() => {
         for (const word of currentQuestion.words) {
           await updateUserWordProgress({
             variables: {
-              wordKanji: word.kanji,
+              word: word,
               isCorrect: isCorrect,
             },
           });
-          console.log(`Word progress updated for: ${word.kanji}`);
+          console.log(`Word progress updated for: ${word}`);
         }
       }
 
       // Update grammar point progress for ALL grammar points in the question
       if (currentQuestion.grammarPoints && currentQuestion.grammarPoints.length > 0) {
+        console.log('=== GRAMMAR PROGRESS UPDATE ===');
+        console.log('About to update grammar progress for:', currentQuestion.grammarPoints);
         for (const grammarPoint of currentQuestion.grammarPoints) {
           await updateUserGrammarPointProgress({
             variables: {
-              GPname: grammarPoint.name,
+              GPname: grammarPoint,
               isCorrect: isCorrect,
             },
           });
-          console.log(`Grammar point progress updated for: ${grammarPoint.name}`);
+          console.log(`Grammar point progress updated for: ${grammarPoint}`);
         }
       }
 
@@ -208,9 +145,7 @@ useEffect(() => {
       <SessionProgressBar 
         currentQuestion={currentIndex + 1}
         totalQuestions={QUESTIONS_PER_SESSION}
-        elapsedTime={elapsedTime}
-        currentQuestionTime={currentQuestionTime}
-      />
+      /> 
       {needsReadingContent ? (
         <QuestionsWithReading {...questionProps} />
       ) : (

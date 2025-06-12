@@ -51,6 +51,54 @@ export const GET_ALL_QUESTIONS = gql`
   ${WORD_FRAGMENT}
 `;
 
+export const GET_ALL_GRAMMAR_POINTS = gql`
+  query GetAllGrammarPoints {
+    allGrammarPoints {
+      id
+      title
+      name
+      explanation
+      grammarStructure {
+        formation
+        declinations
+      }
+      grammarExamples {
+        japanese
+        english
+      }
+    }
+  }
+`;
+
+// NEW: SRS-based question study session
+export const GET_QUESTION_STUDY_SESSION = gql`
+  query GetQuestionStudySession($exerciseType: String!, $level: String!, $limit: Int) {
+    getQuestionStudySession(exerciseType: $exerciseType, level: $level, limit: $limit) {
+      id
+      question {
+        id
+        questionText
+        answers
+        correctAnswer
+        level
+        type
+        words 
+        # grammarPoints 
+        readingContent {
+          id
+          content
+          contentType
+          level
+        }
+      }
+      srsLevel
+      successCount
+      failureCount
+      isNew
+    }
+  }
+`;
+
 export const GET_CURRENT_USER = gql`
   query getCurrentUser {
     me {
@@ -72,11 +120,15 @@ export const GET_CURRENT_USER = gql`
           ...WordFields
         }
       }
-      userQuestionProgress {  
+      userQuestionProgress {
         id
+        srsLevel
         successCount
         failureCount
         lastReviewed
+        nextReview
+        responseTime
+        averageResponseTime
         question {
           id
         }
@@ -95,7 +147,7 @@ export const ME = gql`
   }
 `;
 
-// Get SRS-based study session
+// Get SRS-based study session (for flashcards)
 export const GET_STUDY_SESSION = gql`
   query GetStudySession($level: String!, $limit: Int) {
     getStudySession(level: $level, limit: $limit) {

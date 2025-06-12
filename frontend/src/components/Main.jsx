@@ -7,6 +7,8 @@ import SignUp from './usercomponents/SignUp';
 import Home from './Home';
 import FlashcardsManager from './testcomponents/FlashcardsManager';
 import QuestionManager from './testcomponents/QuestionManager';
+import GrammarPointList from './study/GrammarPointsList';
+import GrammarPoint from './study/GrammarPoint';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,6 +26,8 @@ const Main = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/vocabularyflashcards" element={<FlashcardsManager />} />
         <Route path="/questions" element={<QuestionManager />} />
+        <Route path="/grammarpoints" element={<GrammarPointList />} />
+        <Route path="/grammarpoint/:name" element={<GrammarPoint />} />
       </Routes>
     </SafeAreaView>
   );

@@ -17,8 +17,8 @@ const typeDefs = gql`
     correctAnswer: Int!
     level: String!
     type: String!
-    words: [Word!]
-    grammarPoints: [GrammarPoint!]
+    words: [String!]
+    grammarPoints: [String!]
     readingContent: ReadingContent
   }
 
@@ -56,12 +56,42 @@ const typeDefs = gql`
     isNew: Boolean!
   }
 
+  type StudyQuestion {
+    id: ID
+    question: Question!
+    srsLevel: Int!
+    successCount: Int!
+    failureCount: Int!
+    isNew: Boolean!
+  }
+
+  type GrammarStructure {
+    formation: [String!]!
+    declinations: [String!]
+  }
+
+  type GrammarExample {
+    japanese: String!
+    english: String!
+  }
+
   type GrammarPoint {
     id: ID!
+    title: String!
     name: String!
     explanation: String
-    structure: String
-    examples: [String!]
+    grammarStructure: GrammarStructure
+    grammarExamples: [GrammarExample!]!
+  }
+
+  input GrammarStructureInput {
+    formation: [String!]!
+    declinations: [String!]
+  }
+
+  input GrammarExampleInput {
+    japanese: String!
+    english: String!
   }
 
   type ReadingContent {
@@ -81,9 +111,13 @@ const typeDefs = gql`
     id: ID!
     user: User!
     question: Question!
+    srsLevel: Int!
     successCount: Int!
     failureCount: Int!
     lastReviewed: String
+    nextReview: String!
+    responseTime: Int
+    averageResponseTime: Int
   }
 
   type UserWordProgress {
@@ -107,11 +141,14 @@ const typeDefs = gql`
   type Query {
     allWords(level: String!): [Word!]!
     findWords(kanji: String, hiragana: String, english: String): [Word!]!
+    allGrammarPoints: [GrammarPoint!]!
+    findGrammarPoints(name: String, title: String): [GrammarPoint!]!
     allQuestions(level: String!, type: String!): [Question!]!
     findQuestions(level: String, type: String, word: String, grammarPoint: String, questionText: String): [Question!]!
     me: User
     getUserFlashcardsProgress(userId: ID!): [UserFlashcardsProgress!]!
     getStudySession(level: String!, limit: Int = 100): [StudyCard!]!
+    getQuestionStudySession(exerciseType: String!, level: String!, limit: Int = 50): [StudyQuestion!]!
     getUserQuestionProgress(userId: ID!): [UserQuestionProgress!]!
     getUserWordProgress(userId: ID!): [UserWordProgress!]!
     getUserGrammarPointProgress(userId: ID!): [UserGrammarPointProgress!]!
@@ -137,9 +174,10 @@ const typeDefs = gql`
     updateUserQuestionProgress(
       questionId: ID!
       isCorrect: Boolean!
+      responseTime: Int
     ): UserQuestionProgress!
     updateUserWordProgress(
-      wordKanji: String!
+      word: String!
       isCorrect: Boolean!
     ): UserWordProgress!
     updateUserGrammarPointProgress(
@@ -164,8 +202,17 @@ const typeDefs = gql`
       words: [String!]
       grammarPoints: [String!]
     ): Question!
+    updateGrammarPoint(
+      id: ID!
+      title: String
+      name: String
+      explanation: String
+      grammarStructure: GrammarStructureInput
+      grammarExamples: [GrammarExampleInput!]
+    ): GrammarPoint!
     deleteWord(id: ID!): Boolean!
     deleteQuestion(id: ID!): Boolean!
+    deleteGrammarPoint(id: ID!): Boolean!
   }
 `;
 

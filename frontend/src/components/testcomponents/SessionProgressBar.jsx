@@ -31,56 +31,33 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.warning,
     borderRadius: 4,
   },
-  rightSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-  },
   progressText: {
     fontSize: 16,
     fontWeight: '700',
-    color: theme.colors.textPrimary,
+    color: 'white',
   },
-  timeText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: "white",
-    fontFamily: 'monospace',
-    textAlign: 'center',
-    minWidth: 55,
-  },
+
 });
 
-const SessionProgressBar = ({ currentQuestion, totalQuestions, elapsedTime, currentQuestionTime }) => {
+const SessionProgressBar = ({ currentQuestion, totalQuestions }) => {
   const progressPercentage = (currentQuestion / totalQuestions) * 100;
   
-  // Format time as MM:SS
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         {/* Left side: Progress info and bar */}
         <View style={styles.leftSection}>
+          <Text style={styles.progressText}>
+            {currentQuestion}/{totalQuestions}
+          </Text>
           <View style={styles.progressBarContainer}>
             <View 
               style={[
                 styles.progressBarFill, 
-                { width: `${progressPercentage}%` }
+                { width: `${progressPercentage}%` },
               ]} 
             />
           </View>
-        </View>
-        
-        {/* Right side: Timers */}
-        <View style={styles.rightSection}>
-          <Text style={styles.timeText}>
-            {formatTime(elapsedTime)}
-          </Text>
         </View>
       </View>
     </View>
