@@ -1,6 +1,6 @@
 const Word = require('../models/word');
 
-const getAllWords = async (level) => {
+const getAllWords = async (level = null) => {
   const filter = {};
   if (level) filter.level = level;
   const words = await Word.find(filter);

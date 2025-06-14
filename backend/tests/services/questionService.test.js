@@ -1,4 +1,3 @@
-
 const questionService = require('../../services/questionService');
 
 // Mock the dependencies
@@ -19,13 +18,17 @@ describe('questionService', () => {
           questionText: 'What is the reading?',
           level: 'N4',
           type: 'vocabulary',
-          populateByNames: jest.fn().mockResolvedValue({
-            id: 'question1',
+          words: ['単語'],
+          grammarPoints: ['grammar_point'],
+          readingContentId: null,
+          toObject: jest.fn().mockReturnValue({
+            _id: 'question1',
             questionText: 'What is the reading?',
             level: 'N4',
             type: 'vocabulary',
-            words: [],
-            grammarPoints: []
+            words: ['単語'],
+            grammarPoints: ['grammar_point'],
+            readingContentId: null
           })
         }
       ];
@@ -35,29 +38,38 @@ describe('questionService', () => {
       const result = await questionService.getAllQuestions('N4', 'vocabulary');
 
       expect(Question.find).toHaveBeenCalledWith({ level: 'N4', type: 'vocabulary' });
-      expect(mockQuestions[0].populateByNames).toHaveBeenCalled();
       expect(result).toEqual([{
+        _id: 'question1',
         id: 'question1',
         questionText: 'What is the reading?',
         level: 'N4',
         type: 'vocabulary',
-        words: [],
-        grammarPoints: []
+        words: ['単語'],
+        grammarPoints: ['grammar_point'],
+        readingContentId: null
       }]);
     });
 
-    test('should populate all questions returned', async () => {
+    test('should return multiple questions with correct format', async () => {
       const mockQuestions = [
-        { populateByNames: jest.fn().mockResolvedValue({ id: '1' }) },
-        { populateByNames: jest.fn().mockResolvedValue({ id: '2' }) }
+        { 
+          _id: 'question1',
+          toObject: jest.fn().mockReturnValue({ _id: 'question1', words: [], grammarPoints: [] })
+        },
+        { 
+          _id: 'question2',
+          toObject: jest.fn().mockReturnValue({ _id: 'question2', words: [], grammarPoints: [] })
+        }
       ];
       
       Question.find.mockResolvedValue(mockQuestions);
 
-      await questionService.getAllQuestions('N4', 'vocabulary');
+      const result = await questionService.getAllQuestions('N4', 'vocabulary');
 
-      expect(mockQuestions[0].populateByNames).toHaveBeenCalled();
-      expect(mockQuestions[1].populateByNames).toHaveBeenCalled();
+      expect(result).toEqual([
+        { _id: 'question1', id: 'question1', words: [], grammarPoints: [] },
+        { _id: 'question2', id: 'question2', words: [], grammarPoints: [] }
+      ]);
     });
   });
 
@@ -65,8 +77,10 @@ describe('questionService', () => {
     test('should find questions by level', async () => {
       const mockQuestions = [
         { 
-          populateByNames: jest.fn().mockResolvedValue({
-            id: 'question1',
+          _id: 'question1',
+          level: 'N4',
+          toObject: jest.fn().mockReturnValue({
+            _id: 'question1',
             level: 'N4'
           })
         }
@@ -77,14 +91,16 @@ describe('questionService', () => {
       const result = await questionService.findQuestions({ level: 'N4' });
 
       expect(Question.find).toHaveBeenCalledWith({ level: 'N4' });
-      expect(result).toHaveLength(1);
+      expect(result).toEqual([{ _id: 'question1', id: 'question1', level: 'N4' }]);
     });
 
     test('should find questions by type', async () => {
       const mockQuestions = [
         { 
-          populateByNames: jest.fn().mockResolvedValue({
-            id: 'question1',
+          _id: 'question1',
+          type: 'grammar',
+          toObject: jest.fn().mockReturnValue({
+            _id: 'question1',
             type: 'grammar'
           })
         }
@@ -100,8 +116,10 @@ describe('questionService', () => {
     test('should find questions by word in array', async () => {
       const mockQuestions = [
         { 
-          populateByNames: jest.fn().mockResolvedValue({
-            id: 'question1',
+          _id: 'question1',
+          words: ['寒い'],
+          toObject: jest.fn().mockReturnValue({
+            _id: 'question1',
             words: ['寒い']
           })
         }
@@ -119,8 +137,10 @@ describe('questionService', () => {
     test('should find questions by grammar point in array', async () => {
       const mockQuestions = [
         { 
-          populateByNames: jest.fn().mockResolvedValue({
-            id: 'question1',
+          _id: 'question1',
+          grammarPoints: ['〜ている'],
+          toObject: jest.fn().mockReturnValue({
+            _id: 'question1',
             grammarPoints: ['〜ている']
           })
         }
@@ -138,8 +158,10 @@ describe('questionService', () => {
     test('should find questions by partial question text match', async () => {
       const mockQuestions = [
         { 
-          populateByNames: jest.fn().mockResolvedValue({
-            id: 'question1',
+          _id: 'question1',
+          questionText: 'Choose the correct reading',
+          toObject: jest.fn().mockReturnValue({
+            _id: 'question1',
             questionText: 'Choose the correct reading'
           })
         }
@@ -184,8 +206,10 @@ describe('questionService', () => {
       const mockUpdatedQuestion = {
         _id: 'question1',
         questionText: 'Updated question text',
-        populateByNames: jest.fn().mockResolvedValue({
-          id: 'question1',
+        words: [],
+        grammarPoints: [],
+        toObject: jest.fn().mockReturnValue({
+          _id: 'question1',
           questionText: 'Updated question text',
           words: [],
           grammarPoints: []
@@ -202,8 +226,8 @@ describe('questionService', () => {
         updateData,
         { new: true, runValidators: true }
       );
-      expect(mockUpdatedQuestion.populateByNames).toHaveBeenCalled();
       expect(result).toEqual({
+        _id: 'question1',
         id: 'question1',
         questionText: 'Updated question text',
         words: [],
@@ -213,8 +237,12 @@ describe('questionService', () => {
 
     test('should update question with arrays (answers, words, grammarPoints)', async () => {
       const mockUpdatedQuestion = {
-        populateByNames: jest.fn().mockResolvedValue({
-          id: 'question1',
+        _id: 'question1',
+        answers: ['新しい答え1', '新しい答え2'],
+        words: ['新しい', '古い'],
+        grammarPoints: ['〜い形容詞'],
+        toObject: jest.fn().mockReturnValue({
+          _id: 'question1',
           answers: ['新しい答え1', '新しい答え2'],
           words: ['新しい', '古い'],
           grammarPoints: ['〜い形容詞']
@@ -229,13 +257,21 @@ describe('questionService', () => {
         grammarPoints: ['〜い形容詞']
       };
 
-      await questionService.updateQuestion('question1', updateData);
+      const result = await questionService.updateQuestion('question1', updateData);
 
       expect(Question.findByIdAndUpdate).toHaveBeenCalledWith(
         'question1',
         updateData,
         { new: true, runValidators: true }
       );
+      
+      expect(result).toEqual({
+        _id: 'question1',
+        id: 'question1',
+        answers: ['新しい答え1', '新しい答え2'],
+        words: ['新しい', '古い'],
+        grammarPoints: ['〜い形容詞']
+      });
     });
 
     test('should throw error when question not found', async () => {

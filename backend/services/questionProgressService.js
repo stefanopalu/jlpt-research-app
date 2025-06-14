@@ -1,5 +1,6 @@
 const UserQuestionProgress = require('../models/userQuestionProgress');
 const Question = require('../models/question');
+const ReadingContent = require('../models/readingContent'); // eslint-disable-line no-unused-vars
 
 const questionProgressService = {
   // Get due questions for a user (for SRS)
@@ -43,7 +44,20 @@ const questionProgressService = {
     const dueQuestions = await UserQuestionProgress.aggregate(pipeline);
     console.log('Found due questions:', dueQuestions.length);
     
-    return dueQuestions;
+    const populatedDueQuestions = await Promise.all(
+      dueQuestions.map(async (item) => {
+        if (item.questionData.readingContentId) {
+          const ReadingContent = require('../models/readingContent');
+          const readingContent = await ReadingContent.findById(item.questionData.readingContentId);
+          if (readingContent) {
+            item.questionData.readingContentId = readingContent;
+          }
+        }
+        return item;
+      }),
+    );
+    
+    return populatedDueQuestions;
   },
 
   // Get new questions not yet attempted by user
@@ -65,7 +79,9 @@ const questionProgressService = {
       query.level = level;
     }
 
-    const questions = await Question.find(query).limit(limit);
+    const questions = await Question.find(query)
+      .populate('readingContentId')
+      .limit(limit);
     console.log('Found new questions:', questions.length);
     
     return questions;
@@ -95,17 +111,7 @@ const questionProgressService = {
         _id: null, // No progress record yet
         user: userId,
         question: question._id,
-        questionData: {
-          _id: question._id,
-          questionText: question.questionText,
-          answers: question.answers,
-          correctAnswer: question.correctAnswer,
-          type: question.type,
-          level: question.level,
-          words: question.words || [],
-          grammarPoints: question.grammarPoints || [],
-          readingContent: null,
-        },
+        questionData: question,
         srsLevel: 0,
         successCount: 0,
         failureCount: 0,

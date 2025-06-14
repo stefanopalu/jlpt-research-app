@@ -5,13 +5,10 @@ const getAllQuestions = async (level, type) => {
 
   const questions = await Question.find(filter);
   
-  // For each question call the method to get the populated data 
-  const populatedQuestions = await Promise.all(
-    questions.map(q => q.populateByNames()),
-  );
-  
-  // directly return populatedQuestions (plain objects with the needed data about words and grammar points)
-  return populatedQuestions; 
+  return questions.map(q => ({
+    ...q.toObject(),
+    id: q._id.toString(),
+  }));
 };
 
 const findQuestions = async (searchParams) => {
@@ -33,12 +30,10 @@ const findQuestions = async (searchParams) => {
   
   const questions = await Question.find(filter);
   
-  // Populate the questions
-  const populatedQuestions = await Promise.all(
-    questions.map(q => q.populateByNames()),
-  );
-  
-  return populatedQuestions;
+  return questions.map(q => ({
+    ...q.toObject(),
+    id: q._id.toString(),
+  }));
 };
 
 const updateQuestion = async (id, updateFields) => {
@@ -52,8 +47,10 @@ const updateQuestion = async (id, updateFields) => {
     throw new Error('Question not found');
   }
   
-  // Return populated question (like other question queries)
-  return await updatedQuestion.populateByNames();
+  return {
+    ...updatedQuestion.toObject(),
+    id: updatedQuestion._id.toString(),
+  };
 };
 
 const deleteQuestion = async (id) => {

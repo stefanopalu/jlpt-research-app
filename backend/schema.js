@@ -139,7 +139,8 @@ const typeDefs = gql`
   }
 
   type Query {
-    allWords(level: String!): [Word!]!
+    allWords: [Word!]! 
+    wordsByLevel(level: String!): [Word!]! 
     findWords(kanji: String, hiragana: String, english: String): [Word!]!
     allGrammarPoints: [GrammarPoint!]!
     findGrammarPoints(name: String, title: String): [GrammarPoint!]!
@@ -152,6 +153,8 @@ const typeDefs = gql`
     getUserQuestionProgress(userId: ID!): [UserQuestionProgress!]!
     getUserWordProgress(userId: ID!): [UserWordProgress!]!
     getUserGrammarPointProgress(userId: ID!): [UserGrammarPointProgress!]!
+    getProblematicGrammarPoints: [GrammarPoint!]!
+    getProblematicWords: [Word!]!
   }
 
   type Mutation {

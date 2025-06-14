@@ -37,36 +37,8 @@ const questionSchema = new mongoose.Schema({
 
 questionSchema.index({ type: 1, level: 1 });
 
-questionSchema.methods.populateByNames = async function() {
-  let populatedWords = [];
-  let populatedGrammarPoints = [];
+questionSchema.methods.populateReadingContent = async function() {
   let populatedReadingContent = null;
-  
-  if (this.words && this.words.length > 0) {
-    const Word = require('./word');
-    // Find words where kanji matches the word in the word array
-    const foundWords = await Word.find({ 
-      kanji: { $in: this.words },
-    });
-    
-    // Get an array of Word objects with ObjectId converted to string
-    populatedWords = foundWords.map(word => ({
-      ...word.toObject(),
-      id: word._id.toString(),
-    }));
-  }
-  
-  if (this.grammarPoints && this.grammarPoints.length > 0) {
-    const GrammarPoint = require('./grammarPoint');
-    const foundGrammar = await GrammarPoint.find({ 
-      name: { $in: this.grammarPoints },
-    });
-    
-    populatedGrammarPoints = foundGrammar.map(gp => ({
-      ...gp.toObject(),
-      id: gp._id.toString(),
-    }));
-  }
 
   if (this.readingContentId) {
     const ReadingContent = require('./readingContent');
@@ -84,8 +56,6 @@ questionSchema.methods.populateByNames = async function() {
   return {
     ...this.toObject(),
     id: this._id.toString(),
-    words: populatedWords,
-    grammarPoints: populatedGrammarPoints,
     readingContent: populatedReadingContent,
   };
 };

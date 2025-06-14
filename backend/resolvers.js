@@ -96,7 +96,13 @@ const resolvers = {
   },
 
   Query: {
-    allWords: async (root, args) => {
+    allWords: async (_root, _args) => {
+      // No parameters, just like allGrammarPoints
+      return await wordService.getAllWords();
+    },
+
+    wordsByLevel: async (root, args) => {
+      // Separate resolver for level filtering
       return await wordService.getAllWords(args.level);
     },
 
@@ -112,7 +118,7 @@ const resolvers = {
       return await questionService.findQuestions(args);
     },
 
-    allGrammarPoints: async (root, args) => {
+    allGrammarPoints: async (_root, _args) => {
       return await grammarPointService.getAllGrammarPoints();
     },
 
@@ -202,6 +208,8 @@ const resolvers = {
             questionDataId: questionData?._id,
             questionText: questionData?.questionText,
             answers: questionData?.answers,
+            readingContentId: questionData?.readingContentId,
+            readingContent: questionData?.readingContent,
           });
           
           if (!questionData || !questionData._id) {
@@ -220,7 +228,7 @@ const resolvers = {
               type: questionData.type,
               words: questionData.words || [],
               grammarPoints: questionData.grammarPoints || [],
-              readingContent: questionData.readingContent || null,
+              readingContent: questionData.readingContentId || null,
             },
             srsLevel: questionCard.srsLevel || 0,
             successCount: questionCard.successCount || 0,
@@ -248,6 +256,24 @@ const resolvers = {
     },
     getUserGrammarPointProgress: async (_, { userId }) => {
       return await grammarPointProgressService.getUserProgress(userId);
+    },
+    getProblematicGrammarPoints: async (root, args, context) => {
+      const userId = context.currentUser?._id;
+      
+      if (!userId) {
+        throw new GraphQLError('Not authenticated');
+      }
+
+      return await grammarPointProgressService.getProblematicGrammarPoints(userId);
+    },
+    getProblematicWords: async (root, args, context) => {
+      const userId = context.currentUser?._id;
+      
+      if (!userId) {
+        throw new GraphQLError('Not authenticated');
+      }
+
+      return await wordProgressService.getProblematicWords(userId);
     },
   },
 

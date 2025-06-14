@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { useNavigate } from 'react-router-native';
 import { useDebounce } from 'use-debounce';
-import { useGrammarPoints } from '../../hooks/useGrammarPoints';
 import { useQuery } from '@apollo/client';
 import { GET_CURRENT_USER } from '../../graphql/queries';
+import { useWords } from '../../hooks/useWords';
 
 const styles = StyleSheet.create({
   container: {
@@ -63,14 +63,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: '#FF6B35', // Orange-red for problematic items
+    backgroundColor: '#FF6B35', // Orange-red for problematic words
     padding: 16,
     marginVertical: 8,
     borderRadius: 8,
     alignItems: 'center',
   },
-  allGrammarButton: {
-    backgroundColor: '#007AFF', // Blue for all grammar points
+  allWordsButton: {
+    backgroundColor: '#17a2b8', // Teal for all words
   },
   searchButton: {
     backgroundColor: '#007AFF', // Blue for search results
@@ -79,6 +79,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: '500',
+  },
+  wordInfo: {
+    marginTop: 4,
+  },
+  wordSubtext: {
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: 14,
   },
   noResultsText: {
     fontSize: 16,
@@ -148,24 +155,24 @@ const styles = StyleSheet.create({
   },
 });
 
-const GrammarPointList = () => {
-  const { data: userData } = useQuery(GET_CURRENT_USER, { errorPolicy: 'ignore' }); // Don't throw errors if not authenticated
+const WordsList = () => {
+  const { data: userData } = useQuery(GET_CURRENT_USER, { errorPolicy: 'ignore' });
   const currentUser = userData?.me;
   const isAuthenticated = !!currentUser;
 
   const { 
-    grammarPoints, // All grammar points (fallback for non-authenticated users)
+    words, // All words (fallback for non-authenticated users)
     loading: allLoading,
     error: allError,
-    problematicGrammarPoints, // Problematic grammar points (for authenticated users)
+    problematicWords, // Problematic words (for authenticated users)
     problematicLoading,
     problematicError,
-    searchGrammarPoints,
+    searchWords,
     searchResults,
     searchError,
     searchLoading,
-  } = useGrammarPoints();
-  
+  } = useWords(); // No level filter for now - can add later
+
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery] = useDebounce(searchQuery, 300);
@@ -173,18 +180,19 @@ const GrammarPointList = () => {
   // Trigger search when debounced query changes
   useEffect(() => {
     if (debouncedQuery.trim()) {
-      searchGrammarPoints({
-        variables: { title: debouncedQuery.trim() },
+      // Search by english - could enhance to search multiple fields
+      searchWords({
+        variables: { english: debouncedQuery.trim() },
       });
     }
-  }, [debouncedQuery, searchGrammarPoints]);
+  }, [debouncedQuery, searchWords]);
 
-  const handlePress = (grammarPoint) => {
-    navigate(`/grammarpoint/${grammarPoint.name}`, { state: { grammarPoint } });
+  const handlePress = (word) => {
+    navigate(`/word/${word.id}`, { state: { word } });
   };
 
   const handleLoginPress = () => {
-    navigate('/login'); // Adjust path as needed
+    navigate('/login');
   };
 
   const clearSearch = () => {
@@ -202,24 +210,24 @@ const GrammarPointList = () => {
     hasError = searchError;
     buttonStyle = styles.searchButton;
   } else if (isAuthenticated) {
-    // Show problematic grammar points for authenticated users
-    displayData = problematicGrammarPoints;
+    // Show problematic words for authenticated users
+    displayData = problematicWords;
     isLoading = problematicLoading;
     hasError = problematicError;
     buttonStyle = styles.button; // Orange-red for problematic
   } else {
-    // Show all grammar points for non-authenticated users
-    displayData = grammarPoints;
+    // Show all words for non-authenticated users
+    displayData = words;
     isLoading = allLoading;
     hasError = allError;
-    buttonStyle = styles.allGrammarButton; // Blue for all grammar points
+    buttonStyle = styles.allWordsButton; // Teal for all words
   }
 
   // Handle loading states
   if (isLoading && !isSearching) {
     return (
       <View style={styles.container}>
-        <Text style={styles.loadingText}>Loading grammar points...</Text>
+        <Text style={styles.loadingText}>Loading words...</Text>
       </View>
     );
   }
@@ -236,8 +244,8 @@ const GrammarPointList = () => {
   // Get appropriate subtitle
   const getSubtitle = () => {
     if (isSearching) return 'Search Results';
-    if (isAuthenticated) return 'Areas that need practice';
-    return 'All Grammar Points';
+    if (isAuthenticated) return 'Words that need practice';
+    return 'All Words';
   };
 
   // Get appropriate results count text
@@ -248,9 +256,9 @@ const GrammarPointList = () => {
     if (isSearching) {
       return `${count} search result${count !== 1 ? 's' : ''} found`;
     } else if (isAuthenticated) {
-      return `${count} grammar point${count !== 1 ? 's' : ''} needing practice`;
+      return `${count} word${count !== 1 ? 's' : ''} needing practice`;
     } else {
-      return `${count} grammar point${count !== 1 ? 's' : ''} available`;
+      return `${count} word${count !== 1 ? 's' : ''} available`;
     }
   };
 
@@ -259,22 +267,22 @@ const GrammarPointList = () => {
     if (isSearching) {
       return (
         <Text style={styles.noResultsText}>
-          No grammar points found matching your search.
+          No words found matching your search.
         </Text>
       );
     } else if (isAuthenticated) {
       return (
         <View style={styles.emptyState}>
-          <Text style={styles.emptyStateTitle}>🎉 Great job!</Text>
+          <Text style={styles.emptyStateTitle}>🎉 Excellent!</Text>
           <Text style={styles.emptyStateText}>
-            {'No problematic grammar points right now. Keep practicing to maintain your progress!'}
+            {'No problematic words right now. Keep practicing to maintain your vocabulary progress!'}
           </Text>
         </View>
       );
     } else {
       return (
         <Text style={styles.noResultsText}>
-          No grammar points available at the moment.
+          No words available at the moment.
         </Text>
       );
     }
@@ -282,14 +290,14 @@ const GrammarPointList = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Grammar Points</Text>
+      <Text style={styles.title}>Words</Text>
       <Text style={styles.subtitle}>{getSubtitle()}</Text>
       
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
-          placeholder="Search all grammar points..."
+          placeholder="Search all words..."
           value={searchQuery}
           onChangeText={setSearchQuery}
           autoCorrect={false}
@@ -307,7 +315,7 @@ const GrammarPointList = () => {
         <View style={styles.authPrompt}>
           <Text style={styles.authPromptTitle}>Get Personalized Learning</Text>
           <Text style={styles.authPromptText}>
-            Log in to see grammar points you need to practice based on your performance and get a personalized learning experience.
+            Log in to see words you need to practice based on your performance and get a personalized vocabulary learning experience.
           </Text>
           <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
             <Text style={styles.loginButtonText}>Log In</Text>
@@ -333,13 +341,18 @@ const GrammarPointList = () => {
         {!displayData || displayData.length === 0 ? (
           getEmptyStateMessage()
         ) : (
-          displayData.map((grammarPoint) => (
+          displayData.map((word) => (
             <TouchableOpacity
-              key={grammarPoint.id}
+              key={word.id}
               style={[styles.button, buttonStyle]}
-              onPress={() => handlePress(grammarPoint)}
+              onPress={() => handlePress(word)}
             >
-              <Text style={styles.buttonText}>{grammarPoint.title}</Text>
+              <Text style={styles.buttonText}>{word.kanji}</Text>
+              <View style={styles.wordInfo}>
+                <Text style={styles.wordSubtext}>
+                  {word.hiragana} • {word.english.join(', ')}
+                </Text>
+              </View>
             </TouchableOpacity>
           ))
         )}
@@ -348,4 +361,4 @@ const GrammarPointList = () => {
   );
 };
 
-export default GrammarPointList;
+export default WordsList;

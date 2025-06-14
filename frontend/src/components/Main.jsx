@@ -8,7 +8,9 @@ import Home from './Home';
 import FlashcardsManager from './testcomponents/FlashcardsManager';
 import QuestionManager from './testcomponents/QuestionManager';
 import GrammarPointList from './study/GrammarPointsList';
-import GrammarPoint from './study/GrammarPoint';
+import GrammarPointView from './study/GrammarPointView';
+import WordsList from './study/WordsList';
+import WordView from './study/WordView';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,7 +29,9 @@ const Main = () => {
         <Route path="/vocabularyflashcards" element={<FlashcardsManager />} />
         <Route path="/questions" element={<QuestionManager />} />
         <Route path="/grammarpoints" element={<GrammarPointList />} />
-        <Route path="/grammarpoint/:name" element={<GrammarPoint />} />
+        <Route path="/grammarpoint/:name" element={<GrammarPointView />} />
+        <Route path="/words" element={<WordsList />} />
+        <Route path="/word/:id" element={<WordView />} />
       </Routes>
     </SafeAreaView>
   );
