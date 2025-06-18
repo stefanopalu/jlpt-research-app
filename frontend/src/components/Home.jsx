@@ -72,6 +72,11 @@ const Home = () => {
         { key: 'words', label: 'Words', path: '/words' },
       ],
     },
+    stats: {
+      title: 'Stats',
+      directPath: '/stats',
+      color: theme.colors.primary,
+    },
     flashcards: {
       title: 'Vocabulary Flashcards',
       directPath: '/vocabularyflashcards',

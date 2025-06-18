@@ -184,7 +184,7 @@ const GrammarPointList = () => {
   };
 
   const handleLoginPress = () => {
-    navigate('/login'); // Adjust path as needed
+    navigate('/sigin'); 
   };
 
   const clearSearch = () => {

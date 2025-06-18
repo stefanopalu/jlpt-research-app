@@ -11,6 +11,7 @@ import GrammarPointList from './study/GrammarPointsList';
 import GrammarPointView from './study/GrammarPointView';
 import WordsList from './study/WordsList';
 import WordView from './study/WordView';
+import UserStats from './usercomponents/UserStats';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,6 +33,7 @@ const Main = () => {
         <Route path="/grammarpoint/:name" element={<GrammarPointView />} />
         <Route path="/words" element={<WordsList />} />
         <Route path="/word/:id" element={<WordView />} />
+        <Route path="/stats" element={<UserStats />} />
       </Routes>
     </SafeAreaView>
   );

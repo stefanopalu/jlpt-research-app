@@ -251,6 +251,16 @@ const resolvers = {
     getUserQuestionProgress: async (_, { userId }) => {
       return await questionProgressService.getUserProgress(userId);
     },
+
+    getUserQuestionStats: async (parent, { userId }, context) => {
+      const { currentUser } = context;
+      if (!currentUser) {
+        throw new Error('Authentication required');
+      }
+      
+      return await questionProgressService.getUserStats(userId);
+    },
+
     getUserWordProgress: async (_, { userId }) => {
       return await wordProgressService.getUserProgress(userId);
     },

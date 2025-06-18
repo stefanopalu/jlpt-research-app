@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useLocation } from 'react-router-native';
+import { useLocation, useNavigate } from 'react-router-native';
 import { useQuestionStudySession } from '../../hooks/useQuestionStudySession';
 import QuestionsWithReading from './QuestionsWithReading';
 import SimpleQuestions from './SimpleQuestions';
 import SessionProgressBar from './SessionProgressBar';
+import SessionComplete from './SessionComplete';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_CURRENT_USER } from '../../graphql/queries';
 import { UPDATE_USER_QUESTION_PROGRESS, UPDATE_USER_GRAMMAR_POINT_PROGRESS, UPDATE_USER_WORD_PROGRESS } from '../../graphql/mutations';
@@ -19,6 +20,7 @@ const styles = StyleSheet.create({
 
 const QuestionManager = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const params = new URLSearchParams(location.search);
   const type = params.get('exerciseType');
 
@@ -26,9 +28,11 @@ const QuestionManager = () => {
   const user = userData?.me;
   const level = user?.studyLevel;
 
-  const { questions, loading, error } = useQuestionStudySession(level, type, QUESTIONS_PER_SESSION);
+  const { questions, loading, error, refetch } = useQuestionStudySession(level, type, QUESTIONS_PER_SESSION);
+  
   const [currentIndex, setCurrentIndex] = useState(0);
   const [questionStartTime, setQuestionStartTime] = useState(null);
+  const [isRefetching, setIsRefetching] = useState(false);
 
   const [updateUserQuestionProgress] = useMutation(UPDATE_USER_QUESTION_PROGRESS);
   const [updateUserGrammarPointProgress] = useMutation(UPDATE_USER_GRAMMAR_POINT_PROGRESS);
@@ -47,7 +51,7 @@ const QuestionManager = () => {
   if (userLoading) return <Text>Loading user data...</Text>;
   if (!user) return <Text>User not found...</Text>;
   if (!level) return <Text>User study level not set...</Text>;
-  if (loading) return <Text>Loading questions...</Text>;
+  if (loading || isRefetching) return <Text>Loading questions...</Text>;
   if (error) return <Text>Error loading questions: {error.message}</Text>;
 
   if (!questions || questions.length === 0) {
@@ -62,12 +66,31 @@ const QuestionManager = () => {
 
   // Check if session is complete
   if (currentIndex >= QUESTIONS_PER_SESSION) {
+    const handleNewSession = async () => {
+      console.log('Starting new session...');
+      setIsRefetching(true);
+      setCurrentIndex(0);
+      setQuestionStartTime(null);
+      try {
+        await refetch(); // Refetch new questions from the server
+        console.log('New questions fetched successfully');
+      } catch (err) {
+        console.error('Error fetching new questions:', err);
+      } finally {
+        setIsRefetching(false);
+      }
+    };
+
+    const handleGoHome = () => {
+      navigate('/');
+    };
+
     return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: 'center', fontSize: 18, marginTop: 50 }}>
-          Session Complete! 🎉{'\n'}
-        </Text>
-      </View>
+      <SessionComplete 
+        onNewSession={handleNewSession}
+        onGoHome={handleGoHome}
+        questionsCompleted={QUESTIONS_PER_SESSION}
+      />
     );
   }
 
@@ -130,6 +153,7 @@ const QuestionManager = () => {
       } else {
         //Session complete
         console.log('Quiz completed!');
+        setCurrentIndex(currentIndex + 1);
       }
     }, 1500);
   };

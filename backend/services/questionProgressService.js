@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const UserQuestionProgress = require('../models/userQuestionProgress');
 const Question = require('../models/question');
 const ReadingContent = require('../models/readingContent'); // eslint-disable-line no-unused-vars
@@ -89,26 +90,40 @@ const questionProgressService = {
 
   // Get mixed study session (70% new, 30% due) - replaces old useQuestions logic
   async getStudySession(userId, exerciseType = null, level = null, totalLimit = 50) {
-    console.log('getStudySession called with:', { userId, exerciseType, level, totalLimit });
-
     try {
       // Calculate limits for mixing
       const newLimit = Math.floor(totalLimit * 0.7); // 70% new questions
       const dueLimit = Math.ceil(totalLimit * 0.3); // 30% due questions
       
-      console.log('Limits:', { newLimit, dueLimit });
-
       // Get both due and new questions in parallel
       const [dueQuestions, newQuestions] = await Promise.all([
         this.getDueQuestions(userId, exerciseType, level, dueLimit),
         this.getNewQuestions(userId, exerciseType, level, newLimit),
       ]);
 
-      console.log('Retrieved:', { dueCount: dueQuestions.length, newCount: newQuestions.length });
+      // BACKFILL LOGIC: If we don't have enough questions, get more from the other category
+      let finalDueQuestions = dueQuestions;
+      let finalNewQuestions = newQuestions;
 
-      // Convert new questions to consistent format with due questions
-      const newQuestionCards = newQuestions.map(question => ({
-        _id: null, // No progress record yet
+      const currentTotal = dueQuestions.length + newQuestions.length;
+      
+      if (currentTotal < totalLimit) {
+        const shortage = totalLimit - currentTotal;
+
+        if (dueQuestions.length < dueLimit) {
+          // Not enough due questions - get more new ones
+          const additionalNew = await this.getNewQuestions(userId, exerciseType, level, newLimit + shortage);
+          finalNewQuestions = additionalNew;
+        } else if (newQuestions.length < newLimit) {
+          // Not enough new questions - get more due ones
+          const additionalDue = await this.getDueQuestions(userId, exerciseType, level, dueLimit + shortage);
+          finalDueQuestions = additionalDue;
+        }
+      }
+
+      // Convert new questions to consistent format
+      const newQuestionCards = finalNewQuestions.map(question => ({
+        _id: null,
         user: userId,
         question: question._id,
         questionData: question,
@@ -118,16 +133,14 @@ const questionProgressService = {
         isNew: true,
       }));
 
-      // Combine due questions (already in correct format) with new question cards
-      const combined = [...dueQuestions, ...newQuestionCards];
-      
-      // Limit to requested total and shuffle
+      // Combine and limit
+      const combined = [...finalDueQuestions, ...newQuestionCards];
       const finalQuestions = combined.slice(0, totalLimit).sort(() => Math.random() - 0.5);
       
       console.log('Final session:', { 
-        total: finalQuestions.length, 
-        due: dueQuestions.length, 
-        new: newQuestionCards.length, 
+        totalReturned: finalQuestions.length,
+        dueCount: finalDueQuestions.length, 
+        newCount: newQuestionCards.length, 
       });
 
       return finalQuestions;
@@ -171,11 +184,130 @@ const questionProgressService = {
   },
 
   // Get user's progress for specific question
-  async getQuestionProgress(userId, questionId) {
-    return await UserQuestionProgress.findOne({
-      user: userId,
-      question: questionId,
-    }).populate('question');
+  async getUserStats(userId) {
+    console.log('getUserStats called for:', userId);
+    
+    try {
+      const userObjectId = new mongoose.Types.ObjectId(userId);
+      
+      // Basic counts
+      const totalAttempted = await UserQuestionProgress.countDocuments({ user: userId });
+      const currentlyDue = await UserQuestionProgress.countDocuments({ 
+        user: userId, 
+        nextReview: { $lte: new Date() }, 
+      });
+      
+      // Enhanced breakdown by question type with success/failure stats
+      const byType = await UserQuestionProgress.aggregate([
+        { $match: { user: userObjectId } },
+        {
+          $lookup: {
+            from: 'questions',
+            localField: 'question',
+            foreignField: '_id',
+            as: 'questionData',
+          },
+        },
+        { $unwind: '$questionData' },
+        {
+          $group: {
+            _id: '$questionData.type',
+            attempted: { $sum: 1 },
+            totalSuccess: { $sum: '$successCount' },
+            totalFailure: { $sum: '$failureCount' },
+            due: {
+              $sum: {
+                $cond: [{ $lte: ['$nextReview', new Date()] }, 1, 0],
+              },
+            },
+            // Count questions where success > failure (user is "winning")
+            questionsCorrect: {
+              $sum: {
+                $cond: [{ $gt: ['$successCount', '$failureCount'] }, 1, 0],
+              },
+            },
+            // Average SRS level for this type
+            avgSrsLevel: { $avg: '$srsLevel' },
+            // Questions still at level 0 (never answered correctly)
+            questionsAtLevel0: {
+              $sum: {
+                $cond: [{ $eq: ['$srsLevel', 0] }, 1, 0],
+              },
+            },
+          },
+        },
+        {
+          $addFields: {
+            // Calculate accuracy: total correct attempts / total attempts
+            accuracy: {
+              $cond: [
+                { $gt: [{ $add: ['$totalSuccess', '$totalFailure'] }, 0] },
+                { 
+                  $multiply: [
+                    { $divide: ['$totalSuccess', { $add: ['$totalSuccess', '$totalFailure'] }] },
+                    100,
+                  ],
+                },
+                0,
+              ],
+            },
+            // Calculate question mastery rate: questions correct / total questions
+            masteryRate: {
+              $cond: [
+                { $gt: ['$attempted', 0] },
+                { $multiply: [{ $divide: ['$questionsCorrect', '$attempted'] }, 100] },
+                0,
+              ],
+            },
+          },
+        },
+        { $sort: { attempted: -1 } },
+      ]);
+      
+      // Overall accuracy calculation
+      const overallStats = await UserQuestionProgress.aggregate([
+        { $match: { user: userObjectId } },
+        {
+          $group: {
+            _id: null,
+            totalSuccess: { $sum: '$successCount' },
+            totalFailure: { $sum: '$failureCount' },
+            questionsCorrect: {
+              $sum: {
+                $cond: [{ $gt: ['$successCount', '$failureCount'] }, 1, 0],
+              },
+            },
+            avgSrsLevel: { $avg: '$srsLevel' },
+          },
+        },
+      ]);
+      
+      const overall = overallStats[0] || { totalSuccess: 0, totalFailure: 0, questionsCorrect: 0, avgSrsLevel: 0 };
+      const overallAccuracy = (overall.totalSuccess + overall.totalFailure) > 0 
+        ? (overall.totalSuccess / (overall.totalSuccess + overall.totalFailure)) * 100 
+        : 0;
+      const overallMasteryRate = totalAttempted > 0 
+        ? (overall.questionsCorrect / totalAttempted) * 100 
+        : 0;
+      
+      return {
+        totalAttempted,
+        currentlyDue,
+        overallAccuracy: Math.round(overallAccuracy * 10) / 10,
+        overallMasteryRate: Math.round(overallMasteryRate * 10) / 10,
+        averageSrsLevel: Math.round(overall.avgSrsLevel * 10) / 10,
+        byType: byType.map(type => ({
+          ...type,
+          accuracy: Math.round(type.accuracy * 10) / 10,
+          masteryRate: Math.round(type.masteryRate * 10) / 10,
+          avgSrsLevel: Math.round(type.avgSrsLevel * 10) / 10,
+        })),
+      };
+      
+    } catch (error) {
+      console.error('Error getting user stats:', error);
+      throw error;
+    }
   },
 };
 

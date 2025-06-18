@@ -210,3 +210,27 @@ export const GET_PROBLEMATIC_WORDS = gql`
   }
   ${WORD_FRAGMENT}
 `;
+
+export const GET_USER_QUESTION_STATS = gql`
+  query GetUserQuestionStats($userId: ID!) {
+    getUserQuestionStats(userId: $userId) {
+      totalAttempted
+      currentlyDue
+      overallAccuracy
+      overallMasteryRate
+      averageSrsLevel
+      byType {
+        _id
+        attempted
+        due
+        totalSuccess
+        totalFailure
+        questionsCorrect
+        avgSrsLevel
+        questionsAtLevel0
+        accuracy
+        masteryRate
+      }
+    }
+  }
+`;

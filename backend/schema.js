@@ -120,6 +120,28 @@ const typeDefs = gql`
     averageResponseTime: Int
   }
 
+  type UserQuestionStats {
+    totalAttempted: Int!
+    currentlyDue: Int!
+    overallAccuracy: Float!
+    overallMasteryRate: Float!
+    averageSrsLevel: Float!
+    byType: [QuestionTypeStats!]!
+  }
+
+  type QuestionTypeStats {
+    _id: String!
+    attempted: Int!
+    due: Int!
+    totalSuccess: Int!
+    totalFailure: Int!
+    questionsCorrect: Int!
+    avgSrsLevel: Float!
+    questionsAtLevel0: Int!
+    accuracy: Float!
+    masteryRate: Float!
+  }
+
   type UserWordProgress {
     id: ID!
     user: User!
@@ -151,6 +173,7 @@ const typeDefs = gql`
     getStudySession(level: String!, limit: Int = 100): [StudyCard!]!
     getQuestionStudySession(exerciseType: String!, level: String!, limit: Int = 50): [StudyQuestion!]!
     getUserQuestionProgress(userId: ID!): [UserQuestionProgress!]!
+    getUserQuestionStats(userId: ID!): UserQuestionStats!
     getUserWordProgress(userId: ID!): [UserWordProgress!]!
     getUserGrammarPointProgress(userId: ID!): [UserGrammarPointProgress!]!
     getProblematicGrammarPoints: [GrammarPoint!]!

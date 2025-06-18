@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   answerButton: {
     backgroundColor: 'white',
     padding: 12,
-    margin: 10,
+    margin: 5,
     marginHorizontal: 10,
     borderRadius: 10,
     borderColor: '#ccc',
@@ -39,12 +39,12 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.error,
   },
   answerText: {
-    fontSize: 20,
+    fontSize: 24,
     textAlign: 'center',
     color: '#333',
   },
   answerTextSelected: {
-    fontSize: 18,
+    fontSize: 24,
     textAlign: 'center',
     color: 'white', 
   },

@@ -88,7 +88,7 @@ const start = async () => {
         try {
           const decodedToken = jwt.verify(token, JWT_SECRET);
           const currentUser = await User.findById(decodedToken.id);
-          console.log('CurrentUser in context:', currentUser);
+          console.log('CurrentUser in context:', currentUser?.username, 'for operation:', req.body?.operationName);
           return { currentUser };
         } catch (err) {
           console.error('Invalid token:', err.message);

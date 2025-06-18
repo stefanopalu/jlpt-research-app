@@ -4,7 +4,7 @@ import { GET_QUESTION_STUDY_SESSION } from '../graphql/queries';
 const useQuestionStudySession = (level, exerciseType, limit = 5) => {
   console.log('useQuestionStudySession called with:', { level, exerciseType, limit });
   
-  const { data, error, loading } = useQuery(GET_QUESTION_STUDY_SESSION, {
+  const { data, error, loading, refetch } = useQuery(GET_QUESTION_STUDY_SESSION, {
     variables: { 
       exerciseType, 
       level, 
@@ -23,7 +23,7 @@ const useQuestionStudySession = (level, exerciseType, limit = 5) => {
     isNew: studyQuestion.isNew,
   })) || [];
 
-  return { questions, error, loading };
+  return { questions, error, loading, refetch };
 };
 
 export { useQuestionStudySession };

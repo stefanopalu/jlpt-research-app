@@ -192,7 +192,7 @@ const WordsList = () => {
   };
 
   const handleLoginPress = () => {
-    navigate('/login');
+    navigate('/signin');
   };
 
   const clearSearch = () => {

@@ -4,7 +4,6 @@ import { KeyboardAvoidingView, Platform, View, TextInput, Pressable, StyleSheet,
 import { FontAwesome } from '@expo/vector-icons';
 import { useMutation } from '@apollo/client';
 import { UPDATE_USER_FLASHCARDS_PROGRESS } from '../../graphql/mutations';
-import { useDebounce } from 'use-debounce';
 
 import WordCard from '../study/WordCard';
 import FlashcardProgressBar from './FlashcardProgressBar';
@@ -14,11 +13,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  keyboardContainer: {
+    flex: 1,
+  },
+  contentContainer: {
+    flex: 1,
+  },
   wordcontainer: {
-    flex: 1, 
+    height: 250, // Fixed height instead of flex
     backgroundColor: theme.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  bottomSection: {
+    flex: 1, // This will be the flexible space for keyboard
+  },
+  keyboardSpace: {
+    flex: 1, // This space gets occupied by keyboard
+    minHeight: 100, // Minimum space when keyboard is not visible
+    backgroundColor: 'white',
   },
   kanjitext: {
     fontSize: 60,
@@ -52,7 +65,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 22,
   },
   iconButton: {
     padding: 10,
@@ -66,6 +79,13 @@ const styles = StyleSheet.create({
   inputWrong: {
     color: '#dc3545',     // red
   },
+  solutionContainer: {
+    flex: 1, // Takes all available space in bottomSection
+    marginTop: 10,
+  },
+  solutionContent: {
+    flexGrow: 1,
+  },
 });
 
 const BeginnerFlashcard = ({ words }) => {
@@ -75,16 +95,20 @@ const BeginnerFlashcard = ({ words }) => {
   const [showWordCard, setShowWordCard] = useState(false);
   const [completedWords, setCompletedWords] = useState(0);
 
-  const [debouncedAnswer] = useDebounce(answer, 500);
   const [updateUserFlashcardsProgress] = useMutation(UPDATE_USER_FLASHCARDS_PROGRESS);
 
   const currentWord = words[index];
 
   const handleSubmit = async () => {
-    const isCorrect = currentWord.english.some(
-      e => e.toLowerCase() === debouncedAnswer.trim().toLowerCase(),
-    );
+    const userAnswerTrimmed = answer.trim().toLowerCase();
     
+    const isCorrect = currentWord.english.some(
+      e => {
+        const expectedAnswer = e.toLowerCase();
+        return expectedAnswer === userAnswerTrimmed;
+      },
+    );
+
     setResult(isCorrect ? 'correct' : 'wrong');
 
     // Update progress
@@ -135,7 +159,8 @@ const BeginnerFlashcard = ({ words }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}
+      style={styles.keyboardContainer}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20} 
     >
       <View style={styles.container}>
         {/* Progress indicator */}
@@ -146,52 +171,63 @@ const BeginnerFlashcard = ({ words }) => {
           currentWord={currentWord}
         />
 
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.contentContainer}>
+          {/* Fixed size word display area */}
           <View style={styles.wordcontainer}>
             <Text style={styles.kanjitext}>{currentWord.kanji}</Text>
             <Text style={styles.hiraganatext}>{currentWord.hiragana}</Text>
           </View>
-          <View style={styles.labelContainer}>
-            <Text style={styles.labelText}>English meaning:</Text>
-          </View>
-          <View style={styles.inputRow}>
-            {result === 'wrong' && (
-              <Pressable style={styles.iconButton} onPress={() => setShowWordCard(true)}>
-                <FontAwesome name="info-circle" size={24} color={theme.colors.primary} />
-              </Pressable>
-            )}
-            <TextInput 
-              editable={isInputEditable}
-              autoCorrect={false}   
-              autoComplete="off"
-              spellCheck={false}
-              style={[
-                styles.input,
-                result === 'correct' ? styles.inputCorrect :
-                  result === 'wrong' ? styles.inputWrong : null,
-              ]}
-              value={answer}
-              onChangeText={setAnswer}
-              placeholder="Your response"
-            />
-            {result === 'wrong' ? (
-              <Pressable style={styles.iconButton} onPress={handleNext}>
-                <FontAwesome name="arrow-right" size={24} color={theme.colors.primary} />
-              </Pressable>
-            ) : (
-              <Pressable style={styles.iconButton} onPress={handleSubmit}>
-                <FontAwesome name="check" size={24} color={theme.colors.primary} />
-              </Pressable>
-            )}
-          </View>
 
-          {showWordCard && (
-            <View style={styles.solutionContainer}>
-              <WordCard word={currentWord} />
+          {/* Bottom section with input and flexible space */}
+          <View style={styles.bottomSection}>
+            {/* Fixed input area */}
+            <View>
+              <View style={styles.labelContainer}>
+                <Text style={styles.labelText}>English meaning:</Text>
+              </View>
+              <View style={styles.inputRow}>
+                {result === 'wrong' && (
+                  <Pressable style={styles.iconButton} onPress={() => setShowWordCard(true)}>
+                    <FontAwesome name="info-circle" size={24} color={theme.colors.primary} />
+                  </Pressable>
+                )}
+                <TextInput 
+                  editable={isInputEditable}
+                  autoCorrect={false}   
+                  autoComplete="off"
+                  spellCheck={false}
+                  style={[
+                    styles.input,
+                    result === 'correct' ? styles.inputCorrect :
+                      result === 'wrong' ? styles.inputWrong : null,
+                  ]}
+                  value={answer}
+                  onChangeText={setAnswer}
+                  placeholder="Your response"
+                />
+                {result === 'wrong' ? (
+                  <Pressable style={styles.iconButton} onPress={handleNext}>
+                    <FontAwesome name="arrow-right" size={24} color={theme.colors.primary} />
+                  </Pressable>
+                ) : (
+                  <Pressable style={styles.iconButton} onPress={handleSubmit}>
+                    <FontAwesome name="check" size={24} color={theme.colors.primary} />
+                  </Pressable>
+                )}
+              </View>
             </View>
-          )}
 
-        </ScrollView>
+            {/* Flexible area for WordCard or keyboard space */}
+            {showWordCard ? (
+              <ScrollView style={styles.solutionContainer} contentContainerStyle={styles.solutionContent}>
+                <WordCard word={currentWord} />
+              </ScrollView>
+            ) : (
+              /* This space gets occupied by the keyboard when input is focused */
+              <View style={styles.keyboardSpace} />
+            )}
+          </View>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );
