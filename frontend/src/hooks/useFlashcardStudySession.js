@@ -1,15 +1,15 @@
 import { useQuery } from '@apollo/client';
-import { GET_STUDY_SESSION } from '../graphql/queries';
+import { GET_FLASHCARD_STUDY_SESSION } from '../graphql/queries';
 
-const useStudySession = (level, limit = 100) => {
-  const { data, error, loading, refetch } = useQuery(GET_STUDY_SESSION, {
+const useFlashcardStudySession = (level, limit = 100) => {
+  const { data, error, loading, refetch } = useQuery(GET_FLASHCARD_STUDY_SESSION, {
     variables: { level, limit },
     fetchPolicy: 'cache-and-network',
     // Don't fetch automatically - let component decide when to start
     skip: !level,
   });
 
-  const studyCards = data?.getStudySession || [];
+  const studyCards = data?.getFlashcardStudySession || [];
   
   // Transform to match your existing word structure
   const words = studyCards.map(card => ({
@@ -29,4 +29,4 @@ const useStudySession = (level, limit = 100) => {
   };
 };
 
-export { useStudySession };
+export { useFlashcardStudySession };

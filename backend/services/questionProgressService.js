@@ -5,9 +5,7 @@ const ReadingContent = require('../models/readingContent'); // eslint-disable-li
 
 const questionProgressService = {
   // Get due questions for a user (for SRS)
-  async getDueQuestions(userId, exerciseType = null, level = null, limit = 15) {
-    console.log('getDueQuestions called:', { userId, exerciseType, level, limit });
-    
+  async getDueQuestions(userId, exerciseType = null, level = null, limit = 15) {    
     const query = {
       user: userId,
       nextReview: { $lte: new Date() },
@@ -40,10 +38,9 @@ const questionProgressService = {
       });
     }
 
-    pipeline.push({ $limit: limit });
+    pipeline.push({ $sample: { size: limit } });
 
     const dueQuestions = await UserQuestionProgress.aggregate(pipeline);
-    console.log('Found due questions:', dueQuestions.length);
     
     const populatedDueQuestions = await Promise.all(
       dueQuestions.map(async (item) => {
@@ -62,11 +59,8 @@ const questionProgressService = {
   },
 
   // Get new questions not yet attempted by user
-  async getNewQuestions(userId, exerciseType = null, level = null, limit = 35) {
-    console.log('getNewQuestions called:', { userId, exerciseType, level, limit });
-    
+  async getNewQuestions(userId, exerciseType = null, level = null, limit = 35) {    
     const userProgressQuestionIds = await UserQuestionProgress.distinct('question', { user: userId });
-    console.log('User has attempted:', userProgressQuestionIds.length, 'questions');
 
     const query = {
       _id: { $nin: userProgressQuestionIds },
@@ -80,10 +74,26 @@ const questionProgressService = {
       query.level = level;
     }
 
-    const questions = await Question.find(query)
-      .populate('readingContentId')
-      .limit(limit);
-    console.log('Found new questions:', questions.length);
+    const pipeline = [
+      { $match: query },
+      { $sample: { size: limit } },
+      {
+        $lookup: {
+          from: 'readingcontents', // Check your actual collection name
+          localField: 'readingContentId',
+          foreignField: '_id',
+          as: 'readingContentId',
+        },
+      },
+      {
+        $unwind: {
+          path: '$readingContentId',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+    ];
+
+    const questions = await Question.aggregate(pipeline);
     
     return questions;
   },
@@ -136,12 +146,6 @@ const questionProgressService = {
       // Combine and limit
       const combined = [...finalDueQuestions, ...newQuestionCards];
       const finalQuestions = combined.slice(0, totalLimit).sort(() => Math.random() - 0.5);
-      
-      console.log('Final session:', { 
-        totalReturned: finalQuestions.length,
-        dueCount: finalDueQuestions.length, 
-        newCount: newQuestionCards.length, 
-      });
 
       return finalQuestions;
 

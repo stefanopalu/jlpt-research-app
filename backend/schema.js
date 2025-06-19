@@ -170,7 +170,7 @@ const typeDefs = gql`
     findQuestions(level: String, type: String, word: String, grammarPoint: String, questionText: String): [Question!]!
     me: User
     getUserFlashcardsProgress(userId: ID!): [UserFlashcardsProgress!]!
-    getStudySession(level: String!, limit: Int = 100): [StudyCard!]!
+    getFlashcardStudySession(level: String!, limit: Int = 100): [StudyCard!]!
     getQuestionStudySession(exerciseType: String!, level: String!, limit: Int = 50): [StudyQuestion!]!
     getUserQuestionProgress(userId: ID!): [UserQuestionProgress!]!
     getUserQuestionStats(userId: ID!): UserQuestionStats!

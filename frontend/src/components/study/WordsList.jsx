@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { useNavigate } from 'react-router-native';
 import { useDebounce } from 'use-debounce';
-import { useQuery } from '@apollo/client';
-import { GET_CURRENT_USER } from '../../graphql/queries';
 import { useWords } from '../../hooks/useWords';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: 'white',
   },
   title: {
     fontSize: 24,
@@ -156,9 +157,7 @@ const styles = StyleSheet.create({
 });
 
 const WordsList = () => {
-  const { data: userData } = useQuery(GET_CURRENT_USER, { errorPolicy: 'ignore' });
-  const currentUser = userData?.me;
-  const isAuthenticated = !!currentUser;
+  const { isAuthenticated } = useCurrentUser();
 
   const { 
     words, // All words (fallback for non-authenticated users)
@@ -291,7 +290,6 @@ const WordsList = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Words</Text>
-      <Text style={styles.subtitle}>{getSubtitle()}</Text>
       
       {/* Search Bar */}
       <View style={styles.searchContainer}>
@@ -310,6 +308,7 @@ const WordsList = () => {
         )}
       </View>
 
+      <Text style={styles.subtitle}>{getSubtitle()}</Text>
       {/* Authentication prompt for non-authenticated users */}
       {!isAuthenticated && !isSearching && (
         <View style={styles.authPrompt}>

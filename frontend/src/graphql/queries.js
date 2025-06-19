@@ -30,72 +30,12 @@ export const GRAMMAR_POINT_FRAGMENT = gql`
   }
 `;
 
-export const GET_ALL_QUESTIONS = gql`
-  query GetAllQuestions($level: String!, $type: String!) {
-    allQuestions(level: $level, type: $type) {
-      id
-      questionText
-      answers
-      correctAnswer
-      level
-      type
-      words 
-      grammarPoints 
-      readingContent {
-        id
-        content
-        contentType
-        level
-      }
-    }
-  }
-  ${WORD_FRAGMENT}
-`;
-
-export const GET_CURRENT_USER = gql`
-  query getCurrentUser {
-    me {
-      id
-      username
-      email
-      firstName
-      lastName
-      studyLevel
-      createdAt
-      userFlashcardsProgress {
-        id
-        srsLevel
-        successCount
-        failureCount
-        lastReviewed
-        nextReview
-        word {
-          ...WordFields
-        }
-      }
-      userQuestionProgress {
-        id
-        srsLevel
-        successCount
-        failureCount
-        lastReviewed
-        nextReview
-        responseTime
-        averageResponseTime
-        question {
-          id
-        }
-      }
-    }
-  }
-  ${WORD_FRAGMENT}
-`;
-
 export const ME = gql`
   query {
     me {
       id
       username
+      studyLevel
     }
   }
 `;
@@ -130,9 +70,9 @@ export const GET_QUESTION_STUDY_SESSION = gql`
 `;
 
 // Get SRS-based study session (for flashcards)
-export const GET_STUDY_SESSION = gql`
-  query GetStudySession($level: String!, $limit: Int) {
-    getStudySession(level: $level, limit: $limit) {
+export const GET_FLASHCARD_STUDY_SESSION = gql`
+  query GetFlashcardStudySession($level: String!, $limit: Int) {
+    getFlashcardStudySession(level: $level, limit: $limit) {
       id
       word {
         ...WordFields

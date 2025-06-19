@@ -28,7 +28,7 @@ const flashcardsProgressService = {
       });
     }
     
-    pipeline.push({ $limit: limit });
+    pipeline.push({ $sample: { size: limit } });
     
     return await UserFlashcardsProgress.aggregate(pipeline);
   },
@@ -45,7 +45,12 @@ const flashcardsProgressService = {
       query.level = level;
     }
     
-    return await Word.find(query).limit(limit);
+    const pipeline = [
+      { $match: query },
+      { $sample: { size: limit } },
+    ];
+    
+    return await Word.aggregate(pipeline);
   },
 
   // Get mixed study session (70% new, 30% due)
@@ -56,7 +61,7 @@ const flashcardsProgressService = {
       this.getDueCards(userId, level, totalLimit),
       this.getNewWords(userId, level, newLimit),
     ]);
-    
+
     // Convert new words to consistent format with due cards
     const newCards = newWords.map(word => ({
       _id: null, // No progress record yet

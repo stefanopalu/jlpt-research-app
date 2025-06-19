@@ -1,18 +1,15 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
-import { useQuery } from '@apollo/client';
-import { GET_CURRENT_USER } from '../../graphql/queries';
-import { useStudySession } from '../../hooks/useStudySession';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+import { useFlashcardStudySession } from '../../hooks/useFlashcardStudySession';
 import BeginnerFlashcard from './BeginnerFlashcard';
 import AdvancedFlashcard from './AdvancedFlashcard';
 
-
 const FlashcardsManager = () => {
-  const { data: userData, loading: userLoading } = useQuery(GET_CURRENT_USER);
-  const user = userData?.me;
+  const { user, loading: userLoading } = useCurrentUser({ required: true });
   const level = user?.studyLevel;
 
-  const { words, loading: wordsLoading, error, refetch } = useStudySession(level, 100);
+  const { words, loading: wordsLoading, error, refetch } = useFlashcardStudySession(level, 100);
 
   if (userLoading || wordsLoading) return <Text>Loading study session...</Text>;
   if (error) return <Text>Error loading study session: {error.message}</Text>;

@@ -67,7 +67,7 @@ describe('flashcardsProgressService', () => {
         { $lookup: { from: 'words', localField: 'word', foreignField: '_id', as: 'wordData' } },
         { $unwind: '$wordData' },
         { $match: { 'wordData.level': 'N5' } },
-        { $limit: 10 },
+        { $sample: { size: 10 } }, // Updated: $sample instead of $limit
       ]);
       expect(result).toEqual(mockDueCards);
     });
@@ -79,17 +79,22 @@ describe('flashcardsProgressService', () => {
       const mockNewWords = [{ _id: 'word3', kanji: '犬' }];
 
       UserFlashcardsProgress.distinct.mockResolvedValue(mockWordIds);
-      Word.find.mockReturnValue({
-        limit: jest.fn().mockResolvedValue(mockNewWords),
-      });
+      // Updated: Mock Word.aggregate instead of Word.find
+      Word.aggregate.mockResolvedValue(mockNewWords);
 
       const result = await flashcardsProgressService.getNewWords('user123', 'N5', 5);
 
       expect(UserFlashcardsProgress.distinct).toHaveBeenCalledWith('word', { user: 'user123' });
-      expect(Word.find).toHaveBeenCalledWith({
-        _id: { $nin: mockWordIds },
-        level: 'N5',
-      });
+      // Updated: Expect Word.aggregate with pipeline instead of Word.find
+      expect(Word.aggregate).toHaveBeenCalledWith([
+        { 
+          $match: { 
+            _id: { $nin: mockWordIds },
+            level: 'N5',
+          } 
+        },
+        { $sample: { size: 5 } }
+      ]);
       expect(result).toEqual(mockNewWords);
     });
   });

@@ -6,8 +6,8 @@ import QuestionsWithReading from './QuestionsWithReading';
 import SimpleQuestions from './SimpleQuestions';
 import SessionProgressBar from './SessionProgressBar';
 import SessionComplete from './SessionComplete';
-import { useQuery, useMutation } from '@apollo/client';
-import { GET_CURRENT_USER } from '../../graphql/queries';
+import { useMutation } from '@apollo/client';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { UPDATE_USER_QUESTION_PROGRESS, UPDATE_USER_GRAMMAR_POINT_PROGRESS, UPDATE_USER_WORD_PROGRESS } from '../../graphql/mutations';
 
 const QUESTIONS_PER_SESSION = 5;
@@ -24,8 +24,7 @@ const QuestionManager = () => {
   const params = new URLSearchParams(location.search);
   const type = params.get('exerciseType');
 
-  const { data: userData, loading: userLoading } = useQuery(GET_CURRENT_USER);
-  const user = userData?.me;
+  const { user, loading: userLoading } = useCurrentUser({ required: true });
   const level = user?.studyLevel;
 
   const { questions, loading, error, refetch } = useQuestionStudySession(level, type, QUESTIONS_PER_SESSION);

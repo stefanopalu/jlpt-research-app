@@ -1,12 +1,9 @@
 import { useQuery, useLazyQuery } from '@apollo/client';
-import { 
-  GET_ALL_WORDS,
-  GET_WORDS_BY_LEVEL, 
-  GET_PROBLEMATIC_WORDS,
-  FIND_WORDS, 
-} from '../graphql/queries';
+import { useCurrentUser } from './useCurrentUser';
+import { GET_ALL_WORDS, GET_WORDS_BY_LEVEL, GET_PROBLEMATIC_WORDS, FIND_WORDS } from '../graphql/queries';
 
 const useWords = (level) => {
+  const { isAuthenticated } = useCurrentUser();
   // Choose the right query based on whether level is provided
   const queryToUse = level ? GET_WORDS_BY_LEVEL : GET_ALL_WORDS;
   const variables = level ? { level } : undefined;
@@ -20,7 +17,8 @@ const useWords = (level) => {
   // Get problematic words
   const { data: problematicData, error: problematicError, loading: problematicLoading, refetch: refetchProblematic } = useQuery(GET_PROBLEMATIC_WORDS, {
     fetchPolicy: 'cache-and-network',
-    errorPolicy: 'all', // Handle auth errors gracefully
+    errorPolicy: 'all',
+    skip: !isAuthenticated,
   });
 
   // Lazy query for search

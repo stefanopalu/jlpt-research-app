@@ -135,7 +135,7 @@ const resolvers = {
       return await flashcardsProgressService.getUserProgress(userId);
     },
 
-    getStudySession: async (root, { level, limit }, context) => {
+    getFlashcardStudySession: async (root, { level, limit }, context) => {
       const userId = context.currentUser?._id;
       
       if (!userId) {
@@ -174,7 +174,6 @@ const resolvers = {
           };
         }).filter(card => card !== null);
         
-        console.log(`Returning ${transformedSession.length} cards`);
         return transformedSession;
       } catch (error) {
         console.error('Error getting study session:', error);
@@ -192,26 +191,12 @@ const resolvers = {
       }
 
       try {
-        console.log('Resolver called with:', { exerciseType, level, limit, userId });
-        
         const session = await questionProgressService.getStudySession(userId, exerciseType, level, limit);
-        
-        console.log('Session returned from service:', session.length, 'items');
-        console.log('First session item:', session[0]);
         
         // Transform the data for GraphQL
         const transformedSession = session.map((questionCard, index) => {
           const questionData = questionCard.questionData;
-          
-          console.log(`Transforming question ${index}:`, {
-            hasQuestionData: !!questionData,
-            questionDataId: questionData?._id,
-            questionText: questionData?.questionText,
-            answers: questionData?.answers,
-            readingContentId: questionData?.readingContentId,
-            readingContent: questionData?.readingContent,
-          });
-          
+
           if (!questionData || !questionData._id) {
             console.error(`Missing questionData for card at index ${index}:`, questionCard);
             return null;
@@ -236,11 +221,9 @@ const resolvers = {
             isNew: questionCard.isNew || false,
           };
           
-          console.log(`Transformed question ${index}:`, transformed.question);
           return transformed;
         }).filter(questionCard => questionCard !== null);
         
-        console.log(`Returning ${transformedSession.length} question cards`);
         return transformedSession;
       } catch (error) {
         console.error('Error getting question study session:', error);
