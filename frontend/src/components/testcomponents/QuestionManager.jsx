@@ -10,7 +10,7 @@ import { useMutation } from '@apollo/client';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { UPDATE_USER_QUESTION_PROGRESS, UPDATE_USER_GRAMMAR_POINT_PROGRESS, UPDATE_USER_WORD_PROGRESS } from '../../graphql/mutations';
 
-const QUESTIONS_PER_SESSION = 5;
+const QUESTIONS_PER_SESSION = 10;
 
 const styles = StyleSheet.create({
   container: {

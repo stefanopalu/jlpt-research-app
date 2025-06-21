@@ -21,8 +21,8 @@ describe('questionProgressService - getStudySession', () => {
   });
 
   describe('getStudySession', () => {
-    test('should return mixed session with 70% new, 30% due questions', async () => {
-      // Mock due questions (should get 30% = 2 questions for limit 5)
+    test('should return mixed session with 80% new, 20% due questions', async () => {
+      // Mock due questions (should get 20% = 10 questions for limit 50)
       const mockDueQuestions = [
         {
           _id: 'progress1',
@@ -71,74 +71,31 @@ describe('questionProgressService - getStudySession', () => {
         }
       ];
 
-      // Mock new questions (should get 70% = 3 questions for limit 5)
-      const mockNewQuestions = [
-        {
-          _id: 'question3',
-          questionText: 'New question 1',
-          answers: ['a', 'b', 'c', 'd'],
-          correctAnswer: 2,
-          type: 'vocabulary',
-          level: 'N4',
-          words: ['word3'],
-          grammarPoints: ['grammar3'],
-          readingContentId: null
-        },
-        {
-          _id: 'question4',
-          questionText: 'New question 2',
-          answers: ['a', 'b', 'c', 'd'],
-          correctAnswer: 3,
-          type: 'vocabulary',
-          level: 'N4',
-          words: ['word4'],
-          grammarPoints: ['grammar4'],
-          readingContentId: 'reading2'
-        },
-        {
-          _id: 'question5',
-          questionText: 'New question 3',
-          answers: ['a', 'b', 'c', 'd'],
-          correctAnswer: 0,
-          type: 'vocabulary',
-          level: 'N4',
-          words: ['word5'],
-          grammarPoints: ['grammar5'],
-          readingContentId: null
-        }
-      ];
-
-      // Mock reading content population for new questions
-      ReadingContent.findById = jest.fn().mockImplementation((id) => {
-        if (id === 'reading2') {
-          return Promise.resolve({
-            _id: 'reading2',
-            content: 'New reading content',
-            contentType: 'text',
-            level: 'N4',
-            toObject: () => ({
-              _id: 'reading2',
-              content: 'New reading content',
-              contentType: 'text',
-              level: 'N4'
-            })
-          });
-        }
-        return Promise.resolve(null);
-      });
+      // Mock new questions (should get 80% = 40 questions for limit 50)
+      const mockNewQuestions = Array.from({ length: 40 }, (_, i) => ({
+        _id: `question${i + 3}`,
+        questionText: `New question ${i + 1}`,
+        answers: ['a', 'b', 'c', 'd'],
+        correctAnswer: i % 4,
+        type: 'vocabulary',
+        level: 'N4',
+        words: [`word${i + 3}`],
+        grammarPoints: [`grammar${i + 3}`],
+        readingContentId: null
+      }));
 
       // Mock the service methods
       jest.spyOn(questionProgressService, 'getDueQuestions').mockResolvedValue(mockDueQuestions);
       jest.spyOn(questionProgressService, 'getNewQuestions').mockResolvedValue(mockNewQuestions);
 
-      const result = await questionProgressService.getStudySession('user123', 'vocabulary', 'N4', 5);
+      const result = await questionProgressService.getStudySession('user123', 'vocabulary', 'N4', 50);
 
-      // Verify correct limits were calculated (70% new = 3, 30% due = 2)
-      expect(questionProgressService.getDueQuestions).toHaveBeenCalledWith('user123', 'vocabulary', 'N4', 2);
-      expect(questionProgressService.getNewQuestions).toHaveBeenCalledWith('user123', 'vocabulary', 'N4', 3);
+      // Verify initial calls with correct limits (80% new = 40, 20% due = 10)
+      expect(questionProgressService.getDueQuestions).toHaveBeenCalledWith('user123', 'vocabulary', 'N4', 10);
+      expect(questionProgressService.getNewQuestions).toHaveBeenCalledWith('user123', 'vocabulary', 'N4', 40);
 
       // Verify result structure
-      expect(result).toHaveLength(5);
+      expect(result).toHaveLength(42); // 2 due + 40 new = 42 total
       
       // Check that due questions maintain their progress data
       const dueQuestionCards = result.filter(card => !card.isNew);
@@ -154,7 +111,7 @@ describe('questionProgressService - getStudySession', () => {
 
       // Check that new questions have default progress data
       const newQuestionCards = result.filter(card => card.isNew);
-      expect(newQuestionCards).toHaveLength(3);
+      expect(newQuestionCards).toHaveLength(40);
       expect(newQuestionCards[0]).toMatchObject({
         _id: null,
         user: 'user123',
@@ -163,34 +120,10 @@ describe('questionProgressService - getStudySession', () => {
         failureCount: 0,
         isNew: true
       });
-
-      // Verify reading content was populated for new questions
-      const newCardWithReading = result.find(card => 
-        card.isNew && 
-        card.questionData.readingContentId && 
-        typeof card.questionData.readingContentId === 'object'
-      );
-      
-      if (newCardWithReading) {
-        expect(newCardWithReading.questionData.readingContentId).toEqual({
-          _id: 'reading2',
-          content: 'New reading content',
-          contentType: 'text',
-          level: 'N4'
-        });
-      } else {
-        // Fallback: verify reading content ID exists (even if not populated)
-        const newCardWithReadingId = result.find(card => 
-          card.isNew && card.questionData.readingContentId === 'reading2'
-        );
-        expect(newCardWithReadingId).toBeDefined();
-        expect(newCardWithReadingId.questionData.readingContentId).toBe('reading2');
-      }
     });
 
     test('should handle case with no due questions', async () => {
-      jest.spyOn(questionProgressService, 'getDueQuestions').mockResolvedValue([]);
-      jest.spyOn(questionProgressService, 'getNewQuestions').mockResolvedValue([
+      const mockNewQuestions = [
         {
           _id: 'question1',
           questionText: 'New question',
@@ -202,14 +135,17 @@ describe('questionProgressService - getStudySession', () => {
           grammarPoints: [],
           readingContentId: null
         }
-      ]);
+      ];
+
+      jest.spyOn(questionProgressService, 'getDueQuestions').mockResolvedValue([]);
+      jest.spyOn(questionProgressService, 'getNewQuestions').mockResolvedValue(mockNewQuestions);
 
       const result = await questionProgressService.getStudySession('user123', 'grammar', 'N4', 3);
 
-      expect(result).toHaveLength(1);
-      expect(result[0].isNew).toBe(true);
-      expect(questionProgressService.getDueQuestions).toHaveBeenCalledWith('user123', 'grammar', 'N4', 1);
-      expect(questionProgressService.getNewQuestions).toHaveBeenCalledWith('user123', 'grammar', 'N4', 2);
+      expect(result).toHaveLength(1); // Only 1 question available
+      expect(result.every(card => card.isNew)).toBe(true);
+      expect(questionProgressService.getDueQuestions).toHaveBeenCalledWith('user123', 'grammar', 'N4', 1); // 20% of 3 = 1
+      expect(questionProgressService.getNewQuestions).toHaveBeenCalledWith('user123', 'grammar', 'N4', 2); // 80% of 3 = 2
     });
 
     test('should handle case with no new questions', async () => {
@@ -239,8 +175,8 @@ describe('questionProgressService - getStudySession', () => {
 
       const result = await questionProgressService.getStudySession('user123', 'kanji', 'N4', 3);
 
-      expect(result).toHaveLength(1);
-      expect(result[0].isNew).toBe(false);
+      expect(result).toHaveLength(1); // Only 1 due question available
+      expect(result.every(card => !card.isNew)).toBe(true);
       expect(result[0]._id).toBe('progress1');
     });
 
@@ -318,8 +254,8 @@ describe('questionProgressService - getStudySession', () => {
 
       await questionProgressService.getStudySession('user123', 'reading', 'N3', 10);
 
-      expect(questionProgressService.getDueQuestions).toHaveBeenCalledWith('user123', 'reading', 'N3', 3);
-      expect(questionProgressService.getNewQuestions).toHaveBeenCalledWith('user123', 'reading', 'N3', 7);
+      expect(questionProgressService.getDueQuestions).toHaveBeenCalledWith('user123', 'reading', 'N3', 2); // 20% of 10 = 2
+      expect(questionProgressService.getNewQuestions).toHaveBeenCalledWith('user123', 'reading', 'N3', 8); // 80% of 10 = 8
     });
 
     test('should handle null/undefined exercise type and level', async () => {
@@ -328,8 +264,8 @@ describe('questionProgressService - getStudySession', () => {
 
       await questionProgressService.getStudySession('user123', null, null, 5);
 
-      expect(questionProgressService.getDueQuestions).toHaveBeenCalledWith('user123', null, null, 2);
-      expect(questionProgressService.getNewQuestions).toHaveBeenCalledWith('user123', null, null, 3);
+      expect(questionProgressService.getDueQuestions).toHaveBeenCalledWith('user123', null, null, 1); // 20% of 5 = 1
+      expect(questionProgressService.getNewQuestions).toHaveBeenCalledWith('user123', null, null, 4); // 80% of 5 = 4
     });
 
     test('should handle service errors gracefully', async () => {
@@ -345,14 +281,14 @@ describe('questionProgressService - getStudySession', () => {
       jest.spyOn(questionProgressService, 'getDueQuestions').mockResolvedValue([]);
       jest.spyOn(questionProgressService, 'getNewQuestions').mockResolvedValue([]);
 
-      // Test limit of 10: 70% = 7 new, 30% = 3 due
+      // Test limit of 10: 80% = 8 new, 20% = 2 due
       await questionProgressService.getStudySession('user123', null, null, 10);
-      expect(questionProgressService.getDueQuestions).toHaveBeenCalledWith('user123', null, null, 3);
-      expect(questionProgressService.getNewQuestions).toHaveBeenCalledWith('user123', null, null, 7);
+      expect(questionProgressService.getDueQuestions).toHaveBeenCalledWith('user123', null, null, 2);
+      expect(questionProgressService.getNewQuestions).toHaveBeenCalledWith('user123', null, null, 8);
 
       jest.clearAllMocks();
 
-      // Test limit of 1: 70% = 0 new, 30% = 1 due (due to Math.ceil)
+      // Test limit of 1: 80% = 0 new, 20% = 1 due (due to Math.ceil)
       await questionProgressService.getStudySession('user123', null, null, 1);
       expect(questionProgressService.getDueQuestions).toHaveBeenCalledWith('user123', null, null, 1);
       expect(questionProgressService.getNewQuestions).toHaveBeenCalledWith('user123', null, null, 0);

@@ -38,9 +38,12 @@ const questionProgressService = {
       });
     }
 
+    //Sort by oldest due first, then by limit amount
+    pipeline.push({ $sort: { nextReview: 1 } });
     pipeline.push({ $sample: { size: limit } });
 
     const dueQuestions = await UserQuestionProgress.aggregate(pipeline);
+
     
     const populatedDueQuestions = await Promise.all(
       dueQuestions.map(async (item) => {
@@ -98,12 +101,12 @@ const questionProgressService = {
     return questions;
   },
 
-  // Get mixed study session (70% new, 30% due) - replaces old useQuestions logic
+  // Get mixed study session (80% new, 20% due) 
   async getStudySession(userId, exerciseType = null, level = null, totalLimit = 50) {
     try {
       // Calculate limits for mixing
-      const newLimit = Math.floor(totalLimit * 0.7); // 70% new questions
-      const dueLimit = Math.ceil(totalLimit * 0.3); // 30% due questions
+      const newLimit = Math.floor(totalLimit * 0.8); // 70% new questions
+      const dueLimit = Math.ceil(totalLimit * 0.2); // 30% due questions
       
       // Get both due and new questions in parallel
       const [dueQuestions, newQuestions] = await Promise.all([

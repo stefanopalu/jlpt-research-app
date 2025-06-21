@@ -44,26 +44,47 @@ const flashcardsProgressService = {
     if (level) {
       query.level = level;
     }
+
+    const totalAvailable = await Word.countDocuments(query);
     
     const pipeline = [
       { $match: query },
-      { $sample: { size: limit } },
+      { $sample: { size: Math.min(limit, totalAvailable) } }, // Don't request more than available
     ];
     
-    return await Word.aggregate(pipeline);
+    const result = await Word.aggregate(pipeline);
+    return result;
   },
 
   // Get mixed study session (70% new, 30% due)
   async getStudySession(userId, level = null, totalLimit = 100) {
     const newLimit = Math.floor(totalLimit * 0.7); // 70% new cards
-    
+    const dueLimit = Math.ceil(totalLimit * 0.3); // 30% due cards
+  
     const [dueCards, newWords] = await Promise.all([
-      this.getDueCards(userId, level, totalLimit),
+      this.getDueCards(userId, level, dueLimit),
       this.getNewWords(userId, level, newLimit),
     ]);
 
+    // BACKFILL LOGIC: Fill any shortage
+    let finalDueCards = dueCards;
+    let finalNewWords = newWords;
+
+    const currentTotal = dueCards.length + newWords.length;
+    
+    if (currentTotal < totalLimit) {
+      if (dueCards.length < dueLimit) {
+        // Get ALL available new words to avoid duplicates
+        const allNewWords = await this.getNewWords(userId, level, 999); // Get all available
+        finalNewWords = allNewWords;
+      } else if (newWords.length < newLimit) {
+        const allDueCards = await this.getDueCards(userId, level, 999); // Get all available
+        finalDueCards = allDueCards;
+      }
+    } 
+
     // Convert new words to consistent format with due cards
-    const newCards = newWords.map(word => ({
+    const newCards = finalNewWords.map(word => ({
       _id: null, // No progress record yet
       user: userId,
       word: word._id,
@@ -81,9 +102,11 @@ const flashcardsProgressService = {
       isNew: true,
     }));
     
-    // Combine and shuffle
-    const combined = [...dueCards, ...newCards].slice(0, totalLimit);
-    return combined.sort(() => Math.random() - 0.5);
+    // Combine and limit to exact total
+    const combined = [...finalDueCards, ...newCards];
+    const finalSession = combined.slice(0, totalLimit);
+
+    return finalSession.sort(() => Math.random() - 0.5);
   },
 
   // Update progress for a word

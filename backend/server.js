@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
 const User = require('./models/user');
-const Question = require('./models/question');
 
 const { WebSocketServer } = require('ws');
 const { useServer } = require('graphql-ws/lib/use/ws');
@@ -36,13 +35,6 @@ mongoose.connect(MONGODB_URI)
 const start = async () => {
   const app = express();
   const httpServer = http.createServer(app);
-
-  try {
-    const questions = await Question.find({ level: 'N4', type: 'textgrammar' });
-    console.log('Questions fetched from MongoDB:', questions);
-  } catch (error) {
-    console.error('Error fetching questions from MongoDB:', error);
-  }
 
   const wsServer = new WebSocketServer({
     server: httpServer,

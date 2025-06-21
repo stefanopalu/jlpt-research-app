@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 // SRS interval levels (in minutes)
 const SRS_INTERVALS = [
   1, // Level 0: 1 minute
-  10, // Level 1: 10 minutes
-  60, // Level 2: 1 hour
-  360, // Level 3: 6 hours  
-  1440, // Level 4: 1 day
-  4320, // Level 5: 3 days
+  240, // Level 1: 4 hours
+  480, // Level 2: 8 hours
+  1440, // Level 3: 1 day 
+  2880, // Level 4: 2 days
+  5760, // Level 5: 4 days
   10080, // Level 6: 1 week
   20160, // Level 7: 2 weeks
   43200, // Level 8: 1 month

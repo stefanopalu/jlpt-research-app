@@ -63,14 +63,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const AdvancedFlashcard = ({ words }) => {
+const AdvancedFlashcard = ({ words, onCardCompleted }) => {
   const [index, setIndex] = useState(0);
   const [step, setStep] = useState('english');
   const [answer, setAnswer] = useState('');
   const [rawAnswer, setRawAnswer] = useState(''); // eslint-disable-line no-unused-vars
   const [result, setResult] = useState(null);
   const [showWordCard, setShowWordCard] = useState(false);
-  const [completedWords, setCompletedWords] = useState(0);
   
   // Track if progress has been updated for current word
   const [progressUpdated, setProgressUpdated] = useState(false);
@@ -169,7 +168,10 @@ const AdvancedFlashcard = ({ words }) => {
   };
 
   const moveToNextWord = () => {
-    setCompletedWords(prev => prev + 1);
+    // Notify the parent that this card is completed
+    if (onCardCompleted) {
+      onCardCompleted();
+    }
     
     if (index + 1 < words.length) {
       setIndex(prev => prev + 1);
@@ -180,9 +182,6 @@ const AdvancedFlashcard = ({ words }) => {
       setResult(null);
       setShowWordCard(false);
       setProgressUpdated(false);
-    } else {
-      // Finished all words
-      alert(`Session complete! You studied ${completedWords + 1} words.`);
     }
   };
 
@@ -206,7 +205,6 @@ const AdvancedFlashcard = ({ words }) => {
         <FlashcardProgressBar 
           currentIndex={index}
           totalWords={words.length}
-          completedWords={completedWords}
           currentWord={currentWord}
         />
 

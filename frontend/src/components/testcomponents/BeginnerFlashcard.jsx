@@ -88,12 +88,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const BeginnerFlashcard = ({ words }) => {
+const BeginnerFlashcard = ({ words, onCardCompleted }) => {
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState('');
   const [result, setResult] = useState(null);
   const [showWordCard, setShowWordCard] = useState(false);
-  const [completedWords, setCompletedWords] = useState(0);
 
   const [updateUserFlashcardsProgress] = useMutation(UPDATE_USER_FLASHCARDS_PROGRESS);
 
@@ -133,7 +132,10 @@ const BeginnerFlashcard = ({ words }) => {
   };
 
   const moveToNextWord = () => {
-    setCompletedWords(prev => prev + 1);
+    // Notify the parent that this card is completed
+    if (onCardCompleted) {
+      onCardCompleted();
+    }
     
     if (index + 1 < words.length) {
       setIndex(prev => prev + 1);
@@ -141,9 +143,6 @@ const BeginnerFlashcard = ({ words }) => {
       setAnswer('');
       setResult(null);
       setShowWordCard(false);
-    } else {
-      // Finished all words
-      alert(`Session complete! You studied ${completedWords + 1} words.`);
     }
   };
 
@@ -167,7 +166,6 @@ const BeginnerFlashcard = ({ words }) => {
         <FlashcardProgressBar 
           currentIndex={index}
           totalWords={words.length}
-          completedWords={completedWords}
           currentWord={currentWord}
         />
 
