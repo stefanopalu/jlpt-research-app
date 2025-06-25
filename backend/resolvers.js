@@ -6,6 +6,7 @@ const wordProgressService = require('./services/wordProgressService');
 const grammarPointProgressService = require('./services/grammarPointProgressService');
 const grammarPointService = require('./services/grammarPointService');
 const authService = require('./services/authService');
+const ReadingContent = require('./models/readingContent'); // eslint-disable-line no-unused-vars
 
 const { GraphQLError } = require('graphql');
 
@@ -47,6 +48,10 @@ const resolvers = {
 
   ReadingContent: {
     id: (parent) => {
+      // Handle both _id (from MongoDB) and id (from transformed data)
+      if (parent.id) {
+        return parent.id.toString();
+      }
       return parent._id ? parent._id.toString() : null;
     },
   },
@@ -201,7 +206,7 @@ const resolvers = {
             console.error(`Missing questionData for card at index ${index}:`, questionCard);
             return null;
           }
-          
+
           const transformed = {
             id: questionCard._id || questionData._id.toString(),
             question: {
@@ -213,7 +218,6 @@ const resolvers = {
               type: questionData.type,
               words: questionData.words || [],
               grammarPoints: questionData.grammarPoints || [],
-              readingContent: questionData.readingContentId || null,
             },
             srsLevel: questionCard.srsLevel || 0,
             successCount: questionCard.successCount || 0,
@@ -228,6 +232,61 @@ const resolvers = {
       } catch (error) {
         console.error('Error getting question study session:', error);
         throw new GraphQLError(`Failed to get question study session: ${error.message}`);
+      }
+    },
+
+    getReadingStudySession: async (root, { exerciseType, level, maxReadings = 3 }, context) => {
+      const userId = context.currentUser?._id;
+      
+      if (!userId) {
+        throw new GraphQLError('Not authenticated', {
+          extensions: { code: 'UNAUTHENTICATED' },
+        });
+      }
+
+      console.log('🎯 GraphQL resolver called with:', { userId, exerciseType, level, maxReadings });
+
+      try {
+        // Call your service method
+        const readingSets = await questionProgressService.getReadingBasedSession(
+          userId, 
+          exerciseType, 
+          level, 
+          maxReadings,
+        );
+        
+        console.log(`🎯 Service returned ${readingSets.length} reading sets`);
+        
+        // Transform the data for GraphQL (similar to your existing pattern)
+        const transformedSets = readingSets.map(set => ({
+          readingContent: set.readingContent, // Already populated by service
+          questions: set.questions.map(questionCard => ({
+            id: questionCard._id ? questionCard._id.toString() : null,
+            question: {
+              id: questionCard.questionData._id.toString(),
+              questionText: questionCard.questionData.questionText,
+              answers: questionCard.questionData.answers,
+              correctAnswer: questionCard.questionData.correctAnswer,
+              level: questionCard.questionData.level,
+              type: questionCard.questionData.type,
+              words: questionCard.questionData.words || [],
+              grammarPoints: questionCard.questionData.grammarPoints || [],
+              readingContent: questionCard.questionData.readingContentId, // This is the populated reading content
+            },
+            srsLevel: questionCard.srsLevel || 0,
+            successCount: questionCard.successCount || 0,
+            failureCount: questionCard.failureCount || 0,
+            isNew: questionCard.isNew || false,
+          })),
+          totalQuestions: set.totalQuestions,
+        }));
+        
+        console.log(`🎯 Returning ${transformedSets.length} reading sets to GraphQL`);
+        return transformedSets;
+        
+      } catch (error) {
+        console.error('💥 Error in getReadingStudySession resolver:', error);
+        throw new GraphQLError(`Failed to get reading study session: ${error.message}`);
       }
     },
 

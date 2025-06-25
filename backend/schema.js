@@ -65,6 +65,12 @@ const typeDefs = gql`
     isNew: Boolean!
   }
 
+  type ReadingSet {
+    readingContent: ReadingContent!
+    questions: [StudyQuestion!]!
+    totalQuestions: Int!
+  }
+
   type GrammarStructure {
     formation: [String!]!
     declinations: [String!]
@@ -172,6 +178,7 @@ const typeDefs = gql`
     getUserFlashcardsProgress(userId: ID!): [UserFlashcardsProgress!]!
     getFlashcardStudySession(level: String!, limit: Int = 100): [StudyCard!]!
     getQuestionStudySession(exerciseType: String!, level: String!, limit: Int = 50): [StudyQuestion!]!
+    getReadingStudySession(exerciseType: String!, level: String!, maxReadings: Int = 3): [ReadingSet!]!
     getUserQuestionProgress(userId: ID!): [UserQuestionProgress!]!
     getUserQuestionStats(userId: ID!): UserQuestionStats!
     getUserWordProgress(userId: ID!): [UserWordProgress!]!

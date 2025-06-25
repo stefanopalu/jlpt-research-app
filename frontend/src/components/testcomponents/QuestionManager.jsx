@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useLocation, useNavigate } from 'react-router-native';
 import { useQuestionStudySession } from '../../hooks/useQuestionStudySession';
+import { useReadingStudySession } from '../../hooks/useReadingStudySession'; 
 import QuestionsWithReading from './QuestionsWithReading';
 import SimpleQuestions from './SimpleQuestions';
 import SessionProgressBar from './SessionProgressBar';
@@ -27,7 +28,25 @@ const QuestionManager = () => {
   const { user, loading: userLoading } = useCurrentUser({ required: true });
   const level = user?.studyLevel;
 
-  const { questions, loading, error, refetch } = useQuestionStudySession(level, type, QUESTIONS_PER_SESSION);
+  // Use different hooks based on exercise type
+  const isReadingBased = type === 'textgrammar';
+  
+  const questionHookResult = isReadingBased 
+    ? useReadingStudySession(level, type, 2) // Max 2 readings for reading-based
+    : useQuestionStudySession(level, type, QUESTIONS_PER_SESSION);
+    
+  const { 
+    questions, 
+    loading, 
+    error, 
+    refetch,
+    // Additional properties for reading-based sessions
+    readingSets,
+    totalQuestions: readingTotalQuestions,
+  } = questionHookResult;
+
+  // Use the appropriate total count
+  const sessionTotal = isReadingBased ? readingTotalQuestions : QUESTIONS_PER_SESSION;
   
   const [currentIndex, setCurrentIndex] = useState(0);
   const [questionStartTime, setQuestionStartTime] = useState(null);
@@ -38,10 +57,10 @@ const QuestionManager = () => {
   const [updateUserWordProgress] = useMutation(UPDATE_USER_WORD_PROGRESS);
 
   useEffect(() => {
-    if (questions && questions.length > 0 && currentIndex < QUESTIONS_PER_SESSION) {
+    if (questions && questions.length > 0 && currentIndex < sessionTotal) {
       setQuestionStartTime(Date.now());
     }
-  }, [currentIndex, questions?.length]);
+  }, [currentIndex, questions?.length, sessionTotal]);
 
   // Define which types need reading content
   const READING_CONTENT_TYPES = ['textgrammar', 'shortpass', 'mediumpass', 'inforetrieval'];
@@ -63,8 +82,8 @@ const QuestionManager = () => {
   
   const currentQuestion = questions[currentIndex];
 
-  // Check if session is complete
-  if (currentIndex >= QUESTIONS_PER_SESSION) {
+  // Check if session is complete - use dynamic session total
+  if (currentIndex >= sessionTotal) {
     const handleNewSession = async () => {
       console.log('Starting new session...');
       setIsRefetching(true);
@@ -88,7 +107,7 @@ const QuestionManager = () => {
       <SessionComplete 
         onNewSession={handleNewSession}
         onGoHome={handleGoHome}
-        questionsCompleted={QUESTIONS_PER_SESSION}
+        questionsCompleted={sessionTotal} // Use dynamic total
       />
     );
   }
@@ -147,7 +166,7 @@ const QuestionManager = () => {
 
     // Short delay and then move to next question
     setTimeout(() => {
-      if (currentIndex + 1 < QUESTIONS_PER_SESSION) {
+      if (currentIndex + 1 < sessionTotal) { // Use dynamic total
         setCurrentIndex(currentIndex + 1);
       } else {
         //Session complete
@@ -161,13 +180,15 @@ const QuestionManager = () => {
   const questionProps = {
     currentQuestion,
     onAnswerSelected: handleAnswerSelected,
+    // Pass reading sets for enhanced reading experience
+    ...(isReadingBased && { readingSets, currentIndex }),
   };
 
   return (
     <View style={styles.container}>
       <SessionProgressBar 
         currentQuestion={currentIndex + 1}
-        totalQuestions={QUESTIONS_PER_SESSION}
+        totalQuestions={sessionTotal} // Use dynamic total
       /> 
       {needsReadingContent ? (
         <QuestionsWithReading {...questionProps} />

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const UserQuestionProgress = require('../models/userQuestionProgress');
 const Question = require('../models/question');
-const ReadingContent = require('../models/readingContent'); // eslint-disable-line no-unused-vars
+const ReadingContent = require('../models/readingContent');  
 
 const questionProgressService = {
   // Get due questions for a user (for SRS)
@@ -43,22 +43,8 @@ const questionProgressService = {
     pipeline.push({ $sample: { size: limit } });
 
     const dueQuestions = await UserQuestionProgress.aggregate(pipeline);
-
     
-    const populatedDueQuestions = await Promise.all(
-      dueQuestions.map(async (item) => {
-        if (item.questionData.readingContentId) {
-          const ReadingContent = require('../models/readingContent');
-          const readingContent = await ReadingContent.findById(item.questionData.readingContentId);
-          if (readingContent) {
-            item.questionData.readingContentId = readingContent;
-          }
-        }
-        return item;
-      }),
-    );
-    
-    return populatedDueQuestions;
+    return dueQuestions;
   },
 
   // Get new questions not yet attempted by user
@@ -77,37 +63,22 @@ const questionProgressService = {
       query.level = level;
     }
 
-    const pipeline = [
-      { $match: query },
-      { $sample: { size: limit } },
-      {
-        $lookup: {
-          from: 'readingcontents', // Check your actual collection name
-          localField: 'readingContentId',
-          foreignField: '_id',
-          as: 'readingContentId',
-        },
-      },
-      {
-        $unwind: {
-          path: '$readingContentId',
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-    ];
-
-    const questions = await Question.aggregate(pipeline);
+    // Simple query without reading content population
+    const questions = await Question.find(query).limit(limit);
     
-    return questions;
+    // Convert to plain objects
+    const questionObjects = questions.map(question => question.toObject());
+    
+    return questionObjects;
   },
 
   // Get mixed study session (80% new, 20% due) 
   async getStudySession(userId, exerciseType = null, level = null, totalLimit = 50) {
-    try {
+    try {  
       // Calculate limits for mixing
-      const newLimit = Math.floor(totalLimit * 0.8); // 70% new questions
-      const dueLimit = Math.ceil(totalLimit * 0.2); // 30% due questions
-      
+      const newLimit = Math.floor(totalLimit * 0.8); // 80% new questions
+      const dueLimit = Math.ceil(totalLimit * 0.2); // 20% due questions
+
       // Get both due and new questions in parallel
       const [dueQuestions, newQuestions] = await Promise.all([
         this.getDueQuestions(userId, exerciseType, level, dueLimit),
@@ -135,16 +106,18 @@ const questionProgressService = {
       }
 
       // Convert new questions to consistent format
-      const newQuestionCards = finalNewQuestions.map(question => ({
-        _id: null,
-        user: userId,
-        question: question._id,
-        questionData: question,
-        srsLevel: 0,
-        successCount: 0,
-        failureCount: 0,
-        isNew: true,
-      }));
+      const newQuestionCards = finalNewQuestions.map((question) => {
+        return {
+          _id: null,
+          user: userId,
+          question: question._id,
+          questionData: question, // Simple question data, no reading content needed
+          srsLevel: 0,
+          successCount: 0,
+          failureCount: 0,
+          isNew: true,
+        };
+      });
 
       // Combine and limit
       const combined = [...finalDueQuestions, ...newQuestionCards];
@@ -158,7 +131,121 @@ const questionProgressService = {
     }
   },
     
-  // Update progress for a question (with SRS and time tracking)
+  async getReadingBasedSession(userId, exerciseType, level, maxReadings = 3) {
+    console.log('=== getReadingBasedSession called ===');
+    console.log(`userId: ${userId}, exerciseType: ${exerciseType}, level: ${level}, maxReadings: ${maxReadings}`);
+
+    try {
+      // 1. Get all questions user has studied to exclude them (using your existing model)
+      const studiedQuestions = await UserQuestionProgress.find({
+        user: userId,
+      }).select('question');
+      
+      const studiedQuestionIds = studiedQuestions.map(sq => sq.question);
+      console.log(`Found ${studiedQuestionIds.length} studied questions to exclude`);
+
+      // 2. Find readings that have questions available for this user
+      const availableReadings = await Question.aggregate([
+        {
+          $match: {
+            type: exerciseType,
+            level: level,
+            _id: { $nin: studiedQuestionIds },
+            readingContentId: { $exists: true, $ne: null },
+          },
+        },
+        {
+          $group: {
+            _id: '$readingContentId',
+            questionCount: { $sum: 1 },
+            questionIds: { $push: '$_id' },
+          },
+        },
+        {
+          $match: {
+            questionCount: { $gte: 2 }, // Only include readings with at least 2 questions
+          },
+        },
+        {
+          $limit: maxReadings,
+        },
+      ]);
+
+      console.log(`Found ${availableReadings.length} available readings`);
+
+      if (availableReadings.length === 0) {
+        console.log('No readings available, returning empty array');
+        return [];
+      }
+
+      // 3. Get full reading content and questions for each selected reading
+      const readingSets = [];
+
+      for (const reading of availableReadings) {
+        console.log(`Processing reading: ${reading._id} with ${reading.questionCount} questions`);
+
+        // Get the reading content
+        const readingContent = await ReadingContent.findById(reading._id);
+        if (!readingContent) {
+          console.log(`Reading content not found for ID: ${reading._id}`);
+          continue;
+        }
+
+        // Get all questions for this reading
+        const questions = await Question.find({
+          _id: { $in: reading.questionIds },
+          type: exerciseType,
+          level: level,
+        }).sort({ _id: 1 }); // Consistent ordering
+
+        // Get question progress for these questions (using your existing model)
+        const questionProgresses = await UserQuestionProgress.find({
+          user: userId,
+          question: { $in: reading.questionIds },
+        });
+
+        // Create question cards (following your existing pattern)
+        const questionCards = questions.map(question => {
+          const progress = questionProgresses.find(qp => 
+            qp.question.toString() === question._id.toString(),
+          );
+
+          return {
+            _id: question._id,
+            user: userId,
+            question: question._id,
+            questionData: {
+              ...question.toObject(),
+              readingContentId: readingContent.toObject(), // Populate the reading content
+            },
+            srsLevel: progress?.srsLevel || 0,
+            successCount: progress?.successCount || 0,
+            failureCount: progress?.failureCount || 0,
+            isNew: !progress,
+            nextReview: progress?.nextReview || new Date(),
+            lastReviewDate: progress?.lastReviewDate || null,
+          };
+        });
+
+        readingSets.push({
+          readingContent: readingContent.toObject(),
+          questions: questionCards,
+          totalQuestions: questionCards.length,
+        });
+      }
+
+      const totalQuestions = readingSets.reduce((sum, set) => sum + set.totalQuestions, 0);
+      console.log(`Returning ${readingSets.length} reading sets with ${totalQuestions} total questions`);
+
+      return readingSets;
+
+    } catch (error) {
+      console.error('Error in getReadingBasedSession:', error);
+      throw error;
+    }
+  },
+
+  // Rest of your methods remain the same...
   async updateProgress(userId, questionId, isCorrect, responseTime = null) {
     let progress = await UserQuestionProgress.findOne({ 
       user: userId, 
@@ -166,11 +253,9 @@ const questionProgressService = {
     });
 
     if (progress) {
-      // Update existing progress using SRS and time tracking
       progress.updateProgress(isCorrect, responseTime);
       await progress.save();
     } else {
-      // Create new progress entry
       progress = new UserQuestionProgress({
         user: userId,
         question: questionId,
@@ -180,31 +265,26 @@ const questionProgressService = {
       await progress.save();
     }
 
-    // Populate the question field
     await progress.populate('question');
     return progress;
   },
 
-  // Get user's progress for all questions
   async getUserProgress(userId) {
     return await UserQuestionProgress.find({ user: userId }).populate('question');
   },
 
-  // Get user's progress for specific question
   async getUserStats(userId) {
     console.log('getUserStats called for:', userId);
     
     try {
       const userObjectId = new mongoose.Types.ObjectId(userId);
       
-      // Basic counts
       const totalAttempted = await UserQuestionProgress.countDocuments({ user: userId });
       const currentlyDue = await UserQuestionProgress.countDocuments({ 
         user: userId, 
         nextReview: { $lte: new Date() }, 
       });
       
-      // Enhanced breakdown by question type with success/failure stats
       const byType = await UserQuestionProgress.aggregate([
         { $match: { user: userObjectId } },
         {
@@ -227,15 +307,12 @@ const questionProgressService = {
                 $cond: [{ $lte: ['$nextReview', new Date()] }, 1, 0],
               },
             },
-            // Count questions where success > failure (user is "winning")
             questionsCorrect: {
               $sum: {
                 $cond: [{ $gt: ['$successCount', '$failureCount'] }, 1, 0],
               },
             },
-            // Average SRS level for this type
             avgSrsLevel: { $avg: '$srsLevel' },
-            // Questions still at level 0 (never answered correctly)
             questionsAtLevel0: {
               $sum: {
                 $cond: [{ $eq: ['$srsLevel', 0] }, 1, 0],
@@ -245,7 +322,6 @@ const questionProgressService = {
         },
         {
           $addFields: {
-            // Calculate accuracy: total correct attempts / total attempts
             accuracy: {
               $cond: [
                 { $gt: [{ $add: ['$totalSuccess', '$totalFailure'] }, 0] },
@@ -258,7 +334,6 @@ const questionProgressService = {
                 0,
               ],
             },
-            // Calculate question mastery rate: questions correct / total questions
             masteryRate: {
               $cond: [
                 { $gt: ['$attempted', 0] },
@@ -271,7 +346,6 @@ const questionProgressService = {
         { $sort: { attempted: -1 } },
       ]);
       
-      // Overall accuracy calculation
       const overallStats = await UserQuestionProgress.aggregate([
         { $match: { user: userObjectId } },
         {

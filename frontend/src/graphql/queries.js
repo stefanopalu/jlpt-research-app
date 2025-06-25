@@ -40,7 +40,7 @@ export const ME = gql`
   }
 `;
 
-// NEW: SRS-based question study session
+// SRS-based question study session
 export const GET_QUESTION_STUDY_SESSION = gql`
   query GetQuestionStudySession($exerciseType: String!, $level: String!, $limit: Int) {
     getQuestionStudySession(exerciseType: $exerciseType, level: $level, limit: $limit) {
@@ -54,17 +54,49 @@ export const GET_QUESTION_STUDY_SESSION = gql`
         type
         words 
         grammarPoints 
-        readingContent {
-          id
-          content
-          contentType
-          level
-        }
       }
       srsLevel
       successCount
       failureCount
       isNew
+    }
+  }
+`;
+
+// SRS-based question study session with readings
+export const GET_READING_STUDY_SESSION = gql`
+  query GetReadingStudySession($exerciseType: String!, $level: String!, $maxReadings: Int) {
+    getReadingStudySession(exerciseType: $exerciseType, level: $level, maxReadings: $maxReadings) {
+      readingContent {
+        id
+        content
+        contentType
+        level
+      }
+      questions {
+        id
+        question {
+          id
+          questionText
+          answers
+          correctAnswer
+          level
+          type
+          words
+          grammarPoints
+          readingContent {
+            id
+            content
+            contentType
+            level
+          }
+        }
+        srsLevel
+        successCount
+        failureCount
+        isNew
+      }
+      totalQuestions
     }
   }
 `;
