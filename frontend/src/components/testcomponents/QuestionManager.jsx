@@ -52,6 +52,9 @@ const QuestionManager = () => {
   const [questionStartTime, setQuestionStartTime] = useState(null);
   const [isRefetching, setIsRefetching] = useState(false);
 
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [incorrectAnswers, setIncorrectAnswers] = useState(0);
+
   const [updateUserQuestionProgress] = useMutation(UPDATE_USER_QUESTION_PROGRESS);
   const [updateUserGrammarPointProgress] = useMutation(UPDATE_USER_GRAMMAR_POINT_PROGRESS);
   const [updateUserWordProgress] = useMutation(UPDATE_USER_WORD_PROGRESS);
@@ -89,6 +92,8 @@ const QuestionManager = () => {
       setIsRefetching(true);
       setCurrentIndex(0);
       setQuestionStartTime(null);
+      setCorrectAnswers(0);
+      setIncorrectAnswers(0);
       try {
         await refetch(); // Refetch new questions from the server
         console.log('New questions fetched successfully');
@@ -115,6 +120,12 @@ const QuestionManager = () => {
   const handleAnswerSelected = async (selectedAnswer) => {
     const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
     const responseTime = questionStartTime ? Date.now() - questionStartTime : 0;
+
+    if (isCorrect) {
+      setCorrectAnswers(prev => prev + 1);
+    } else {
+      setIncorrectAnswers(prev => prev + 1);
+    }
 
     try {
       // Update question progress 
@@ -188,7 +199,9 @@ const QuestionManager = () => {
     <View style={styles.container}>
       <SessionProgressBar 
         currentQuestion={currentIndex + 1}
-        totalQuestions={sessionTotal} // Use dynamic total
+        totalQuestions={sessionTotal}
+        correctAnswers={correctAnswers} 
+        incorrectAnswers={incorrectAnswers} 
       /> 
       {needsReadingContent ? (
         <QuestionsWithReading {...questionProps} />

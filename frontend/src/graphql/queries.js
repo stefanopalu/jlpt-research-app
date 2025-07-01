@@ -187,6 +187,7 @@ export const GET_USER_QUESTION_STATS = gql`
   query GetUserQuestionStats($userId: ID!) {
     getUserQuestionStats(userId: $userId) {
       totalAttempted
+      totalQuestions
       currentlyDue
       overallAccuracy
       overallMasteryRate
@@ -194,6 +195,7 @@ export const GET_USER_QUESTION_STATS = gql`
       byType {
         _id
         attempted
+        totalAvailable 
         due
         totalSuccess
         totalFailure

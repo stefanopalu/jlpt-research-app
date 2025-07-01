@@ -52,7 +52,10 @@ const resolvers = {
       if (parent.id) {
         return parent.id.toString();
       }
-      return parent._id ? parent._id.toString() : null;
+      if (parent._id) {
+        return parent._id.toString();
+      }
+      return null;
     },
   },
 
@@ -247,19 +250,16 @@ const resolvers = {
       console.log('🎯 GraphQL resolver called with:', { userId, exerciseType, level, maxReadings });
 
       try {
-        // Call your service method
         const readingSets = await questionProgressService.getReadingBasedSession(
-          userId, 
-          exerciseType, 
-          level, 
+          userId,
+          exerciseType,
+          level,
           maxReadings,
         );
         
-        console.log(`🎯 Service returned ${readingSets.length} reading sets`);
-        
-        // Transform the data for GraphQL (similar to your existing pattern)
+        // Pass through the objects from service
         const transformedSets = readingSets.map(set => ({
-          readingContent: set.readingContent, // Already populated by service
+          readingContent: set.readingContent, 
           questions: set.questions.map(questionCard => ({
             id: questionCard._id ? questionCard._id.toString() : null,
             question: {
@@ -271,7 +271,7 @@ const resolvers = {
               type: questionCard.questionData.type,
               words: questionCard.questionData.words || [],
               grammarPoints: questionCard.questionData.grammarPoints || [],
-              readingContent: questionCard.questionData.readingContentId, // This is the populated reading content
+              readingContent: questionCard.questionData.readingContent, 
             },
             srsLevel: questionCard.srsLevel || 0,
             successCount: questionCard.successCount || 0,
@@ -281,11 +281,9 @@ const resolvers = {
           totalQuestions: set.totalQuestions,
         }));
         
-        console.log(`🎯 Returning ${transformedSets.length} reading sets to GraphQL`);
         return transformedSets;
         
       } catch (error) {
-        console.error('💥 Error in getReadingStudySession resolver:', error);
         throw new GraphQLError(`Failed to get reading study session: ${error.message}`);
       }
     },

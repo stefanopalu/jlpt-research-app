@@ -54,7 +54,7 @@ const grammarPointProgressService = {
     const pipeline = [
       // Start with all grammar points. 
       {
-        // Join grammar points  with user grammar point progress collection using current grammar point's ID
+        // Join grammarpoints with usergrammarpointprogress collection using current grammar point's ID
         $lookup: {
           from: 'usergrammarpointprogresses', 
           let: { grammarPointId: '$_id' },

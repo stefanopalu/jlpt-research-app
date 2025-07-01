@@ -128,6 +128,7 @@ const typeDefs = gql`
 
   type UserQuestionStats {
     totalAttempted: Int!
+    totalQuestions: Int!
     currentlyDue: Int!
     overallAccuracy: Float!
     overallMasteryRate: Float!
@@ -138,6 +139,7 @@ const typeDefs = gql`
   type QuestionTypeStats {
     _id: String!
     attempted: Int!
+    totalAvailable: Int!
     due: Int!
     totalSuccess: Int!
     totalFailure: Int!

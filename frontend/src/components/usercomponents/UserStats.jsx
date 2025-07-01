@@ -199,7 +199,7 @@ const UserStats = () => {
             <View style={styles.statCard}>
               <Text style={styles.statLabel}>Questions Attempted</Text>
               <Text style={[styles.statValue, { color: theme.colors.primary }]}>
-                {stats.totalAttempted}
+                {stats.totalAttempted} / {stats.totalQuestions}
               </Text>
             </View>
             
@@ -240,7 +240,9 @@ const UserStats = () => {
                 </View>
               </View>
               <View style={styles.typeStats}>
-                <Text style={styles.typeStatText}>Attempted: {type.attempted}</Text>
+                <Text style={styles.typeStatText}>
+                  Attempted: {type.attempted} / {type.totalAvailable}
+                </Text>
                 <Text style={styles.typeStatText}>Due: {type.due}</Text>
                 <Text style={styles.typeStatText}>Level: {type.avgSrsLevel}</Text>
               </View>
