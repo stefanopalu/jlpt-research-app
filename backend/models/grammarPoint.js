@@ -33,6 +33,27 @@ const grammarPointSchema = new mongoose.Schema({
       required: true,
     },
   }],
+  // BKT Parameters
+  priorKnowledge: {
+    type: Number,
+    min: 0,
+    max: 1,
+  },
+  learningRate: {
+    type: Number,
+    min: 0,
+    max: 1,
+  },
+  slipRate: {
+    type: Number,
+    min: 0,
+    max: 1,
+  },
+  guessRate: {
+    type: Number,
+    min: 0,
+    max: 1,
+  },
 });
 
 grammarPointSchema.index({ name: 1 });

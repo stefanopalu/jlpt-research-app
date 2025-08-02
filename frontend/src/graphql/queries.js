@@ -42,7 +42,7 @@ export const ME = gql`
 
 // SRS-based question study session
 export const GET_QUESTION_STUDY_SESSION = gql`
-  query GetQuestionStudySession($exerciseType: String!, $level: String!, $limit: Int) {
+  query GetQuestionStudySession($exerciseType: String!, $level: String!, $limit: Int!) {
     getQuestionStudySession(exerciseType: $exerciseType, level: $level, limit: $limit) {
       id
       question {

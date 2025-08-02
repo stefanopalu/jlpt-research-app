@@ -179,7 +179,7 @@ const typeDefs = gql`
     me: User
     getUserFlashcardsProgress(userId: ID!): [UserFlashcardsProgress!]!
     getFlashcardStudySession(level: String!, limit: Int = 100): [StudyCard!]!
-    getQuestionStudySession(exerciseType: String!, level: String!, limit: Int = 50): [StudyQuestion!]!
+    getQuestionStudySession(exerciseType: String!, level: String!, limit: Int!): [StudyQuestion!]!
     getReadingStudySession(exerciseType: String!, level: String!, maxReadings: Int = 3): [ReadingSet!]!
     getUserQuestionProgress(userId: ID!): [UserQuestionProgress!]!
     getUserQuestionStats(userId: ID!): UserQuestionStats!

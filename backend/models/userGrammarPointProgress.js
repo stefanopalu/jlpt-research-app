@@ -27,11 +27,18 @@ const userGrammarPointProgressSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
+
+  masteryScore: {
+    type: Number,
+    min: 0,
+    max: 1,
+  },
 }, {
   timestamps: true,
 });
 
 userGrammarPointProgressSchema.index({ user: 1, grammarPoint: 1 }, { unique: true });
+userGrammarPointProgressSchema.index({ user: 1, masteryScore: 1 });
 
 // Instance method to update progress
 userGrammarPointProgressSchema.methods.updateProgress = function(isCorrect) {

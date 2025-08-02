@@ -189,7 +189,7 @@ const resolvers = {
       }
     },
 
-    getQuestionStudySession: async (root, { exerciseType, level, limit }, context) => {
+    getQuestionStudySession: async (root, { exerciseType, level, limit }, context) => {      
       const userId = context.currentUser?._id;
       
       if (!userId) {
@@ -197,20 +197,25 @@ const resolvers = {
           extensions: { code: 'UNAUTHENTICATED' },
         });
       }
-
+      
       try {
-        const session = await questionProgressService.getStudySession(userId, exerciseType, level, limit);
-        
+        const session = await questionProgressService.getAdaptiveStudySession(
+          userId, 
+          exerciseType, 
+          level, 
+          limit,
+        );
+              
         // Transform the data for GraphQL
-        const transformedSession = session.map((questionCard, index) => {
+        const transformedSession = session.flatMap((questionCard, index) => {
           const questionData = questionCard.questionData;
 
           if (!questionData || !questionData._id) {
             console.error(`Missing questionData for card at index ${index}:`, questionCard);
-            return null;
+            return []; // Return empty array instead of null
           }
 
-          const transformed = {
+          return [{
             id: questionCard._id || questionData._id.toString(),
             question: {
               id: questionData._id.toString(),
@@ -226,14 +231,12 @@ const resolvers = {
             successCount: questionCard.successCount || 0,
             failureCount: questionCard.failureCount || 0,
             isNew: questionCard.isNew || false,
-          };
-          
-          return transformed;
-        }).filter(questionCard => questionCard !== null);
+          }];
+        });
         
         return transformedSession;
+        
       } catch (error) {
-        console.error('Error getting question study session:', error);
         throw new GraphQLError(`Failed to get question study session: ${error.message}`);
       }
     },

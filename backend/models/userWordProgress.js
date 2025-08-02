@@ -27,11 +27,18 @@ const userWordProgressSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
+
+  masteryScore: {
+    type: Number,
+    min: 0,
+    max: 1,
+  },
 }, {
   timestamps: true,
 });
 
 userWordProgressSchema.index({ user: 1, word: 1 }, { unique: true });
+userWordProgressSchema.index({ user: 1, masteryScore: 1 });
 
 // Instance method to update progress
 userWordProgressSchema.methods.updateProgress = function(isCorrect) {

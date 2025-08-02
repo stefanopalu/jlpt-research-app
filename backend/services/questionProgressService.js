@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 const UserQuestionProgress = require('../models/userQuestionProgress');
 const Question = require('../models/question');
-const ReadingContent = require('../models/readingContent');  
+const ReadingContent = require('../models/readingContent'); 
+const User = require('../models/user'); 
+const UserWordProgress = require('../models/userWordProgress');
+const UserGrammarPointProgress = require('../models/userGrammarPointProgress');
 
 const questionProgressService = {
-  // Get due questions for a user (for SRS)
+  // SRS METHODS
+  // Get due questions for a user 
   async getDueQuestions(userId, exerciseType = null, level = null, limit = 15) {
     // CLEANUP ORPHANED RECORDS FIRST
     // const orphanedRecords = await UserQuestionProgress.aggregate([
@@ -101,7 +105,7 @@ const questionProgressService = {
   },
 
   // Get mixed study session (80% new, 20% due) 
-  async getStudySession(userId, exerciseType = null, level = null, totalLimit = 50) {
+  async getSRSStudySession(userId, exerciseType = null, level = null, totalLimit = 50) {
     try {  
       // Calculate limits for mixing
       const newLimit = Math.floor(totalLimit * 0.8); // 80% new questions
@@ -281,6 +285,143 @@ const questionProgressService = {
 
     } catch (error) {
       console.error('Error in getReadingBasedSession:', error);
+      throw error;
+    }
+  },
+
+  // BKT METHODS
+  //Get questions based on knowledge component mastery levels
+  async getQuestionsByMastery(userId, exerciseType, level, masteryRange, limit) {
+    try {
+      console.log(`Getting questions for mastery range ${masteryRange.min}-${masteryRange.max}, limit: ${limit}`);
+      
+      // Get user's progress in the specified mastery range
+      const [userWordProgress, userGrammarProgress] = await Promise.all([
+        UserWordProgress.find({
+          user: userId,
+          masteryScore: { $gte: masteryRange.min, $lt: masteryRange.max },
+        }).populate('word'),
+        
+        UserGrammarPointProgress.find({
+          user: userId,
+          masteryScore: { $gte: masteryRange.min, $lt: masteryRange.max },
+        }).populate('grammarPoint'),
+      ]);
+
+      // Extract the actual words and grammar point names
+      const targetWords = userWordProgress.map(p => p.word.kanji);
+      const targetGrammarPoints = userGrammarProgress.map(p => p.grammarPoint.name);
+
+      console.log(`Found ${targetWords.length} words and ${targetGrammarPoints.length} grammar points in mastery range`);
+
+      if (targetWords.length === 0 && targetGrammarPoints.length === 0) {
+        console.log('No knowledge components found in this mastery range');
+        return [];
+      }
+
+      // Find questions containing these knowledge components
+      const query = {
+        type: exerciseType,
+        level: level,
+        $or: [],
+      };
+
+      if (targetWords.length > 0) {
+        query.$or.push({ words: { $in: targetWords } });
+      }
+
+      if (targetGrammarPoints.length > 0) {
+        query.$or.push({ grammarPoints: { $in: targetGrammarPoints } });
+      }
+
+      const questions = await Question.find(query).limit(limit);
+      console.log(`Found ${questions.length} questions for this mastery range`);
+
+      // Return in same format as getNewQuestions
+      return questions.map(question => ({
+        _id: null,
+        user: userId,
+        question: question._id,
+        questionData: question.toObject(),
+        srsLevel: 0,
+        successCount: 0,
+        failureCount: 0,
+        isNew: false,
+      }));
+
+    } catch (error) {
+      console.error('Error getting questions by mastery:', error);
+      throw error;
+    }
+  },
+
+  //Generate BKT-based study session using mastery levels
+  async getBKTStudySession(userId, exerciseType, level, totalLimit) {
+    try {
+      const lowMasteryLimit = Math.floor(totalLimit * 0.5); // 50% low mastery
+      const mediumMasteryLimit = Math.floor(totalLimit * 0.3); // 30% medium mastery  
+      const highMasteryLimit = Math.floor(totalLimit * 0.2); // 20% high mastery
+
+      // Get questions from each mastery category in parallel
+      const [lowMasteryQuestions, mediumMasteryQuestions, highMasteryQuestions] = await Promise.all([
+        this.getQuestionsByMastery(userId, exerciseType, level, { min: 0.0, max: 0.3 }, lowMasteryLimit),
+        this.getQuestionsByMastery(userId, exerciseType, level, { min: 0.3, max: 0.7 }, mediumMasteryLimit),
+        this.getQuestionsByMastery(userId, exerciseType, level, { min: 0.7, max: 1.0 }, highMasteryLimit),
+      ]);
+
+      // Combine all questions
+      let allQuestions = [
+        ...lowMasteryQuestions,
+        ...mediumMasteryQuestions, 
+        ...highMasteryQuestions,
+      ];
+
+      // If we don't have enough questions, backfill with new questions (like your current SRS logic)
+      if (allQuestions.length < totalLimit) {        
+        const backfillQuestions = await this.getNewQuestions(userId, exerciseType, level, totalLimit - allQuestions.length);
+        allQuestions = [...allQuestions, ...backfillQuestions.map(question => ({
+          _id: null,
+          user: userId,
+          question: question._id,
+          questionData: question,
+          srsLevel: 0,
+          successCount: 0,
+          failureCount: 0,
+          isNew: true,
+        }))];
+      }
+
+      // Shuffle and limit to requested amount
+      const finalQuestions = allQuestions.slice(0, totalLimit).sort(() => Math.random() - 0.5);
+
+      return finalQuestions;
+
+    } catch (error) {
+      console.error('Error generating BKT study session:', error);
+      throw error;
+    }
+  },
+
+  //Unified method to get study session (SRS or BKT)
+  async getAdaptiveStudySession(userId, exerciseType, level, totalLimit) {
+    try {
+      // Get user's study session type from database
+      const user = await User.findById(userId);
+      if (!user) {
+        throw new Error(`User not found: ${userId}`);
+      }
+      
+      const useBKT = user.studySessionType === 'BKT';
+
+      
+      if (useBKT) {
+        return await this.getBKTStudySession(userId, exerciseType, level, totalLimit);
+      } else {
+        return await this.getSRSStudySession(userId, exerciseType, level, totalLimit);
+      }
+      
+    } catch (error) {
+      console.error('Error in getAdaptiveStudySession:', error);
       throw error;
     }
   },

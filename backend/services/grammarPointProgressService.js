@@ -1,5 +1,6 @@
 const UserGrammarPointProgress = require('../models/userGrammarPointProgress');
 const GrammarPoint = require('../models/grammarPoint');
+const bktService = require('./bktService');
 const mongoose = require('mongoose');
 
 const grammarPointProgressService = {
@@ -13,23 +14,29 @@ const grammarPointProgressService = {
     }
 
     console.log('GrammarPoint ObjectId:', grammarPoint._id);
-        
+    
+    // Find existing progress record for the user and grammarPoint
     let progress = await UserGrammarPointProgress.findOne({
       user: userId, 
       grammarPoint: grammarPoint._id,
     });
 
     if (progress) {
+      // If it exist, update progress record
       progress.updateProgress(isCorrect);
-      await progress.save();
     } else {
+      // If it does not, create a new record with prior knowledge as starting mastery
       progress = new UserGrammarPointProgress({
         user: userId,
         grammarPoint: grammarPoint._id,
+        masteryScore: grammarPoint.priorKnowledge,
       });
       progress.updateProgress(isCorrect);
-      await progress.save();
     }
+    await progress.save();
+
+    // Update BKT mastery score using formula in BKT service
+    await bktService.updateGrammarPointMastery(userId, grammarPoint._id, isCorrect);
 
     await progress.populate('grammarPoint');
     return progress;

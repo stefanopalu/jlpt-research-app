@@ -1,5 +1,6 @@
 const UserWordProgress = require('../models/userWordProgress');
 const Word = require('../models/word');
+const bktService = require('./bktService');
 const mongoose = require('mongoose');
 
 const wordProgressService = {
@@ -11,30 +12,36 @@ const wordProgressService = {
     if (!wordObj) {
       throw new Error(`Word not found with kanji: ${word}`);
     }
-
-    console.log('Word ObjectId:', wordObj._id);
-        
+    
+    // Find existing progress record for the user and word
     let progress = await UserWordProgress.findOne({
       user: userId, 
       word: wordObj._id,
     });
 
     if (progress) {
+      // If there is an existing progress record, update it
       progress.updateProgress(isCorrect);
-      await progress.save();
     } else {
+      // If not, create new record with prior knowledge as starting mastery score
       progress = new UserWordProgress({
         user: userId,
         word: wordObj._id,
+        masteryScore: wordObj.priorKnowledge,
       });
+      
       progress.updateProgress(isCorrect);
-      await progress.save();
     }
 
+    await progress.save();
+ 
+    // Update BKT mastery score using formula in BKT service
+    await bktService.updateWordMastery(userId, wordObj._id, isCorrect);
+    
     await progress.populate('word');
     return progress;
   },
-
+  
   // Get user's progress for all words
   async getUserProgress(userId) {
     return await UserWordProgress.find({ user: userId }).populate('word');

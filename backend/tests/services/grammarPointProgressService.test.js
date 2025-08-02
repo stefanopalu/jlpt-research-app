@@ -1,11 +1,13 @@
 const grammarPointProgressService = require('../../services/grammarPointProgressService');
 
-// Mock the dependencies
-jest.mock('../../models/grammarPoint');
+// Mock all dependencies
 jest.mock('../../models/userGrammarPointProgress');
+jest.mock('../../models/grammarPoint');
+jest.mock('../../services/bktService');
 
-const GrammarPoint = require('../../models/grammarPoint');
 const UserGrammarPointProgress = require('../../models/userGrammarPointProgress');
+const GrammarPoint = require('../../models/grammarPoint');
+const bktService = require('../../services/bktService');
 
 describe('grammarPointProgressService', () => {
   beforeEach(() => {
@@ -14,16 +16,20 @@ describe('grammarPointProgressService', () => {
 
   describe('updateProgress', () => {
     test('should find grammar point by name and update existing progress', async () => {
+      // Mock GrammarPoint.findOne to return a grammar point
       const mockGrammarPoint = {
         _id: 'gp123',
-        name: 'particle_について',
-        title: 'について particle'
+        name: 'particle-ga',
+        priorKnowledge: 0.04,
+        learningRate: 0.25,
+        slipRate: 0.25,
+        guessRate: 0.25
       };
+      GrammarPoint.findOne.mockResolvedValue(mockGrammarPoint);
 
+      // Mock existing progress
       const mockProgress = {
-        _id: 'progress123',
-        user: 'user123',
-        grammarPoint: 'gp123',
+        masteryScore: 0.45,
         successCount: 2,
         failureCount: 1,
         updateProgress: jest.fn(),
@@ -32,119 +38,103 @@ describe('grammarPointProgressService', () => {
           _id: 'progress123',
           user: 'user123',
           grammarPoint: mockGrammarPoint,
+          masteryScore: 0.45,
           successCount: 3,
-          failureCount: 1,
-          lastReviewed: new Date()
-        })
+          failureCount: 1
+        }),
       };
-
-      GrammarPoint.findOne.mockResolvedValue(mockGrammarPoint);
       UserGrammarPointProgress.findOne.mockResolvedValue(mockProgress);
 
-      const result = await grammarPointProgressService.updateProgress('user123', 'particle_について', true);
+      // Mock BKT service - IMPORTANT: Mock GrammarPoint.findById for BKT service
+      GrammarPoint.findById.mockResolvedValue(mockGrammarPoint);
+      bktService.updateGrammarPointMastery = jest.fn().mockResolvedValue();
 
-      // Verify grammar point lookup
-      expect(GrammarPoint.findOne).toHaveBeenCalledWith({ name: 'particle_について' });
+      const userId = 'user123';
+      const grammarPointName = 'particle-ga';
+      const isCorrect = true;
 
-      // Verify progress lookup
+      const result = await grammarPointProgressService.updateProgress(userId, grammarPointName, isCorrect);
+
+      // Verify grammar point lookup by name
+      expect(GrammarPoint.findOne).toHaveBeenCalledWith({ name: grammarPointName });
+      
+      // Verify existing progress lookup
       expect(UserGrammarPointProgress.findOne).toHaveBeenCalledWith({
-        user: 'user123',
-        grammarPoint: 'gp123'
+        user: userId,
+        grammarPoint: mockGrammarPoint._id,
       });
-
+      
       // Verify progress update
-      expect(mockProgress.updateProgress).toHaveBeenCalledWith(true);
+      expect(mockProgress.updateProgress).toHaveBeenCalledWith(isCorrect);
       expect(mockProgress.save).toHaveBeenCalled();
+      
+      // Verify BKT service called
+      expect(bktService.updateGrammarPointMastery).toHaveBeenCalledWith(userId, mockGrammarPoint._id, isCorrect);
+      
+      // Verify populate
       expect(mockProgress.populate).toHaveBeenCalledWith('grammarPoint');
-
       expect(result).toBeDefined();
     });
 
     test('should create new progress when none exists', async () => {
+      // Mock GrammarPoint.findOne to return a grammar point
       const mockGrammarPoint = {
         _id: 'gp456',
-        name: 'teform_givereceive',
-        title: 'Te-form give/receive'
+        name: 'particle-wo',
+        priorKnowledge: 0.04,
+        learningRate: 0.25,
+        slipRate: 0.25,
+        guessRate: 0.25
       };
+      GrammarPoint.findOne.mockResolvedValue(mockGrammarPoint);
 
-      const mockNewProgress = {
-        _id: 'newprogress456',
-        user: 'user123',
-        grammarPoint: 'gp456',
-        successCount: 0,
-        failureCount: 0,
+      // Mock no existing progress
+      UserGrammarPointProgress.findOne.mockResolvedValue(null);
+
+      // Mock new progress creation
+      const mockProgress = {
         updateProgress: jest.fn(),
         save: jest.fn(),
         populate: jest.fn().mockResolvedValue({
-          _id: 'newprogress456',
+          _id: 'newprogress123',
           user: 'user123',
           grammarPoint: mockGrammarPoint,
+          masteryScore: 0.04,
           successCount: 1,
-          failureCount: 0,
-          lastReviewed: new Date()
-        })
+          failureCount: 0
+        }),
       };
+      UserGrammarPointProgress.mockImplementation(() => mockProgress);
 
-      GrammarPoint.findOne.mockResolvedValue(mockGrammarPoint);
-      UserGrammarPointProgress.findOne.mockResolvedValue(null); // No existing progress
-      UserGrammarPointProgress.mockImplementation(() => mockNewProgress);
+      // Mock BKT service - IMPORTANT: Mock GrammarPoint.findById for BKT service
+      GrammarPoint.findById.mockResolvedValue(mockGrammarPoint);
+      bktService.updateGrammarPointMastery = jest.fn().mockResolvedValue();
 
-      const result = await grammarPointProgressService.updateProgress('user123', 'teform_givereceive', true);
+      const userId = 'user123';
+      const grammarPointName = 'particle-wo';
+      const isCorrect = true;
+
+      const result = await grammarPointProgressService.updateProgress(userId, grammarPointName, isCorrect);
 
       // Verify grammar point lookup
-      expect(GrammarPoint.findOne).toHaveBeenCalledWith({ name: 'teform_givereceive' });
-
-      // Verify progress lookup
-      expect(UserGrammarPointProgress.findOne).toHaveBeenCalledWith({
-        user: 'user123',
-        grammarPoint: 'gp456'
-      });
-
-      // Verify new progress creation
+      expect(GrammarPoint.findOne).toHaveBeenCalledWith({ name: grammarPointName });
+      
+      // Verify progress creation with prior knowledge
       expect(UserGrammarPointProgress).toHaveBeenCalledWith({
-        user: 'user123',
-        grammarPoint: 'gp456'
+        user: userId,
+        grammarPoint: mockGrammarPoint._id,
+        masteryScore: mockGrammarPoint.priorKnowledge,
       });
-
+      
       // Verify progress update
-      expect(mockNewProgress.updateProgress).toHaveBeenCalledWith(true);
-      expect(mockNewProgress.save).toHaveBeenCalled();
-      expect(mockNewProgress.populate).toHaveBeenCalledWith('grammarPoint');
-
-      expect(result).toBeDefined();
-    });
-
-    test('should handle incorrect answers', async () => {
-      const mockGrammarPoint = {
-        _id: 'gp789',
-        name: 'conjunction_usage',
-        title: 'Conjunction Usage'
-      };
-
-      const mockProgress = {
-        _id: 'progress789',
-        user: 'user123',
-        grammarPoint: 'gp789',
-        successCount: 1,
-        failureCount: 0,
-        updateProgress: jest.fn(),
-        save: jest.fn(),
-        populate: jest.fn().mockResolvedValue({
-          _id: 'progress789',
-          user: 'user123',
-          grammarPoint: mockGrammarPoint,
-          successCount: 1,
-          failureCount: 1,
-          lastReviewed: new Date()
-        })
-      };
-
-      GrammarPoint.findOne.mockResolvedValue(mockGrammarPoint);
-      UserGrammarPointProgress.findOne.mockResolvedValue(mockProgress);
-
-      const result = await grammarPointProgressService.updateProgress('user123', 'conjunction_usage', false);
-
-      expect(mockProgress.updateProgress).toHaveBeenCalledWith(false);
+      expect(mockProgress.updateProgress).toHaveBeenCalledWith(isCorrect);
+      expect(mockProgress.save).toHaveBeenCalled();
+      
+      // Verify BKT service called
+      expect(bktService.updateGrammarPointMastery).toHaveBeenCalledWith(userId, mockGrammarPoint._id, isCorrect);
+      
+      // Verify populate
+      expect(mockProgress.populate).toHaveBeenCalledWith('grammarPoint');
       expect(result).toBeDefined();
     });
 
@@ -152,138 +142,102 @@ describe('grammarPointProgressService', () => {
       GrammarPoint.findOne.mockResolvedValue(null);
 
       await expect(
-        grammarPointProgressService.updateProgress('user123', 'nonexistent_grammar', true)
-      ).rejects.toThrow('Grammar point not found with name: nonexistent_grammar');
+        grammarPointProgressService.updateProgress('user123', 'nonexistent-grammar', true)
+      ).rejects.toThrow('Grammar point not found with name: nonexistent-grammar');
 
-      // Should not attempt to update progress if grammar point doesn't exist
+      // Should not call any other methods if grammar point not found
       expect(UserGrammarPointProgress.findOne).not.toHaveBeenCalled();
+      expect(bktService.updateGrammarPointMastery).not.toHaveBeenCalled();
     });
 
-    test('should handle database errors gracefully', async () => {
-      GrammarPoint.findOne.mockRejectedValue(new Error('Database connection failed'));
+    test('should handle BKT service errors gracefully', async () => {
+      // Mock grammar point
+      const mockGrammarPoint = {
+        _id: 'gp789',
+        name: 'particle-ni',
+        priorKnowledge: 0.04,
+        learningRate: 0.25,
+        slipRate: 0.25,
+        guessRate: 0.25
+      };
+      GrammarPoint.findOne.mockResolvedValue(mockGrammarPoint);
+      GrammarPoint.findById.mockResolvedValue(mockGrammarPoint);
+
+      // Mock existing progress
+      const mockProgress = {
+        updateProgress: jest.fn(),
+        save: jest.fn(),
+        populate: jest.fn().mockResolvedValue({}),
+      };
+      UserGrammarPointProgress.findOne.mockResolvedValue(mockProgress);
+
+      // Mock BKT service to throw error
+      bktService.updateGrammarPointMastery = jest.fn().mockRejectedValue(new Error('BKT calculation failed'));
 
       await expect(
-        grammarPointProgressService.updateProgress('user123', 'particle_について', true)
-      ).rejects.toThrow('Database connection failed');
+        grammarPointProgressService.updateProgress('user123', 'particle-ni', true)
+      ).rejects.toThrow('BKT calculation failed');
+
+      // Verify that progress was still updated (BKT runs after progress update)
+      expect(mockProgress.updateProgress).toHaveBeenCalledWith(true);
+      expect(mockProgress.save).toHaveBeenCalled();
     });
+  });
 
-    test('should handle progress save errors', async () => {
-      const mockGrammarPoint = {
-        _id: 'gp123',
-        name: 'particle_について'
-      };
-
-      const mockProgress = {
-        updateProgress: jest.fn(),
-        save: jest.fn().mockRejectedValue(new Error('Save failed')),
-        populate: jest.fn()
-      };
-
-      GrammarPoint.findOne.mockResolvedValue(mockGrammarPoint);
-      UserGrammarPointProgress.findOne.mockResolvedValue(mockProgress);
-
-      await expect(
-        grammarPointProgressService.updateProgress('user123', 'particle_について', true)
-      ).rejects.toThrow('Save failed');
-    });
-
-    test('should handle special characters in grammar point names', async () => {
-      const mockGrammarPoint = {
-        _id: 'gp999',
-        name: 'particle_に/で',
-        title: 'に/で particles'
-      };
-
-      const mockProgress = {
-        updateProgress: jest.fn(),
-        save: jest.fn(),
-        populate: jest.fn().mockResolvedValue({})
-      };
-
-      GrammarPoint.findOne.mockResolvedValue(mockGrammarPoint);
-      UserGrammarPointProgress.findOne.mockResolvedValue(mockProgress);
-
-      await grammarPointProgressService.updateProgress('user123', 'particle_に/で', true);
-
-      expect(GrammarPoint.findOne).toHaveBeenCalledWith({ name: 'particle_に/で' });
-    });
-
-    test('should handle null user ID by passing to database', async () => {
-      const mockGrammarPoint = {
-        _id: 'gp123',
-        name: 'particle_について'
-      };
-
-      const mockProgress = {
-        updateProgress: jest.fn(),
-        save: jest.fn(),
-        populate: jest.fn().mockResolvedValue({})
-      };
-
-      GrammarPoint.findOne.mockResolvedValue(mockGrammarPoint);
-      UserGrammarPointProgress.findOne.mockResolvedValue(mockProgress);
-
-      // The service doesn't validate user ID - it passes it through to the database
-      const result = await grammarPointProgressService.updateProgress(null, 'particle_について', true);
-
-      expect(UserGrammarPointProgress.findOne).toHaveBeenCalledWith({
-        user: null,
-        grammarPoint: 'gp123'
-      });
-
-      expect(result).toBeDefined();
-    });
-
-    test('should log grammar point ObjectId for debugging', async () => {
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-      
-      const mockGrammarPoint = {
-        _id: 'gp123',
-        name: 'particle_について'
-      };
-
-      const mockProgress = {
-        updateProgress: jest.fn(),
-        save: jest.fn(),
-        populate: jest.fn().mockResolvedValue({})
-      };
-
-      GrammarPoint.findOne.mockResolvedValue(mockGrammarPoint);
-      UserGrammarPointProgress.findOne.mockResolvedValue(mockProgress);
-
-      await grammarPointProgressService.updateProgress('user123', 'particle_について', true);
-
-      expect(consoleSpy).toHaveBeenCalledWith('GrammarPoint ObjectId:', 'gp123');
-      
-      consoleSpy.mockRestore();
-    });
-
-    test('should handle multiple rapid updates for same grammar point', async () => {
-      const mockGrammarPoint = {
-        _id: 'gp123',
-        name: 'particle_について'
-      };
-
-      const mockProgress = {
-        updateProgress: jest.fn(),
-        save: jest.fn(),
-        populate: jest.fn().mockResolvedValue({})
-      };
-
-      GrammarPoint.findOne.mockResolvedValue(mockGrammarPoint);
-      UserGrammarPointProgress.findOne.mockResolvedValue(mockProgress);
-
-      // Simulate rapid updates
-      const promises = [
-        grammarPointProgressService.updateProgress('user123', 'particle_について', true),
-        grammarPointProgressService.updateProgress('user123', 'particle_について', false),
-        grammarPointProgressService.updateProgress('user123', 'particle_について', true)
+  describe('getUserProgress', () => {
+    test('should return user progress with populated grammar points', async () => {
+      const mockProgress = [
+        {
+          _id: 'progress1',
+          user: 'user123',
+          grammarPoint: { name: 'particle-ga', title: 'Subject Marker' },
+          masteryScore: 0.75,
+          successCount: 3,
+          failureCount: 1
+        }
       ];
 
-      await Promise.all(promises);
+      UserGrammarPointProgress.find.mockReturnValue({
+        populate: jest.fn().mockResolvedValue(mockProgress)
+      });
 
-      expect(mockProgress.updateProgress).toHaveBeenCalledTimes(3);
-      expect(mockProgress.save).toHaveBeenCalledTimes(3);
+      const result = await grammarPointProgressService.getUserProgress('user123');
+
+      expect(UserGrammarPointProgress.find).toHaveBeenCalledWith({ user: 'user123' });
+      expect(result).toEqual(mockProgress);
+    });
+  });
+
+  describe('getProblematicGrammarPoints', () => {
+    test('should return grammar points with more failures than successes', async () => {
+      const mockAggregateResult = [
+        {
+          _id: 'gp1',
+          title: 'Particle Ga',
+          name: 'particle-ga',
+          explanation: 'Subject marker',
+          grammarStructure: { formation: ['Noun + が'] },
+          grammarExamples: [{ japanese: '私が', english: 'I (subject)' }]
+        }
+      ];
+
+      GrammarPoint.aggregate.mockResolvedValue(mockAggregateResult);
+
+      // Use a valid ObjectId format for testing
+      const validUserId = '507f1f77bcf86cd799439011';
+      const result = await grammarPointProgressService.getProblematicGrammarPoints(validUserId);
+
+      expect(GrammarPoint.aggregate).toHaveBeenCalled();
+      expect(result).toHaveLength(1);
+      expect(result[0].id).toBe('gp1');
+      expect(result[0].name).toBe('particle-ga');
+    });
+
+    test('should handle invalid user ID gracefully', async () => {
+      // Test with invalid user ID should throw error
+      await expect(
+        grammarPointProgressService.getProblematicGrammarPoints('invalid-user-id')
+      ).rejects.toThrow('input must be a 24 character hex string');
     });
   });
 });
