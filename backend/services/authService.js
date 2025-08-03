@@ -36,7 +36,7 @@ const login = async ({ username, password }) => {
   };
 };
 
-const signUp = async ({ username, password, email, firstName, lastName, studyLevel }) => {
+const signUp = async ({ username, password, email, firstName, lastName, studyLevel, sessionLength }) => {
   // Check if user already exists
   const existingUser = await User.findOne({ 
     $or: [{ username }, { email }], 
@@ -50,6 +50,9 @@ const signUp = async ({ username, password, email, firstName, lastName, studyLev
     });
   }
 
+  // Randomly select study session type (50% SRS, 50% BKT)
+  const studySessionType = Math.random() < 0.5 ? 'SRS' : 'BKT';
+
   // Create new user
   const user = new User({
     username,
@@ -58,6 +61,8 @@ const signUp = async ({ username, password, email, firstName, lastName, studyLev
     firstName,
     lastName,
     studyLevel,
+    sessionLength,
+    studySessionType,
   });
 
   await user.save();
@@ -78,6 +83,8 @@ const signUp = async ({ username, password, email, firstName, lastName, studyLev
       firstName: user.firstName,
       lastName: user.lastName,
       studyLevel: user.studyLevel,
+      sessionLength: user.sessionLength,
+      studySessionType: user.studySessionType,
       createdAt: user.createdAt.toISOString(),
     },
   };

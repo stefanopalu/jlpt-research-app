@@ -29,6 +29,8 @@ const typeDefs = gql`
     firstName: String!
     lastName: String!
     studyLevel: String!
+    sessionLength: String!
+    studySessionType: String
     createdAt: String!
     userFlashcardsProgress: [UserFlashcardsProgress!]!
     userQuestionProgress: [UserQuestionProgress!]!
@@ -201,6 +203,7 @@ const typeDefs = gql`
       firstName: String!
       lastName: String!
       studyLevel: String!
+      sessionLength: String!
     ): LoginResponse
     updateUserFlashcardsProgress(
       wordId: ID!

@@ -9,9 +9,9 @@ const useSignUp = () => {
   const apolloClient = useApolloClient();
   const [mutate, result] = useMutation(SIGN_UP);
 
-  const signUp = async ({ username, password, email, firstName, lastName, studyLevel }) => {
+  const signUp = async ({ username, password, email, firstName, lastName, studyLevel, sessionLength }) => {
     const { data } = await mutate({
-      variables: { username, password, email, firstName, lastName, studyLevel },
+      variables: { username, password, email, firstName, lastName, studyLevel, sessionLength },
     });
 
     console.log('Returned data:', data);

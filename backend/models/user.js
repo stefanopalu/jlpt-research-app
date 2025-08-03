@@ -34,6 +34,11 @@ const schema = new mongoose.Schema({
     required: true,
     enum: ['N5', 'N4', 'N3', 'N2', 'N1'],
   },
+  sessionLength: {
+    type: String,
+    required: true,
+    enum: ['5', '10', '20', '30'],
+  },
   studySessionType: {
     type: String,
     enum: ['SRS', 'BKT'],

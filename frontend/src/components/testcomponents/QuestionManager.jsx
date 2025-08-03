@@ -11,8 +11,6 @@ import { useMutation } from '@apollo/client';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { UPDATE_USER_QUESTION_PROGRESS, UPDATE_USER_GRAMMAR_POINT_PROGRESS, UPDATE_USER_WORD_PROGRESS } from '../../graphql/mutations';
 
-const QUESTIONS_PER_SESSION = 10;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -27,13 +25,23 @@ const QuestionManager = () => {
 
   const { user, loading: userLoading } = useCurrentUser({ required: true });
   const level = user?.studyLevel;
+  // Add debug logging for user data
+  console.log('=== USER DATA DEBUG ===');
+  console.log('User sessionLength:', user?.sessionLength);
+  console.log('User studySessionType:', user?.studySessionType);
+  console.log('User studyLevel:', user?.studyLevel);
+  console.log('========================');
+  
+  // Get session length from user, fallback to 10 if not available
+  const questionsPerSession = user?.sessionLength ? parseInt(user.sessionLength, 10) : 10;
+  console.log('Calculated questionsPerSession:', questionsPerSession);
 
   // Use different hooks based on exercise type
   const isReadingBased = type === 'textgrammar';
   
   const questionHookResult = isReadingBased 
     ? useReadingStudySession(level, type, 2) // Max 2 readings for reading-based
-    : useQuestionStudySession(level, type, QUESTIONS_PER_SESSION);
+    : useQuestionStudySession(level, type, questionsPerSession);
     
   const { 
     questions, 
@@ -46,7 +54,7 @@ const QuestionManager = () => {
   } = questionHookResult;
 
   // Use the appropriate total count
-  const sessionTotal = isReadingBased ? readingTotalQuestions : QUESTIONS_PER_SESSION;
+  const sessionTotal = isReadingBased ? readingTotalQuestions : questionsPerSession;
   
   const [currentIndex, setCurrentIndex] = useState(0);
   const [questionStartTime, setQuestionStartTime] = useState(null);

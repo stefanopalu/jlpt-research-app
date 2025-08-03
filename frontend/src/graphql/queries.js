@@ -36,6 +36,8 @@ export const ME = gql`
       id
       username
       studyLevel
+      sessionLength
+      studySessionType
     }
   }
 `;

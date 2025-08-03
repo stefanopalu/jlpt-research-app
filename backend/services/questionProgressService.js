@@ -415,8 +415,10 @@ const questionProgressService = {
 
       
       if (useBKT) {
+        console.log('BKT session!');
         return await this.getBKTStudySession(userId, exerciseType, level, totalLimit);
       } else {
+        console.log('SRS session!');
         return await this.getSRSStudySession(userId, exerciseType, level, totalLimit);
       }
       

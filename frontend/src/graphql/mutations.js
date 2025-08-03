@@ -20,6 +20,7 @@ export const SIGN_UP = gql`
     $firstName: String!
     $lastName: String!
     $studyLevel: String!
+    $sessionLength: String!
   ) {
     signUp(
       username: $username
@@ -28,6 +29,7 @@ export const SIGN_UP = gql`
       firstName: $firstName
       lastName: $lastName
       studyLevel: $studyLevel
+      sessionLength: $sessionLength
     ) {
       value
       user {
@@ -37,6 +39,7 @@ export const SIGN_UP = gql`
         firstName
         lastName
         studyLevel
+        sessionLength
         createdAt
       }
     }

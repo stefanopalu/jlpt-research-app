@@ -123,7 +123,7 @@ describe('questionProgressService', () => {
       ];
 
       // Spy on the SRS method
-      const getStudySessionSpy = jest.spyOn(questionProgressService, 'getStudySession');
+      const getStudySessionSpy = jest.spyOn(questionProgressService, 'getSRSStudySession');
       getStudySessionSpy.mockResolvedValue(mockSRSSession);
 
       const result = await questionProgressService.getAdaptiveStudySession(
