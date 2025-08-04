@@ -1,5 +1,5 @@
 import Text from '../Text';
-import { TextInput, StyleSheet, Pressable, View, ScrollView } from 'react-native';
+import { TextInput, StyleSheet, Pressable, View, ScrollView, ImageBackground } from 'react-native';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-native';
 import useSignIn from '../../hooks/useSignIn';
@@ -25,27 +25,30 @@ const validationSchema = yup.object().shape({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: 'trasnparent',
+  },
+  backgroundImage: {
+    flex: 1,
   },
   headerContainer: {
-    backgroundColor: theme.colors.primary,
-    paddingTop: 40,
+    paddingTop: 30,
     paddingBottom: 40,
     paddingHorizontal: 24,
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
   },
   headerTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: 'white',
+    fontSize: theme.fontSizes.subheading + 18,
+    fontWeight: theme.fontWeights.bold,
+    color: theme.colors.primaryDark,
     textAlign: 'center',
-    marginBottom: 8,
   },
   formContainer: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.90)',
     marginTop: -20,
     marginBottom: 40,
+    marginLeft: 20,
+    marginRight: 20,
     borderRadius: 16,
     padding: 24,
     shadowColor: '#000',
@@ -117,55 +120,61 @@ export const SignInContainer = ({ navigate, signIn }) => {
   });
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Header */}
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>Sign in now</Text>
-      </View>
-
-      {/* Form Container */}
-      <View style={styles.formContainer}>
-        {/* Username */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Username</Text>
-          <TextInput
-            placeholder="Enter your username"
-            value={formik.values.username}
-            onChangeText={formik.handleChange('username')}
-            style={[
-              styles.input,
-              formik.touched.username && formik.errors.username && styles.inputError,
-            ]}
-          />
-          {formik.touched.username && formik.errors.username && (
-            <Text style={styles.errorText}>{formik.errors.username}</Text>
-          )}
+    <ImageBackground 
+      source={require('../../../assets/sakura.png')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerTitle}>Sign in now</Text>
         </View>
 
-        {/* Password */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Password</Text>
-          <TextInput
-            placeholder="••••••••••••••••••••"
-            secureTextEntry={true}
-            value={formik.values.password}
-            onChangeText={formik.handleChange('password')}
-            style={[
-              styles.input,
-              formik.touched.password && formik.errors.password && styles.inputError,
-            ]}
-          />
-          {formik.touched.password && formik.errors.password && (
-            <Text style={styles.errorText}>{formik.errors.password}</Text>
-          )}
-        </View>
+        {/* Form Container */}
+        <View style={styles.formContainer}>
+          {/* Username */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Username</Text>
+            <TextInput
+              placeholder="Enter your username"
+              value={formik.values.username}
+              onChangeText={formik.handleChange('username')}
+              style={[
+                styles.input,
+                formik.touched.username && formik.errors.username && styles.inputError,
+              ]}
+            />
+            {formik.touched.username && formik.errors.username && (
+              <Text style={styles.errorText}>{formik.errors.username}</Text>
+            )}
+          </View>
 
-        {/* Sign In Button */}
-        <Pressable style={styles.signInButton} onPress={formik.handleSubmit}>
-          <Text style={styles.signInButtonText}>Sign In</Text>
-        </Pressable>
-      </View>
-    </ScrollView>
+          {/* Password */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Password</Text>
+            <TextInput
+              placeholder="••••••••••••••••••••"
+              secureTextEntry={true}
+              value={formik.values.password}
+              onChangeText={formik.handleChange('password')}
+              style={[
+                styles.input,
+                formik.touched.password && formik.errors.password && styles.inputError,
+              ]}
+            />
+            {formik.touched.password && formik.errors.password && (
+              <Text style={styles.errorText}>{formik.errors.password}</Text>
+            )}
+          </View>
+
+          {/* Sign In Button */}
+          <Pressable style={styles.signInButton} onPress={formik.handleSubmit}>
+            <Text style={styles.signInButtonText}>Sign In</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
+    </ImageBackground>
   );
 };
 

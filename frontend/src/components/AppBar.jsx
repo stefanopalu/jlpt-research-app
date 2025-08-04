@@ -1,6 +1,7 @@
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Link } from 'react-router-native';
 import { ME } from '../graphql/queries';
+import { FontAwesome } from '@expo/vector-icons';
 import { useQuery, useApolloClient } from '@apollo/client';
 import { useNavigate } from 'react-router-native';
 import useAuthStorage from '../hooks/useAuthStorage';
@@ -16,10 +17,8 @@ const styles = StyleSheet.create({
     minWidth: '100%',
     alignItems: 'center',
   },
-  text: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 14,
+  iconButton: {
+    padding: 8,
   },
 });
 
@@ -39,25 +38,25 @@ const AppBar = () => {
   return (
     <View style={styles.container}>
       <View style={styles.scrollContent}>
-        <TouchableOpacity onPress={() => navigate('/')}>
-          <Text style={styles.text}>Home</Text>
+        <TouchableOpacity onPress={() => navigate('/')} style={styles.iconButton}>
+          <FontAwesome name="home" size={20} color="white" />
         </TouchableOpacity>
         {data?.me && (
-          <TouchableOpacity onPress={() => navigate('/stats')}>
-            <Text style={styles.text}>Stats</Text>
+          <TouchableOpacity onPress={() => navigate('/stats')} style={styles.iconButton}>
+            <FontAwesome name="bar-chart" size={20} color="white" />
           </TouchableOpacity>
         )}
         {data?.me ? (
-          <TouchableOpacity onPress={() => {handleSignOut();}}>
-            <Text style={styles.text}>Sign Out</Text>
+          <TouchableOpacity onPress={handleSignOut} style={styles.iconButton}>
+            <FontAwesome name="sign-out" size={20} color="white" />
           </TouchableOpacity>
         ) : (
           <>
-            <Link to="/signin">
-              <Text style={styles.text}>Sign In</Text>
+            <Link to="/signin" style={styles.iconButton}>
+              <FontAwesome name="sign-in" size={20} color="white" />
             </Link>
-            <Link to="/signup">
-              <Text style={styles.text}>Sign Up</Text>
+            <Link to="/signup" style={styles.iconButton}>
+              <FontAwesome name="user-plus" size={20} color="white" />
             </Link>
           </>
         )}

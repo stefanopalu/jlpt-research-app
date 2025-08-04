@@ -1,30 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { useLocation, useNavigate } from 'react-router-native';
 import theme from '../../../theme';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: 'transparent',
   },
-  header: {
-    backgroundColor: theme.colors.tertiary,
-    paddingVertical: 10,
-    paddingHorizontal: 24,
-    paddingTop: 30,
-  },
-  title: {
-    fontSize: theme.fontSizes.subheading + 8,
-    fontWeight: theme.fontWeights.bold,
-    color: 'white',
-    textAlign: 'left',
+  backgroundImage: {
+    flex: 1,
   },
   content: {
     padding: 18,
   },
   backButton: {
-    backgroundColor: theme.colors.primaryLight,
+    backgroundColor: theme.colors.primaryDark,
     borderRadius: 10,
     padding: 16,
     marginBottom: 20,
@@ -41,7 +32,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   wordCard: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 10,
     padding: 30,
     shadowColor: '#000',
@@ -154,30 +145,32 @@ const WordView = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Word Detail</Text>
-      </View>
-      
-      <View style={styles.content}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-          <Text style={styles.backButtonText}>← Back to Words</Text>
-        </TouchableOpacity>
+    <ImageBackground 
+      source={require('../../../assets/bridge.png')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <View style={styles.content}>
+          <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
+            <Text style={styles.backButtonText}>← Back to Words</Text>
+          </TouchableOpacity>
         
-        <View style={styles.wordCard}>
-          <Text style={styles.sectionTitle}>Kanji</Text>
-          <Text style={styles.kanji}>{word.kanji}</Text>
+          <View style={styles.wordCard}>
+            <Text style={styles.sectionTitle}>Kanji</Text>
+            <Text style={styles.kanji}>{word.kanji}</Text>
           
-          <Text style={styles.sectionTitle}>Hiragana</Text>
-          <Text style={styles.hiragana}>{word.hiragana}</Text>
+            <Text style={styles.sectionTitle}>Hiragana</Text>
+            <Text style={styles.hiragana}>{word.hiragana}</Text>
           
-          <Text style={styles.sectionTitle}>English Meaning</Text>
-          <Text style={styles.english}>{word.english.join(', ')}</Text>
+            <Text style={styles.sectionTitle}>English Meaning</Text>
+            <Text style={styles.english}>{word.english.join(', ')}</Text>
           
-          <Text style={styles.type}>Type: {word.type}</Text>
+            <Text style={styles.type}>Type: {word.type}</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 

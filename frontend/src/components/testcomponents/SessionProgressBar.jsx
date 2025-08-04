@@ -90,9 +90,6 @@ const SessionProgressBar = ({
       <View style={styles.content}>
         {/* Left side: Progress info and bar */}
         <View style={styles.leftSection}>
-          <Text style={styles.progressText}>
-            {currentQuestion}/{totalQuestions}
-          </Text>
           <View style={styles.progressBarContainer}>
             <View 
               style={[

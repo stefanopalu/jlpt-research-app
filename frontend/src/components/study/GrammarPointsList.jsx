@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, ImageBackground } from 'react-native';
 import { useNavigate } from 'react-router-native';
 import { useDebounce } from 'use-debounce';
 import { useGrammarPoints } from '../../hooks/useGrammarPoints';
@@ -9,19 +9,22 @@ import theme from '../../../theme';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: 'transparent',
+  },
+  backgroundImage: {
+    flex: 1,
   },
   header: {
-    backgroundColor: theme.colors.tertiary,
+    backgroundColor: 'transparent',
     paddingVertical: 10,
     paddingHorizontal: 24,
     paddingTop: 30,
   },
   title: {
-    fontSize: theme.fontSizes.subheading + 8,
+    fontSize: theme.fontSizes.subheading + 22,
     fontWeight: theme.fontWeights.bold,
-    color: 'white',
-    textAlign: 'left',
+    color: theme.colors.primaryDark,
+    textAlign: 'center',
   },
   scrollContainer: {
     flex: 1,
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     borderRadius: 8,
-    padding: 12,
+    padding: 18,
     fontSize: 16,
     backgroundColor: 'white',
     paddingRight: 40,
@@ -55,7 +58,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   statusCard: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.95)',
     borderRadius: 10,
     padding: 20,
     marginBottom: 20,
@@ -109,7 +112,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   emptyStateCard: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.95)',
     borderRadius: 10,
     padding: 30,
     shadowColor: '#000',
@@ -138,7 +141,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   authPromptCard: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.95)',
     borderRadius: 10,
     padding: 20,
     marginBottom: 20,
@@ -241,28 +244,40 @@ const GrammarPointList = () => {
   // Handle loading states
   if (isLoading && !isSearching) {
     return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Grammar Points</Text>
+      <ImageBackground 
+        source={require('../../../assets/pagoda.png')}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Grammar Points</Text>
+          </View>
+          <View style={styles.content}>
+            <Text style={styles.loadingText}>Loading grammar points...</Text>
+          </View>
         </View>
-        <View style={styles.content}>
-          <Text style={styles.loadingText}>Loading grammar points...</Text>
-        </View>
-      </View>
+      </ImageBackground>
     );
   }
 
   // Handle errors
   if (hasError && !isSearching) {
     return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Grammar Points</Text>
+      <ImageBackground 
+        source={require('../../../assets/pagoda.png')}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Grammar Points</Text>
+          </View>
+          <View style={styles.content}>
+            <Text style={styles.errorText}>Error: {hasError.message}</Text>
+          </View>
         </View>
-        <View style={styles.content}>
-          <Text style={styles.errorText}>Error: {hasError.message}</Text>
-        </View>
-      </View>
+      </ImageBackground>
     );
   }
 
@@ -288,101 +303,107 @@ const GrammarPointList = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Grammar Points</Text>
-      </View>
-      
-      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        <View style={styles.content}>
-          {/* Search Bar */}
-          <View style={{ position: 'relative' }}>
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search all grammar points..."
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              autoCorrect={false}
-              clearButtonMode="never"
-            />
-            {searchQuery.length > 0 && (
-              <TouchableOpacity style={styles.clearButton} onPress={clearSearch}>
-                <Text style={styles.clearButtonText}>×</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-
-          {/* Authentication prompt for non-authenticated users */}
-          {!isAuthenticated && !isSearching && (
-            <View style={styles.authPromptCard}>
-              <Text style={styles.authPromptTitle}>Get Personalized Learning</Text>
-              <Text style={styles.authPromptText}>
-                Log in to see grammar points you need to practice based on your performance and get a personalized learning experience.
-              </Text>
-              <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
-                <Text style={styles.loginButtonText}>Log In</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {/* Status and Grammar Points Combined Card */}
-          <View style={styles.statusCard}>
-            <Text style={styles.subtitle}>{getSubtitle()}</Text>
-            
-            {/* Search status */}
-            {isSearching && searchLoading && (
-              <Text style={styles.searchingText}>Searching...</Text>
-            )}
-            
-            {isSearching && searchError && (
-              <Text style={styles.errorText}>Search error: {searchError.message}</Text>
-            )}
-
-            {/* Results count */}
-            {displayData && (
-              <Text style={styles.resultCount}>{getResultsText()}</Text>
-            )}
-
-            {/* Grammar Points List */}
-            {!displayData || displayData.length === 0 ? (
-              <View style={{ marginTop: 10 }}>
-                {isSearching ? (
-                  <Text style={styles.noResultsText}>
-                    No grammar points found matching your search.
-                  </Text>
-                ) : isAuthenticated ? (
-                  <View style={{ alignItems: 'center' }}>
-                    <Text style={styles.emptyStateTitle}>🎉 Great job!</Text>
-                    <Text style={styles.emptyStateText}>
-                      {'No problematic grammar points right now. Keep practicing to maintain your progress!'}
-                    </Text>
-                  </View>
-                ) : (
-                  <Text style={styles.noResultsText}>
-                    No grammar points available at the moment.
-                  </Text>
-                )}
-              </View>
-            ) : (
-              <View style={{ marginTop: 10 }}>
-                {displayData.map((grammarPoint, index) => (
-                  <TouchableOpacity
-                    key={grammarPoint.id}
-                    style={[
-                      styles.grammarButton,
-                      index === displayData.length - 1 && styles.grammarButtonLast,
-                    ]}
-                    onPress={() => handlePress(grammarPoint)}
-                  >
-                    <Text style={styles.grammarText}>{grammarPoint.title}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-          </View>
+    <ImageBackground 
+      source={require('../../../assets/pagoda.png')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Grammar Points</Text>
         </View>
-      </ScrollView>
-    </View>
+        
+        <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
+            {/* Search Bar */}
+            <View style={{ position: 'relative' }}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search all grammar points..."
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                autoCorrect={false}
+                clearButtonMode="never"
+              />
+              {searchQuery.length > 0 && (
+                <TouchableOpacity style={styles.clearButton} onPress={clearSearch}>
+                  <Text style={styles.clearButtonText}>×</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {/* Authentication prompt for non-authenticated users */}
+            {!isAuthenticated && !isSearching && (
+              <View style={styles.authPromptCard}>
+                <Text style={styles.authPromptTitle}>Get Personalized Learning</Text>
+                <Text style={styles.authPromptText}>
+                  Log in to see grammar points you need to practice based on your performance and get a personalized learning experience.
+                </Text>
+                <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
+                  <Text style={styles.loginButtonText}>Log In</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {/* Status and Grammar Points Combined Card */}
+            <View style={styles.statusCard}>
+              <Text style={styles.subtitle}>{getSubtitle()}</Text>
+              
+              {/* Search status */}
+              {isSearching && searchLoading && (
+                <Text style={styles.searchingText}>Searching...</Text>
+              )}
+              
+              {isSearching && searchError && (
+                <Text style={styles.errorText}>Search error: {searchError.message}</Text>
+              )}
+
+              {/* Results count */}
+              {displayData && (
+                <Text style={styles.resultCount}>{getResultsText()}</Text>
+              )}
+
+              {/* Grammar Points List */}
+              {!displayData || displayData.length === 0 ? (
+                <View style={{ marginTop: 10 }}>
+                  {isSearching ? (
+                    <Text style={styles.noResultsText}>
+                      No grammar points found matching your search.
+                    </Text>
+                  ) : isAuthenticated ? (
+                    <View style={{ alignItems: 'center' }}>
+                      <Text style={styles.emptyStateTitle}>🎉 Great job!</Text>
+                      <Text style={styles.emptyStateText}>
+                        {'No problematic grammar points right now. Keep practicing to maintain your progress!'}
+                      </Text>
+                    </View>
+                  ) : (
+                    <Text style={styles.noResultsText}>
+                      No grammar points available at the moment.
+                    </Text>
+                  )}
+                </View>
+              ) : (
+                <View style={{ marginTop: 10 }}>
+                  {displayData.map((grammarPoint, index) => (
+                    <TouchableOpacity
+                      key={grammarPoint.id}
+                      style={[
+                        styles.grammarButton,
+                        index === displayData.length - 1 && styles.grammarButtonLast,
+                      ]}
+                      onPress={() => handlePress(grammarPoint)}
+                    >
+                      <Text style={styles.grammarText}>{grammarPoint.title}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+    </ImageBackground>
   );
 };
 

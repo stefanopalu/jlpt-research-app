@@ -1,36 +1,28 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, ImageBackground } from 'react-native';
 import { useNavigate } from 'react-router-native';
+import { useCurrentUser } from '../hooks/useCurrentUser';
 import theme from '../../theme';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.primary,
-  },
-  header: {
-    backgroundColor: theme.colors.tertiary,
-    paddingVertical: 10,
-    paddingHorizontal: 24,
-    paddingTop: 30,
-  },
-  title: {
-    fontSize: theme.fontSizes.subheading + 8,
-    fontWeight: theme.fontWeights.bold,
-    color: 'white',
-    textAlign: 'left',
+    backgroundColor: '#f5f5f5',
   },
   scrollContainer: {
     flex: 1,
   },
+  backgroundImage: {
+    flex: 1,
+  },
   content: {
-    padding: 18,
+    padding: 20,
   },
   // Featured cards (Study Materials and Flashcards)
   featuredCard: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
+    backgroundColor: 'rgba(255,255,255,0.90)',
+    borderRadius: 16,
+    padding: 24,
     marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -42,23 +34,23 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#1f2937',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   featuredSubtitle: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#6b7280',
-    marginBottom: 10,
+    marginBottom: 16,
   },
   studyMaterialsGrid: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 12,
   },
   studyMaterialButton: {
     flex: 1,
-    backgroundColor: theme.colors.primaryDark,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 10,
+    backgroundColor: theme.colors.primary,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
   },
   studyMaterialText: {
     color: 'white',
@@ -67,10 +59,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   flashcardButton: {
-    backgroundColor: theme.colors.primaryDark,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 10,
+    backgroundColor: theme.colors.primary,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 12,
     alignSelf: 'stretch',
   },
   flashcardButtonText: {
@@ -80,13 +72,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   // Categories section
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1f2937',
+    marginBottom: 16,
+  },
   categoriesGrid: {
     flexDirection: 'row',
-    gap: 14,
+    gap: 16,
+    marginBottom: 20,
   },
   categoryCard: {
-    backgroundColor: 'white',
-    borderRadius: 10,
+    backgroundColor: 'rgba(255,255,255,0.80)',
+    borderRadius: 16,
     flex: 1,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -112,7 +111,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   categoryContent: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.80)',
   },
   categoryItem: {
     paddingVertical: 14,
@@ -132,6 +131,8 @@ const styles = StyleSheet.create({
 
 const Home = () => {
   const navigate = useNavigate();
+  const { user } = useCurrentUser({ required: true });
+  const level = user?.studyLevel;
 
   const studyMaterials = [
     { key: 'grammarpoints', label: 'Grammar Points', path: '/grammarpoints' },
@@ -143,7 +144,8 @@ const Home = () => {
     { key: 'orthography', label: 'Orthography', path: '/questions?exerciseType=orthography' },
     { key: 'contextexpression', label: 'Contextually-defined expressions', path: '/questions?exerciseType=contextexpression' },
     { key: 'paraphrases', label: 'Paraphrases', path: '/questions?exerciseType=paraphrases' },
-    { key: 'usage', label: 'Usage', path: '/questions?exerciseType=usage' },
+    // Only show Usage if level is not N5
+    ...(level !== 'N5' ? [{ key: 'usage', label: 'Usage', path: '/questions?exerciseType=usage' }] : []),
   ];
 
   const grammarItems = [
@@ -158,87 +160,87 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>JLPT App</Text>
-      </View>
-      
-      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        <View style={styles.content}>
-          {/* Study Materials Featured Card */}
-          <View style={styles.featuredCard}>
-            <Text style={styles.featuredTitle}>Study Materials</Text>
-            <Text style={styles.featuredSubtitle}>Review grammar points and vocabulary words</Text>
-            <View style={styles.studyMaterialsGrid}>
-              {studyMaterials.map((item) => (
-                <Pressable
-                  key={item.key}
-                  style={styles.studyMaterialButton}
-                  onPress={() => handleNavigation(item.path)}
-                >
-                  <Text style={styles.studyMaterialText}>{item.label}</Text>
-                </Pressable>
-              ))}
-            </View>
-          </View>
-
-          {/* Flashcards Featured Card */}
-          <View style={styles.featuredCard}>
-            <Text style={styles.featuredTitle}>Vocabulary Flashcards</Text>
-            <Text style={styles.featuredSubtitle}>Practice with interactive flashcards</Text>
-            <Pressable
-              style={styles.flashcardButton}
-              onPress={() => handleNavigation('/vocabularyflashcards')}
-            >
-              <Text style={styles.flashcardButtonText}>Start Practice</Text>
-            </Pressable>
-          </View>
-
-          {/* Categories Section */}
-          <View style={styles.categoriesGrid}>
-            {/* Vocabulary Card - Always Expanded */}
-            <View style={styles.categoryCard}>
-              <View style={[styles.categoryHeader, styles.vocabularyHeader]}>
-                <Text style={styles.categoryHeaderText}>Vocabulary</Text>
-              </View>
-              <View style={styles.categoryContent}>
-                {vocabularyItems.map((item, index) => (
+      <ImageBackground 
+        source={require('../../assets/pagoda.png')}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
+            {/* Study Materials Featured Card */}
+            <View style={styles.featuredCard}>
+              <Text style={styles.featuredTitle}>Study Materials</Text>
+              <Text style={styles.featuredSubtitle}>Review grammar points and vocabulary words</Text>
+              <View style={styles.studyMaterialsGrid}>
+                {studyMaterials.map((item) => (
                   <Pressable
                     key={item.key}
-                    style={[
-                      styles.categoryItem,
-                      index === vocabularyItems.length - 1 && styles.categoryItemLast,
-                    ]}
+                    style={styles.studyMaterialButton}
                     onPress={() => handleNavigation(item.path)}
                   >
-                    <Text style={styles.categoryItemText}>{item.label}</Text>
+                    <Text style={styles.studyMaterialText}>{item.label}</Text>
                   </Pressable>
                 ))}
               </View>
             </View>
-
-            {/* Grammar Card - Always Expanded */}
-            <View style={styles.categoryCard}>
-              <View style={[styles.categoryHeader, styles.grammarHeader]}>
-                <Text style={styles.categoryHeaderText}>Grammar</Text>
+            {/* Categories Section */}
+            <View style={styles.categoriesGrid}>
+              {/* Vocabulary Card - Always Expanded */}
+              <View style={styles.categoryCard}>
+                <View style={[styles.categoryHeader, styles.vocabularyHeader]}>
+                  <Text style={styles.categoryHeaderText}>Vocabulary</Text>
+                </View>
+                <View style={styles.categoryContent}>
+                  {vocabularyItems.map((item, index) => (
+                    <Pressable
+                      key={item.key}
+                      style={[
+                        styles.categoryItem,
+                        index === vocabularyItems.length - 1 && styles.categoryItemLast,
+                      ]}
+                      onPress={() => handleNavigation(item.path)}
+                    >
+                      <Text style={styles.categoryItemText}>{item.label}</Text>
+                    </Pressable>
+                  ))}
+                </View>
               </View>
-              <View style={styles.categoryContent}>
-                {grammarItems.map((item, index) => (
-                  <Pressable
-                    key={item.key}
-                    style={[
-                      styles.categoryItem,
-                      index === grammarItems.length - 1 && styles.categoryItemLast,
-                    ]}
-                    onPress={() => handleNavigation(item.path)}
-                  >
-                    <Text style={styles.categoryItemText}>{item.label}</Text>
-                  </Pressable>
-                ))}
+
+              {/* Grammar Card - Always Expanded */}
+              <View style={styles.categoryCard}>
+                <View style={[styles.categoryHeader, styles.grammarHeader]}>
+                  <Text style={styles.categoryHeaderText}>Grammar</Text>
+                </View>
+                <View style={styles.categoryContent}>
+                  {grammarItems.map((item, index) => (
+                    <Pressable
+                      key={item.key}
+                      style={[
+                        styles.categoryItem,
+                        index === grammarItems.length - 1 && styles.categoryItemLast,
+                      ]}
+                      onPress={() => handleNavigation(item.path)}
+                    >
+                      <Text style={styles.categoryItemText}>{item.label}</Text>
+                    </Pressable>
+                  ))}
+                </View>
               </View>
             </View>
+            {/* Flashcards Featured Card */}
+            <View style={styles.featuredCard}>
+              <Text style={styles.featuredTitle}>Vocabulary Flashcards</Text>
+              <Text style={styles.featuredSubtitle}>Practice with interactive flashcards</Text>
+              <Pressable
+                style={styles.flashcardButton}
+                onPress={() => handleNavigation('/vocabularyflashcards')}
+              >
+                <Text style={styles.flashcardButtonText}>Start Practice</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </ImageBackground>
     </View>
   );
 };

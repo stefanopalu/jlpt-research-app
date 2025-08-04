@@ -1,5 +1,5 @@
 import Text from '../Text';
-import { TextInput, StyleSheet, Pressable, View, ScrollView } from 'react-native';
+import { TextInput, StyleSheet, Pressable, View, ScrollView, ImageBackground } from 'react-native';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-native';
 import useSignUp from '../../hooks/useSignUp';
@@ -60,32 +60,30 @@ const disabledLevels = ['N3', 'N2', 'N1'];
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: 'transparent',
+  },
+  backgroundImage: {
+    flex: 1,
   },
   headerContainer: {
-    backgroundColor: theme.colors.primary,
-    paddingTop: 40,
+    paddingTop: 30,
     paddingBottom: 40,
     paddingHorizontal: 24,
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
   },
   headerTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: 'white',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: theme.fontSizes.subheading + 18,
+    fontWeight: theme.fontWeights.bold,
+    color: theme.colors.primaryDark,
     textAlign: 'center',
   },
   formContainer: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.90)',
     marginTop: -20,
     marginBottom: 40,
+    marginLeft: 20,
+    marginRight: 20,
     borderRadius: 16,
     padding: 24,
     shadowColor: '#000',
@@ -214,190 +212,196 @@ export const SignUpContainer = ({ navigate, signUp }) => {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Header */}
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>Sign up now</Text>
-      </View>
-
-      {/* Form Container */}
-      <View style={styles.formContainer}>
-        {/* Email */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Email</Text>
-          <TextInput
-            placeholder="winner@email.com"
-            value={formik.values.email}
-            onChangeText={formik.handleChange('email')}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            style={[
-              styles.input,
-              formik.touched.email && formik.errors.email && styles.inputError,
-            ]}
-          />
-          {formik.touched.email && formik.errors.email && (
-            <Text style={styles.errorText}>{formik.errors.email}</Text>
-          )}
+    <ImageBackground 
+      source={require('../../../assets/sakura.png')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerTitle}>Sign up now</Text>
         </View>
 
-        {/* Username */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Your username</Text>
-          <TextInput
-            placeholder="Rookie123"
-            value={formik.values.username}
-            onChangeText={formik.handleChange('username')}
-            style={[
-              styles.input,
-              formik.touched.username && formik.errors.username && styles.inputError,
-            ]}
-          />
-          {formik.touched.username && formik.errors.username && (
-            <Text style={styles.errorText}>{formik.errors.username}</Text>
-          )}
-        </View>
+        {/* Form Container */}
+        <View style={styles.formContainer}>
+          {/* Email */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Email</Text>
+            <TextInput
+              placeholder="winner@email.com"
+              value={formik.values.email}
+              onChangeText={formik.handleChange('email')}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              style={[
+                styles.input,
+                formik.touched.email && formik.errors.email && styles.inputError,
+              ]}
+            />
+            {formik.touched.email && formik.errors.email && (
+              <Text style={styles.errorText}>{formik.errors.email}</Text>
+            )}
+          </View>
 
-        {/* Password */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Your password</Text>
-          <TextInput
-            placeholder="••••••••••••••••••••"
-            secureTextEntry={true}
-            value={formik.values.password}
-            onChangeText={formik.handleChange('password')}
-            style={[
-              styles.input,
-              formik.touched.password && formik.errors.password && styles.inputError,
-            ]}
-          />
-          {formik.touched.password && formik.errors.password && (
-            <Text style={styles.errorText}>{formik.errors.password}</Text>
-          )}
-        </View>
+          {/* Username */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Your username</Text>
+            <TextInput
+              placeholder="Rookie123"
+              value={formik.values.username}
+              onChangeText={formik.handleChange('username')}
+              style={[
+                styles.input,
+                formik.touched.username && formik.errors.username && styles.inputError,
+              ]}
+            />
+            {formik.touched.username && formik.errors.username && (
+              <Text style={styles.errorText}>{formik.errors.username}</Text>
+            )}
+          </View>
 
-        {/* Confirm Password */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Confirm Password</Text>
-          <TextInput
-            placeholder="••••••••••••••••••••"
-            secureTextEntry={true}
-            value={formik.values.confirmPassword}
-            onChangeText={formik.handleChange('confirmPassword')}
-            style={[
-              styles.input,
-              formik.touched.confirmPassword && formik.errors.confirmPassword && styles.inputError,
-            ]}
-          />
-          {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-            <Text style={styles.errorText}>{formik.errors.confirmPassword}</Text>
-          )}
-        </View>
+          {/* Password */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Your password</Text>
+            <TextInput
+              placeholder="••••••••••••••••••••"
+              secureTextEntry={true}
+              value={formik.values.password}
+              onChangeText={formik.handleChange('password')}
+              style={[
+                styles.input,
+                formik.touched.password && formik.errors.password && styles.inputError,
+              ]}
+            />
+            {formik.touched.password && formik.errors.password && (
+              <Text style={styles.errorText}>{formik.errors.password}</Text>
+            )}
+          </View>
 
-        {/* First Name */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>First Name</Text>
-          <TextInput
-            placeholder="Enter your first name"
-            value={formik.values.firstName}
-            onChangeText={formik.handleChange('firstName')}
-            style={[
-              styles.input,
-              formik.touched.firstName && formik.errors.firstName && styles.inputError,
-            ]}
-          />
-          {formik.touched.firstName && formik.errors.firstName && (
-            <Text style={styles.errorText}>{formik.errors.firstName}</Text>
-          )}
-        </View>
+          {/* Confirm Password */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Confirm Password</Text>
+            <TextInput
+              placeholder="••••••••••••••••••••"
+              secureTextEntry={true}
+              value={formik.values.confirmPassword}
+              onChangeText={formik.handleChange('confirmPassword')}
+              style={[
+                styles.input,
+                formik.touched.confirmPassword && formik.errors.confirmPassword && styles.inputError,
+              ]}
+            />
+            {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+              <Text style={styles.errorText}>{formik.errors.confirmPassword}</Text>
+            )}
+          </View>
 
-        {/* Last Name */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Last Name</Text>
-          <TextInput
-            placeholder="Enter your last name"
-            value={formik.values.lastName}
-            onChangeText={formik.handleChange('lastName')}
-            style={[
-              styles.input,
-              formik.touched.lastName && formik.errors.lastName && styles.inputError,
-            ]}
-          />
-          {formik.touched.lastName && formik.errors.lastName && (
-            <Text style={styles.errorText}>{formik.errors.lastName}</Text>
-          )}
-        </View>
+          {/* First Name */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>First Name</Text>
+            <TextInput
+              placeholder="Enter your first name"
+              value={formik.values.firstName}
+              onChangeText={formik.handleChange('firstName')}
+              style={[
+                styles.input,
+                formik.touched.firstName && formik.errors.firstName && styles.inputError,
+              ]}
+            />
+            {formik.touched.firstName && formik.errors.firstName && (
+              <Text style={styles.errorText}>{formik.errors.firstName}</Text>
+            )}
+          </View>
 
-        {/* Study Level */}
-        <View style={styles.levelContainer}>
-          <Text style={styles.levelLabel}>Study Level</Text>
-          <View style={styles.levelButtonsContainer}>
-            {studyLevels.map((level) => {
-              const isDisabled = disabledLevels.includes(level);
-              return (
+          {/* Last Name */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Last Name</Text>
+            <TextInput
+              placeholder="Enter your last name"
+              value={formik.values.lastName}
+              onChangeText={formik.handleChange('lastName')}
+              style={[
+                styles.input,
+                formik.touched.lastName && formik.errors.lastName && styles.inputError,
+              ]}
+            />
+            {formik.touched.lastName && formik.errors.lastName && (
+              <Text style={styles.errorText}>{formik.errors.lastName}</Text>
+            )}
+          </View>
+
+          {/* Study Level */}
+          <View style={styles.levelContainer}>
+            <Text style={styles.levelLabel}>Study Level</Text>
+            <View style={styles.levelButtonsContainer}>
+              {studyLevels.map((level) => {
+                const isDisabled = disabledLevels.includes(level);
+                return (
+                  <Pressable
+                    key={level}
+                    style={[
+                      styles.levelButton,
+                      formik.values.studyLevel === level && styles.levelButtonSelected,
+                      isDisabled && styles.levelButtonDisabled,
+                    ]}
+                    onPress={isDisabled ? null : () => handleLevelSelect(level)}
+                    disabled={isDisabled}
+                  >
+                    <Text
+                      style={[
+                        styles.levelButtonText,
+                        formik.values.studyLevel === level && styles.levelButtonTextSelected,
+                        isDisabled && styles.levelButtonTextDisabled,
+                      ]}
+                    >
+                      {level}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+            {formik.touched.studyLevel && formik.errors.studyLevel && (
+              <Text style={styles.errorText}>{formik.errors.studyLevel}</Text>
+            )}
+          </View>
+
+          {/* Study Session Length */}
+          <View style={styles.levelContainer}>
+            <Text style={styles.levelLabel}>Study Session Length</Text>
+            <View style={styles.levelButtonsContainer}>
+              {sessionLengths.map((length) => (
                 <Pressable
-                  key={level}
+                  key={length}
                   style={[
                     styles.levelButton,
-                    formik.values.studyLevel === level && styles.levelButtonSelected,
-                    isDisabled && styles.levelButtonDisabled,
+                    formik.values.sessionLength === length && styles.levelButtonSelected,
                   ]}
-                  onPress={isDisabled ? null : () => handleLevelSelect(level)}
-                  disabled={isDisabled}
+                  onPress={() => handleSessionLengthSelect(length)}
                 >
                   <Text
                     style={[
                       styles.levelButtonText,
-                      formik.values.studyLevel === level && styles.levelButtonTextSelected,
-                      isDisabled && styles.levelButtonTextDisabled,
+                      formik.values.sessionLength === length && styles.levelButtonTextSelected,
                     ]}
                   >
-                    {level}
+                    {length}
                   </Text>
                 </Pressable>
-              );
-            })}
+              ))}
+            </View>
+            {formik.touched.sessionLength && formik.errors.sessionLength && (
+              <Text style={styles.errorText}>{formik.errors.sessionLength}</Text>
+            )}
           </View>
-          {formik.touched.studyLevel && formik.errors.studyLevel && (
-            <Text style={styles.errorText}>{formik.errors.studyLevel}</Text>
-          )}
-        </View>
 
-        {/* Study Session Length */}
-        <View style={styles.levelContainer}>
-          <Text style={styles.levelLabel}>Study Session Length</Text>
-          <View style={styles.levelButtonsContainer}>
-            {sessionLengths.map((length) => (
-              <Pressable
-                key={length}
-                style={[
-                  styles.levelButton,
-                  formik.values.sessionLength === length && styles.levelButtonSelected,
-                ]}
-                onPress={() => handleSessionLengthSelect(length)}
-              >
-                <Text
-                  style={[
-                    styles.levelButtonText,
-                    formik.values.sessionLength === length && styles.levelButtonTextSelected,
-                  ]}
-                >
-                  {length}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-          {formik.touched.sessionLength && formik.errors.sessionLength && (
-            <Text style={styles.errorText}>{formik.errors.sessionLength}</Text>
-          )}
+          {/* Sign Up Button */}
+          <Pressable style={styles.signUpButton} onPress={formik.handleSubmit}>
+            <Text style={styles.signUpButtonText}>Sign up</Text>
+          </Pressable>
         </View>
-
-        {/* Sign Up Button */}
-        <Pressable style={styles.signUpButton} onPress={formik.handleSubmit}>
-          <Text style={styles.signUpButtonText}>Sign up</Text>
-        </Pressable>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </ImageBackground>
   );
 };
 

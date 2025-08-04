@@ -1,18 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import { useLocation, useNavigate } from 'react-router-native';
 import theme from '../../../theme';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: 'transparent',
   },
-  title: {
-    fontSize: theme.fontSizes.subheading + 8,
-    fontWeight: theme.fontWeights.bold,
-    color: 'white',
-    textAlign: 'left',
+  backgroundImage: {
+    flex: 1,
   },
   scrollContainer: {
     flex: 1,
@@ -21,7 +18,7 @@ const styles = StyleSheet.create({
     padding: 18,
   },
   backButton: {
-    backgroundColor: theme.colors.primaryLight,
+    backgroundColor: theme.colors.primaryDark,
     borderRadius: 10,
     padding: 16,
     marginBottom: 20,
@@ -38,7 +35,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   mainCard: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 10,
     padding: 20,
     marginBottom: 20,
@@ -63,7 +60,7 @@ const styles = StyleSheet.create({
     color: '#6b7280',
   },
   sectionCard: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 10,
     padding: 20,
     marginBottom: 20,
@@ -76,7 +73,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     color: '#6b7280',
-    textAlign: 'left',
+    textAlign: 'center',
     marginBottom: 10,
     letterSpacing: 0.5,
   },
@@ -164,64 +161,70 @@ const GrammarPoint = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <ImageBackground 
+      source={require('../../../assets/bridge.png')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
       
-      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        <View style={styles.content}>
-          {/* Back Button */}
-          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <Text style={styles.backButtonText}>← Back to Grammar Points</Text>
-          </TouchableOpacity>
+        <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
+            {/* Back Button */}
+            <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+              <Text style={styles.backButtonText}>← Back to Grammar Points</Text>
+            </TouchableOpacity>
 
-          {/* Main Grammar Point Card */}
-          <View style={styles.mainCard}>
-            <Text style={styles.grammarTitle}>{grammarPoint.title}</Text>
+            {/* Main Grammar Point Card */}
+            <View style={styles.mainCard}>
+              <Text style={styles.grammarTitle}>{grammarPoint.title}</Text>
             
-            {grammarPoint.explanation && (
-              <Text style={styles.explanation}>{grammarPoint.explanation}</Text>
+              {grammarPoint.explanation && (
+                <Text style={styles.explanation}>{grammarPoint.explanation}</Text>
+              )}
+            </View>
+
+            {/* Formation Section */}
+            {grammarPoint.grammarStructure?.formation && (
+              <View style={styles.sectionCard}>
+                <Text style={styles.sectionTitle}>Formation</Text>
+                {grammarPoint.grammarStructure.formation.map((item, index) => (
+                  <Text key={index} style={styles.formationItem}>
+                  • {item}
+                  </Text>
+                ))}
+              </View>
+            )}
+
+            {/* Declinations Section */}
+            {grammarPoint.grammarStructure?.declinations &&
+            grammarPoint.grammarStructure.declinations.length > 0 && (
+              <View style={styles.sectionCard}>
+                <Text style={styles.sectionTitle}>Declinations</Text>
+                {grammarPoint.grammarStructure.declinations.map((item, index) => (
+                  <Text key={index} style={styles.declinationItem}>
+                  • {item}
+                  </Text>
+                ))}
+              </View>
+            )}
+
+            {/* Examples Section */}
+            {grammarPoint.grammarExamples && (
+              <View style={styles.sectionCard}>
+                <Text style={styles.sectionTitle}>Examples</Text>
+                {grammarPoint.grammarExamples.map((example, index) => (
+                  <View key={index} style={styles.exampleContainer}>
+                    <Text style={styles.japanese}>{example.japanese}</Text>
+                    <Text style={styles.english}>{example.english}</Text>
+                  </View>
+                ))}
+              </View>
             )}
           </View>
-
-          {/* Formation Section */}
-          {grammarPoint.grammarStructure?.formation && (
-            <View style={styles.sectionCard}>
-              <Text style={styles.sectionTitle}>Formation</Text>
-              {grammarPoint.grammarStructure.formation.map((item, index) => (
-                <Text key={index} style={styles.formationItem}>
-                  • {item}
-                </Text>
-              ))}
-            </View>
-          )}
-
-          {/* Declinations Section */}
-          {grammarPoint.grammarStructure?.declinations &&
-            grammarPoint.grammarStructure.declinations.length > 0 && (
-            <View style={styles.sectionCard}>
-              <Text style={styles.sectionTitle}>Declinations</Text>
-              {grammarPoint.grammarStructure.declinations.map((item, index) => (
-                <Text key={index} style={styles.declinationItem}>
-                  • {item}
-                </Text>
-              ))}
-            </View>
-          )}
-
-          {/* Examples Section */}
-          {grammarPoint.grammarExamples && (
-            <View style={styles.sectionCard}>
-              <Text style={styles.sectionTitle}>Examples</Text>
-              {grammarPoint.grammarExamples.map((example, index) => (
-                <View key={index} style={styles.exampleContainer}>
-                  <Text style={styles.japanese}>{example.japanese}</Text>
-                  <Text style={styles.english}>{example.english}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-        </View>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </ImageBackground>
   );
 };
 

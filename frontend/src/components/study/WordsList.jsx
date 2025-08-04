@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, ImageBackground } from 'react-native';
 import { useNavigate } from 'react-router-native';
 import { useDebounce } from 'use-debounce';
 import { useWords } from '../../hooks/useWords';
@@ -9,19 +9,22 @@ import theme from '../../../theme';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: 'transparent',
+  },
+  backgroundImage: {
+    flex: 1,
   },
   header: {
-    backgroundColor: theme.colors.tertiary,
+    backgroundColor: 'transparent',
     paddingVertical: 10,
     paddingHorizontal: 24,
     paddingTop: 30,
   },
   title: {
-    fontSize: theme.fontSizes.subheading + 8,
+    fontSize: theme.fontSizes.subheading + 22,
     fontWeight: theme.fontWeights.bold,
-    color: 'white',
-    textAlign: 'left',
+    color: theme.colors.primaryDark,
+    textAlign: 'center',
   },
   scrollContainer: {
     flex: 1,
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     borderRadius: 8,
-    padding: 12,
+    padding: 18,
     fontSize: 16,
     backgroundColor: 'white',
     paddingRight: 40,
@@ -55,7 +58,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   statusCard: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.95)',
     borderRadius: 10,
     padding: 20,
     marginBottom: 20,
@@ -94,7 +97,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   wordsContainer: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.95)',
     borderRadius: 10,
     padding: 20,
     shadowColor: '#000',
@@ -133,7 +136,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   emptyStateCard: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.95)',
     borderRadius: 10,
     padding: 30,
     shadowColor: '#000',
@@ -162,7 +165,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   authPromptCard: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255,255,255,0.95)',
     borderRadius: 10,
     padding: 20,
     marginBottom: 20,
@@ -266,28 +269,40 @@ const WordsList = () => {
   // Handle loading states
   if (isLoading && !isSearching) {
     return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Words</Text>
+      <ImageBackground 
+        source={require('../../../assets/pagoda.png')}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Words</Text>
+          </View>
+          <View style={styles.content}>
+            <Text style={styles.loadingText}>Loading words...</Text>
+          </View>
         </View>
-        <View style={styles.content}>
-          <Text style={styles.loadingText}>Loading words...</Text>
-        </View>
-      </View>
+      </ImageBackground>
     );
   }
 
   // Handle errors
   if (hasError && !isSearching) {
     return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Words</Text>
+      <ImageBackground 
+        source={require('../../../assets/pagoda.png')}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Words</Text>
+          </View>
+          <View style={styles.content}>
+            <Text style={styles.errorText}>Error: {hasError.message}</Text>
+          </View>
         </View>
-        <View style={styles.content}>
-          <Text style={styles.errorText}>Error: {hasError.message}</Text>
-        </View>
-      </View>
+      </ImageBackground>
     );
   }
 
@@ -313,104 +328,110 @@ const WordsList = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Words</Text>
-      </View>
-      
-      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        <View style={styles.content}>
-          {/* Search Bar */}
-          <View style={{ position: 'relative' }}>
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search all words..."
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              autoCorrect={false}
-              clearButtonMode="never"
-            />
-            {searchQuery.length > 0 && (
-              <TouchableOpacity style={styles.clearButton} onPress={clearSearch}>
-                <Text style={styles.clearButtonText}>×</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-
-          {/* Authentication prompt for non-authenticated users */}
-          {!isAuthenticated && !isSearching && (
-            <View style={styles.authPromptCard}>
-              <Text style={styles.authPromptTitle}>Get Personalized Learning</Text>
-              <Text style={styles.authPromptText}>
-                Log in to see words you need to practice based on your performance and get a personalized vocabulary learning experience.
-              </Text>
-              <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
-                <Text style={styles.loginButtonText}>Log In</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {/* Status and Words Combined Card */}
-          <View style={styles.statusCard}>
-            <Text style={styles.subtitle}>{getSubtitle()}</Text>
-            
-            {/* Search status */}
-            {isSearching && searchLoading && (
-              <Text style={styles.searchingText}>Searching...</Text>
-            )}
-            
-            {isSearching && searchError && (
-              <Text style={styles.errorText}>Search error: {searchError.message}</Text>
-            )}
-
-            {/* Results count */}
-            {displayData && (
-              <Text style={styles.resultCount}>{getResultsText()}</Text>
-            )}
-
-            {/* Words List */}
-            {!displayData || displayData.length === 0 ? (
-              <View style={{ marginTop: 10 }}>
-                {isSearching ? (
-                  <Text style={styles.noResultsText}>
-                    No words found matching your search.
-                  </Text>
-                ) : isAuthenticated ? (
-                  <View style={{ alignItems: 'center' }}>
-                    <Text style={styles.emptyStateTitle}>🎉 Excellent!</Text>
-                    <Text style={styles.emptyStateText}>
-                      {'No problematic words right now. Keep practicing to maintain your vocabulary progress!'}
-                    </Text>
-                  </View>
-                ) : (
-                  <Text style={styles.noResultsText}>
-                    No words available at the moment.
-                  </Text>
-                )}
-              </View>
-            ) : (
-              <View style={{ marginTop: 10 }}>
-                {displayData.map((word, index) => (
-                  <TouchableOpacity
-                    key={word.id}
-                    style={[
-                      styles.wordButton,
-                      index === displayData.length - 1 && styles.wordButtonLast,
-                    ]}
-                    onPress={() => handlePress(word)}
-                  >
-                    <Text style={styles.wordText}>{word.kanji}</Text>
-                    <Text style={styles.wordSubtext}>
-                      {word.hiragana} • {word.english.join(', ')}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-          </View>
+    <ImageBackground 
+      source={require('../../../assets/pagoda.png')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Words</Text>
         </View>
-      </ScrollView>
-    </View>
+        
+        <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
+            {/* Search Bar */}
+            <View style={{ position: 'relative' }}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search all words..."
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                autoCorrect={false}
+                clearButtonMode="never"
+              />
+              {searchQuery.length > 0 && (
+                <TouchableOpacity style={styles.clearButton} onPress={clearSearch}>
+                  <Text style={styles.clearButtonText}>×</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {/* Authentication prompt for non-authenticated users */}
+            {!isAuthenticated && !isSearching && (
+              <View style={styles.authPromptCard}>
+                <Text style={styles.authPromptTitle}>Get Personalized Learning</Text>
+                <Text style={styles.authPromptText}>
+                  Log in to see words you need to practice based on your performance and get a personalized vocabulary learning experience.
+                </Text>
+                <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
+                  <Text style={styles.loginButtonText}>Log In</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {/* Status and Words Combined Card */}
+            <View style={styles.statusCard}>
+              <Text style={styles.subtitle}>{getSubtitle()}</Text>
+              
+              {/* Search status */}
+              {isSearching && searchLoading && (
+                <Text style={styles.searchingText}>Searching...</Text>
+              )}
+              
+              {isSearching && searchError && (
+                <Text style={styles.errorText}>Search error: {searchError.message}</Text>
+              )}
+
+              {/* Results count */}
+              {displayData && (
+                <Text style={styles.resultCount}>{getResultsText()}</Text>
+              )}
+
+              {/* Words List */}
+              {!displayData || displayData.length === 0 ? (
+                <View style={{ marginTop: 10 }}>
+                  {isSearching ? (
+                    <Text style={styles.noResultsText}>
+                      No words found matching your search.
+                    </Text>
+                  ) : isAuthenticated ? (
+                    <View style={{ alignItems: 'center' }}>
+                      <Text style={styles.emptyStateTitle}>🎉 Excellent!</Text>
+                      <Text style={styles.emptyStateText}>
+                        {'No problematic words right now. Keep practicing to maintain your vocabulary progress!'}
+                      </Text>
+                    </View>
+                  ) : (
+                    <Text style={styles.noResultsText}>
+                      No words available at the moment.
+                    </Text>
+                  )}
+                </View>
+              ) : (
+                <View style={{ marginTop: 10 }}>
+                  {displayData.map((word, index) => (
+                    <TouchableOpacity
+                      key={word.id}
+                      style={[
+                        styles.wordButton,
+                        index === displayData.length - 1 && styles.wordButtonLast,
+                      ]}
+                      onPress={() => handlePress(word)}
+                    >
+                      <Text style={styles.wordText}>{word.kanji}</Text>
+                      <Text style={styles.wordSubtext}>
+                        {word.hiragana} • {word.english.join(', ')}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+    </ImageBackground>
   );
 };
 

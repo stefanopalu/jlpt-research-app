@@ -214,7 +214,11 @@ const QuestionManager = () => {
       {needsReadingContent ? (
         <QuestionsWithReading {...questionProps} />
       ) : (
-        <SimpleQuestions {...questionProps} />
+        <SimpleQuestions 
+          {...questionProps}
+          currentQuestionNumber={currentIndex + 1}
+          totalQuestions={sessionTotal}
+        />
       )}
     </View>
   );
