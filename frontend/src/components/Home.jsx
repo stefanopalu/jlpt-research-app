@@ -48,13 +48,13 @@ const styles = StyleSheet.create({
   studyMaterialButton: {
     flex: 1,
     backgroundColor: theme.colors.primary,
-    paddingVertical: 12,
+    paddingVertical: 16,
     paddingHorizontal: 16,
     borderRadius: 8,
   },
   studyMaterialText: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -135,8 +135,8 @@ const Home = () => {
   const level = user?.studyLevel;
 
   const studyMaterials = [
-    { key: 'grammarpoints', label: 'Grammar Points', path: '/grammarpoints' },
     { key: 'words', label: 'Words', path: '/words' },
+    { key: 'grammarpoints', label: 'Grammar Points', path: '/grammarpoints' },
   ];
 
   const vocabularyItems = [
@@ -170,7 +170,7 @@ const Home = () => {
             {/* Study Materials Featured Card */}
             <View style={styles.featuredCard}>
               <Text style={styles.featuredTitle}>Study Materials</Text>
-              <Text style={styles.featuredSubtitle}>Review grammar points and vocabulary words</Text>
+              <Text style={styles.featuredSubtitle}>Review grammar points and vocabulary</Text>
               <View style={styles.studyMaterialsGrid}>
                 {studyMaterials.map((item) => (
                   <Pressable

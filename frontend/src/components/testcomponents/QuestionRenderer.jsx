@@ -61,7 +61,7 @@ const markdownStyles = {
   },
 };
 
-const QuestionRenderer = ({ question, onAnswerSelected }) => {
+const QuestionRenderer = ({ question, onAnswerSelected, isProcessingAnswer }) => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [questionId, setQuestionId] = useState(null);
 
@@ -78,6 +78,8 @@ const QuestionRenderer = ({ question, onAnswerSelected }) => {
   }
 
   const handleAnswerPress = (answerIndex) => {
+    if (isProcessingAnswer) return;
+
     setSelectedAnswer(answerIndex);
     
     if (onAnswerSelected && typeof onAnswerSelected === 'function') {
@@ -125,6 +127,7 @@ const QuestionRenderer = ({ question, onAnswerSelected }) => {
             key={i} 
             style={getButtonStyle(i)} 
             onPress={() => handleAnswerPress(i)}
+            disabled={isProcessingAnswer}
           >
             <Text style={getTextStyle(i)}>{answer}</Text>
           </TouchableOpacity>

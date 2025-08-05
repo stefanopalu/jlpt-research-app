@@ -1,72 +1,90 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ImageBackground } from 'react-native';
 import { useUserStats } from '../../hooks/useUserStats';
 import theme from '../../../theme';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'transparent',
+  },
+  backgroundImage: {
+    flex: 1,
   },
   header: {
-    backgroundColor: theme.colors.tertiary,
-    paddingVertical: 20,
+    paddingVertical: 10,
     paddingHorizontal: 24,
     paddingTop: 40,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    backgroundColor: 'transparent',
     alignItems: 'center',
   },
   title: {
-    fontSize: theme.fontSizes.subheading + 4,
+    fontSize: theme.fontSizes.subheading + 6,
     fontWeight: theme.fontWeights.bold,
-    color: theme.colors.textSecondary,
+    color: theme.colors.primaryDark,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  content: {
+    padding: 18,
   },
   loadingText: {
-    fontSize: 18,
-    color: theme.colors.textPrimary,
+    fontSize: 16,
+    color: theme.colors.primaryDark,
+    textAlign: 'center',
+    marginTop: 20,
   },
-  errorContainer: {
-    margin: 16,
-    padding: 16,
-    backgroundColor: '#fee2e2',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#fecaca',
+  errorCard: {
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderRadius: 10,
+    padding: 20,
+    marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    alignItems: 'center',
   },
   errorText: {
-    color: '#dc2626',
-    fontSize: 16,
+    fontSize: 18,
+    color: '#ef4444',
+    fontWeight: 'bold',
     marginBottom: 8,
+    textAlign: 'center',
   },
-  statsContainer: {
-    padding: 16,
+  errorSubText: {
+    fontSize: 14,
+    color: '#6b7280',
+    textAlign: 'center',
   },
-  overviewContainer: {
-    marginBottom: 24,
+  overviewCard: {
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   overviewTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: theme.colors.textPrimary,
-    marginBottom: 16,
+    fontSize: 16,
+    color: '#6b7280',
+    textAlign: 'center',
+    marginBottom: 10,
+    letterSpacing: 0.5,
   },
-  statsGrid: {
+  statsRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   statCard: {
+    flex: 1,
     backgroundColor: 'white',
-    padding: 16,
     borderRadius: 8,
-    width: '48%',
-    marginBottom: 12,
+    marginHorizontal: 8,
+    paddingVertical: 16,
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
@@ -75,60 +93,65 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: '600',
     color: '#6b7280',
     marginBottom: 4,
+    textAlign: 'center',
   },
   statValue: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
+    color: theme.colors.primaryDark,
+    textAlign: 'center',
   },
-  typeContainer: {
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 16,
+  typeCard: {
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    borderRadius: 10,
+    padding: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowRadius: 4,
     elevation: 2,
+    marginBottom: 20,
   },
   typeTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: theme.colors.textPrimary,
-    marginBottom: 16,
+    fontSize: 16,
+    color: '#6b7280',
+    textAlign: 'center',
+    marginBottom: 10,
+    letterSpacing: 0.5,
   },
   typeItem: {
-    paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6',
+    borderBottomColor: '#e5e7eb',
+    paddingVertical: 14,
   },
   typeHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   typeName: {
     fontSize: 16,
     fontWeight: '600',
-    color: theme.colors.textPrimary,
+    color: '#1f2937',
     textTransform: 'capitalize',
   },
   accuracyBadge: {
-    paddingHorizontal: 8,
+    paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   accuracyText: {
     fontSize: 12,
     fontWeight: '600',
   },
-  typeStats: {
+  typeStatsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 4,
   },
   typeStatText: {
     fontSize: 14,
@@ -138,17 +161,20 @@ const styles = StyleSheet.create({
 
 const UserStats = () => {
   const { user, stats, loading, error } = useUserStats();
-  console.log('UserStats component:', { user, stats, loading, error });
-  
+
+  const getAccuracyColor = (accuracy) => {
+    if (accuracy >= 80) return { backgroundColor: '#dcfce7', color: '#166534' };
+    if (accuracy >= 60) return { backgroundColor: '#fef3c7', color: '#92400e' };
+    return { backgroundColor: '#fee2e2', color: '#dc2626' };
+  };
+
   if (loading) {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Study Stats</Text>
         </View>
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading stats...</Text>
-        </View>
+        <Text style={styles.loadingText}>Loading stats...</Text>
       </View>
     );
   }
@@ -159,7 +185,7 @@ const UserStats = () => {
         <View style={styles.header}>
           <Text style={styles.title}>Study Stats</Text>
         </View>
-        <View style={styles.errorContainer}>
+        <View style={styles.errorCard}>
           <Text style={styles.errorText}>Error loading stats: {error.message}</Text>
         </View>
       </View>
@@ -172,85 +198,91 @@ const UserStats = () => {
         <View style={styles.header}>
           <Text style={styles.title}>Study Stats</Text>
         </View>
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>No stats available</Text>
-        </View>
+        <Text style={styles.loadingText}>No stats available</Text>
       </View>
     );
   }
 
-  const getAccuracyColor = (accuracy) => {
-    if (accuracy >= 80) return { backgroundColor: '#dcfce7', color: '#166534' };
-    if (accuracy >= 60) return { backgroundColor: '#fef3c7', color: '#92400e' };
-    return { backgroundColor: '#fee2e2', color: '#dc2626' };
-  };
-
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{user?.username || 'User'} Stats</Text>
-      </View>
-
-      <ScrollView style={styles.statsContainer}>
-        {/* Overview Stats */}
-        <View style={styles.overviewContainer}>
-          <Text style={styles.overviewTitle}>Overview</Text>
-          <View style={styles.statsGrid}>
-            <View style={styles.statCard}>
-              <Text style={styles.statLabel}>Questions Attempted</Text>
-              <Text style={[styles.statValue, { color: theme.colors.primary }]}>
-                {stats.totalAttempted} / {stats.totalQuestions}
-              </Text>
+    <ImageBackground
+      source={require('../../../assets/bridge.png')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>{user?.username || 'User'} Stats</Text>
+        </View>
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {/* Overview */}
+          <View style={styles.overviewCard}>
+            <Text style={styles.overviewTitle}>Overview</Text>
+            <View style={styles.statsRow}>
+              <View style={styles.statCard}>
+                <Text style={styles.statLabel}>Questions Attempted</Text>
+                <Text style={[styles.statValue, { color: theme.colors.primary }]}>
+                  {stats.totalAttempted} / {stats.totalQuestions}
+                </Text>
+              </View>
+              <View style={styles.statCard}>
+                <Text style={styles.statLabel}>Currently Due</Text>
+                <Text style={[styles.statValue, { color: '#ea580c' }]}>
+                  {stats.currentlyDue}
+                </Text>
+              </View>
             </View>
-            
-            <View style={styles.statCard}>
-              <Text style={styles.statLabel}>Currently Due</Text>
-              <Text style={[styles.statValue, { color: '#ea580c' }]}>
-                {stats.currentlyDue}
-              </Text>
-            </View>
-            
-            <View style={styles.statCard}>
-              <Text style={styles.statLabel}>Overall Accuracy</Text>
-              <Text style={[styles.statValue, { color: '#16a34a' }]}>
-                {stats.overallAccuracy}%
-              </Text>
-            </View>
-            
-            <View style={styles.statCard}>
-              <Text style={styles.statLabel}>Mastery Rate</Text>
-              <Text style={[styles.statValue, { color: '#9333ea' }]}>
-                {stats.overallMasteryRate}%
-              </Text>
+            <View style={[styles.statsRow, { marginTop: 12 }]}>
+              <View style={styles.statCard}>
+                <Text style={styles.statLabel}>Overall Accuracy</Text>
+                <Text style={[styles.statValue, { color: '#16a34a' }]}>
+                  {stats.overallAccuracy}%
+                </Text>
+              </View>
+              <View style={styles.statCard}>
+                <Text style={styles.statLabel}>Mastery Rate</Text>
+                <Text style={[styles.statValue, { color: '#9333ea' }]}>
+                  {stats.overallMasteryRate}%
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* Question Types */}
-        <View style={styles.typeContainer}>
-          <Text style={styles.typeTitle}>Progress by Type</Text>
-          {stats.byType.map((type) => (
-            <View key={type._id} style={styles.typeItem}>
-              <View style={styles.typeHeader}>
-                <Text style={styles.typeName}>{type._id}</Text>
-                <View style={[styles.accuracyBadge, getAccuracyColor(type.accuracy)]}>
-                  <Text style={[styles.accuracyText, { color: getAccuracyColor(type.accuracy).color }]}>
-                    {type.accuracy}%
-                  </Text>
+          {/* Progress by Type */}
+          <View style={styles.typeCard}>
+            <Text style={styles.typeTitle}>Progress by Type</Text>
+            {stats.byType.map((type) => {
+              const accuracyColors = getAccuracyColor(type.accuracy);
+              return (
+                <View key={type._id} style={styles.typeItem}>
+                  <View style={styles.typeHeader}>
+                    <Text style={styles.typeName}>{type._id}</Text>
+                    <View
+                      style={[
+                        styles.accuracyBadge,
+                        { backgroundColor: accuracyColors.backgroundColor },
+                      ]}
+                    >
+                      <Text
+                        style={[styles.accuracyText, { color: accuracyColors.color }]}
+                      >
+                        {type.accuracy}%
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.typeStatsRow}>
+                    <Text style={styles.typeStatText}>
+                      Attempted: {type.attempted} / {type.totalAvailable}
+                    </Text>
+                    <Text style={styles.typeStatText}>Due: {type.due}</Text>
+                    <Text style={styles.typeStatText}>Level: {type.avgSrsLevel}</Text>
+                  </View>
                 </View>
-              </View>
-              <View style={styles.typeStats}>
-                <Text style={styles.typeStatText}>
-                  Attempted: {type.attempted} / {type.totalAvailable}
-                </Text>
-                <Text style={styles.typeStatText}>Due: {type.due}</Text>
-                <Text style={styles.typeStatText}>Level: {type.avgSrsLevel}</Text>
-              </View>
-            </View>
-          ))}
-        </View>
-      </ScrollView>
-    </View>
+              );
+            })}
+          </View>
+        </ScrollView>
+      </View>
+    </ImageBackground>
   );
 };
 

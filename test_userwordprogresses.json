@@ -1,0 +1,2850 @@
+[
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe07"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb5"
+    },
+    "lastReviewed": {
+      "$date": "2025-05-30T18:26:00.182892Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-10T18:26:00.182892Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-30T19:10:00.182892Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 0,
+    "failureCount": 0
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe08"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbe"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-21T18:26:00.182897Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-16T18:26:00.182897Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-21T18:37:00.182897Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 24,
+    "failureCount": 5,
+    "masteryScore": 0.7620689655172413
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe09"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbc"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-16T18:26:00.182901Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-28T18:26:00.182901Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-16T18:46:00.182901Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 8,
+    "failureCount": 4,
+    "masteryScore": 0.6333333333333333
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe0a"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb8"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-20T18:26:00.182906Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-02T18:26:00.182906Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-20T18:45:00.182906Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 15,
+    "failureCount": 3,
+    "masteryScore": 0.7666666666666667
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe0b"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdaf"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-27T18:26:00.182911Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-03T18:26:00.182911Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-27T19:02:00.182911Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 13,
+    "failureCount": 8,
+    "masteryScore": 0.5952380952380952
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe0c"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb4"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-04T18:26:00.182916Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-10T18:26:00.182916Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-04T18:33:00.182916Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 13,
+    "failureCount": 6,
+    "masteryScore": 0.6473684210526316
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe0d"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb2"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-27T18:26:00.182924Z"
+    },
+    "createdAt": {
+      "$date": "2025-08-04T18:26:00.182924Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-27T18:41:00.182924Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 14,
+    "failureCount": 5,
+    "masteryScore": 0.6894736842105262
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe0e"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbf"
+    },
+    "lastReviewed": {
+      "$date": "2025-05-27T18:26:00.182929Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-15T18:26:00.182929Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-27T18:46:00.182929Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 25,
+    "failureCount": 4,
+    "masteryScore": 0.7896551724137931
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe0f"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbd"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-26T18:26:00.182934Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-30T18:26:00.182934Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-26T19:14:00.182934Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 9,
+    "failureCount": 8,
+    "masteryScore": 0.5235294117647059
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe10"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb3"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-20T18:26:00.182942Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-18T18:26:00.182942Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-20T19:07:00.182942Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 16,
+    "failureCount": 3,
+    "masteryScore": 0.7736842105263158
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe11"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb7"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-06T18:26:00.182947Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-31T18:26:00.182947Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-06T19:13:00.182947Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 0,
+    "failureCount": 2,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe12"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdc0"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-05T18:26:00.182952Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-04T18:26:00.182952Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-05T19:26:00.182952Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 24,
+    "failureCount": 8,
+    "masteryScore": 0.7000000000000001
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe13"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb9"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-04T18:26:00.182957Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-18T18:26:00.182957Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-04T18:51:00.182957Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 0,
+    "failureCount": 2,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe14"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdba"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-30T18:26:00.182965Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-16T18:26:00.182965Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-30T18:29:00.182965Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 21,
+    "failureCount": 2,
+    "masteryScore": 0.8304347826086956
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe15"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbb"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-15T18:26:00.182971Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-31T18:26:00.182971Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-15T18:35:00.182971Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 15,
+    "failureCount": 6,
+    "masteryScore": 0.6714285714285715
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe16"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb6"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-17T18:26:00.182976Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-05T18:26:00.182976Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-17T18:42:00.182976Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc6"
+    },
+    "successCount": 16,
+    "failureCount": 5,
+    "masteryScore": 0.7095238095238096
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe17"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbd"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-19T18:26:00.182985Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-28T18:26:00.182985Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-19T19:24:00.182985Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 0,
+    "failureCount": 2,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe18"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb4"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-09T18:26:00.182990Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-04T18:26:00.182990Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-09T19:23:00.182990Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 12,
+    "failureCount": 6,
+    "masteryScore": 0.6333333333333333
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe19"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb3"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-29T18:26:00.182995Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-04T18:26:00.182995Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-29T18:27:00.182995Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 14,
+    "failureCount": 6,
+    "masteryScore": 0.6599999999999999
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe1a"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb5"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-12T18:26:00.182999Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-15T18:26:00.182999Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-12T19:16:00.182999Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 13,
+    "failureCount": 2,
+    "masteryScore": 0.7933333333333333
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe1b"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb0"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-17T18:26:00.183004Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-12T18:26:00.183004Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-17T19:17:00.183004Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 0,
+    "failureCount": 2,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe1c"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbc"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-23T18:26:00.183008Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-31T18:26:00.183008Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-23T19:18:00.183008Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 0,
+    "failureCount": 2,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe1d"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb9"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-21T18:26:00.183013Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-28T18:26:00.183013Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-21T18:27:00.183013Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 24,
+    "failureCount": 7,
+    "masteryScore": 0.7193548387096774
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe1e"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbb"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-22T18:26:00.183018Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-18T18:26:00.183018Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-22T19:25:00.183018Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 18,
+    "failureCount": 6,
+    "masteryScore": 0.7000000000000001
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe1f"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb8"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-02T18:26:00.183028Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-04T18:26:00.183028Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-02T18:49:00.183028Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 22,
+    "failureCount": 2,
+    "masteryScore": 0.8333333333333334
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe20"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdba"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-10T18:26:00.183033Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-23T18:26:00.183033Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-10T18:43:00.183033Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 25,
+    "failureCount": 3,
+    "masteryScore": 0.8142857142857144
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe21"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb1"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-23T18:26:00.183038Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-11T18:26:00.183038Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-23T18:38:00.183038Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 0,
+    "failureCount": 2,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe22"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdc0"
+    },
+    "lastReviewed": {
+      "$date": "2025-05-19T18:26:00.183045Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-14T18:26:00.183045Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-19T19:10:00.183045Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 8,
+    "failureCount": 3,
+    "masteryScore": 0.6818181818181819
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe23"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb2"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-13T18:26:00.183050Z"
+    },
+    "createdAt": {
+      "$date": "2025-08-01T18:26:00.183050Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-13T19:12:00.183050Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 16,
+    "failureCount": 3,
+    "masteryScore": 0.7736842105263158
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe24"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbe"
+    },
+    "lastReviewed": {
+      "$date": "2025-05-29T18:26:00.183055Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-13T18:26:00.183055Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-29T19:22:00.183055Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 0,
+    "failureCount": 0
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe25"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdae"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-07T18:26:00.183059Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-18T18:26:00.183059Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-07T18:26:00.183059Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 0,
+    "failureCount": 1,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe26"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdad"
+    },
+    "lastReviewed": {
+      "$date": "2025-05-26T18:26:00.183064Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-20T18:26:00.183064Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-26T18:31:00.183064Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 23,
+    "failureCount": 8,
+    "masteryScore": 0.6935483870967742
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe27"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbf"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-02T18:26:00.183068Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-13T18:26:00.183068Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-02T18:35:00.183068Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc7"
+    },
+    "successCount": 24,
+    "failureCount": 2,
+    "masteryScore": 0.8384615384615385
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe28"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdae"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-24T18:26:00.183077Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-05T18:26:00.183077Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-24T19:18:00.183077Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 19,
+    "failureCount": 7,
+    "masteryScore": 0.6846153846153846
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe29"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb0"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-08T18:26:00.183083Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-15T18:26:00.183083Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-08T19:26:00.183083Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 8,
+    "failureCount": 4,
+    "masteryScore": 0.6333333333333333
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe2a"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdc0"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-01T18:26:00.183088Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-04T18:26:00.183088Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T18:45:00.183088Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 24,
+    "failureCount": 7,
+    "masteryScore": 0.7193548387096774
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe2b"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbe"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-11T18:26:00.183093Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-28T18:26:00.183093Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-11T19:25:00.183093Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 10,
+    "failureCount": 2,
+    "masteryScore": 0.7666666666666667
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe2c"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbf"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-12T18:26:00.183098Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-04T18:26:00.183098Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-12T19:25:00.183098Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 22,
+    "failureCount": 2,
+    "masteryScore": 0.8333333333333334
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe2d"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb7"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-15T18:26:00.183102Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-23T18:26:00.183102Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-15T18:48:00.183102Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 19,
+    "failureCount": 5,
+    "masteryScore": 0.7333333333333333
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe2e"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdaf"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-28T18:26:00.183107Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-13T18:26:00.183107Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-28T18:31:00.183107Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 18,
+    "failureCount": 2,
+    "masteryScore": 0.8200000000000001
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe2f"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb6"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-12T18:26:00.183127Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-29T18:26:00.183127Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-12T18:45:00.183127Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 10,
+    "failureCount": 4,
+    "masteryScore": 0.6714285714285715
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe30"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb3"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-03T18:26:00.183132Z"
+    },
+    "createdAt": {
+      "$date": "2025-08-01T18:26:00.183132Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-03T18:37:00.183132Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 23,
+    "failureCount": 5,
+    "masteryScore": 0.7571428571428571
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe31"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdba"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-17T18:26:00.183137Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-15T18:26:00.183137Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-17T18:48:00.183137Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 21,
+    "failureCount": 8,
+    "masteryScore": 0.6793103448275862
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe32"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb8"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-06T18:26:00.183146Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-09T18:26:00.183146Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-06T19:21:00.183146Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 11,
+    "failureCount": 7,
+    "masteryScore": 0.5888888888888889
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe33"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb9"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-24T18:26:00.183151Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-31T18:26:00.183151Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-24T18:42:00.183151Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 0,
+    "failureCount": 1,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe34"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdad"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-15T18:26:00.183166Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-09T18:26:00.183166Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-15T18:46:00.183166Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 19,
+    "failureCount": 5,
+    "masteryScore": 0.7333333333333333
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe35"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbb"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-22T18:26:00.183170Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-28T18:26:00.183170Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-22T19:04:00.183170Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 17,
+    "failureCount": 2,
+    "masteryScore": 0.8157894736842105
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe36"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb1"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-25T18:26:00.183175Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-29T18:26:00.183175Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-25T19:02:00.183175Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 21,
+    "failureCount": 8,
+    "masteryScore": 0.6793103448275862
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe37"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb2"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-07T18:26:00.183181Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-04T18:26:00.183181Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-07T18:52:00.183181Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 19,
+    "failureCount": 7,
+    "masteryScore": 0.6846153846153846
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe38"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbc"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-13T18:26:00.183185Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-05T18:26:00.183185Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-13T18:28:00.183185Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 0,
+    "failureCount": 2,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe39"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb4"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-24T18:26:00.183191Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-18T18:26:00.183191Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-24T19:03:00.183191Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc8"
+    },
+    "successCount": 10,
+    "failureCount": 3,
+    "masteryScore": 0.7153846153846154
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe3a"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbd"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-17T18:26:00.183202Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-23T18:26:00.183202Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-17T19:15:00.183202Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc9"
+    },
+    "successCount": 14,
+    "failureCount": 11,
+    "masteryScore": 0.548
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe3b"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb2"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-26T18:26:00.183207Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-01T18:26:00.183207Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-26T18:28:00.183207Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc9"
+    },
+    "successCount": 8,
+    "failureCount": 4,
+    "masteryScore": 0.6333333333333333
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe3c"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb9"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-08T18:26:00.183212Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-08T18:26:00.183212Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-08T19:04:00.183212Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc9"
+    },
+    "successCount": 8,
+    "failureCount": 5,
+    "masteryScore": 0.5923076923076923
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe3d"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb0"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-22T18:26:00.183216Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-24T18:26:00.183216Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-22T19:00:00.183216Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc9"
+    },
+    "successCount": 9,
+    "failureCount": 9,
+    "masteryScore": 0.5
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe3e"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdc0"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-01T18:26:00.183221Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-27T18:26:00.183221Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T18:39:00.183221Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc9"
+    },
+    "successCount": 0,
+    "failureCount": 0
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe3f"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb7"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-28T18:26:00.183227Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-28T18:26:00.183227Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-28T19:08:00.183227Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc9"
+    },
+    "successCount": 10,
+    "failureCount": 7,
+    "masteryScore": 0.5705882352941177
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe40"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb5"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-17T18:26:00.183232Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-23T18:26:00.183232Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-17T19:10:00.183232Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc9"
+    },
+    "successCount": 19,
+    "failureCount": 5,
+    "masteryScore": 0.7333333333333333
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe41"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb6"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-01T18:26:00.183237Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-27T18:26:00.183237Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T19:00:00.183237Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc9"
+    },
+    "successCount": 13,
+    "failureCount": 12,
+    "masteryScore": 0.516
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe42"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbe"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-13T18:26:00.183241Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-24T18:26:00.183241Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-13T19:03:00.183241Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc9"
+    },
+    "successCount": 13,
+    "failureCount": 6,
+    "masteryScore": 0.6473684210526316
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe43"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdad"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-15T18:26:00.183246Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-03T18:26:00.183246Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-15T18:48:00.183246Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdc9"
+    },
+    "successCount": 18,
+    "failureCount": 5,
+    "masteryScore": 0.7260869565217392
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe44"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbd"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-06T18:26:00.183254Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-06T18:26:00.183254Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-06T19:08:00.183254Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 0,
+    "failureCount": 0
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe45"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbf"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-09T18:26:00.183258Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-30T18:26:00.183258Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-09T18:30:00.183258Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 7,
+    "failureCount": 7,
+    "masteryScore": 0.5
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe46"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb2"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-09T18:26:00.183264Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-28T18:26:00.183264Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-09T18:56:00.183264Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 10,
+    "failureCount": 12,
+    "masteryScore": 0.4636363636363636
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe47"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdaf"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-24T18:26:00.183268Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-10T18:26:00.183268Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-24T18:36:00.183268Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 0,
+    "failureCount": 0
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe48"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbe"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-25T18:26:00.183273Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-30T18:26:00.183273Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-25T18:38:00.183273Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 0,
+    "failureCount": 0
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe49"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdc0"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-17T18:26:00.183277Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-27T18:26:00.183277Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-17T19:12:00.183277Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 13,
+    "failureCount": 11,
+    "masteryScore": 0.5333333333333333
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe4a"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb1"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-14T18:26:00.183285Z"
+    },
+    "createdAt": {
+      "$date": "2025-08-03T18:26:00.183285Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-14T18:44:00.183285Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 20,
+    "failureCount": 6,
+    "masteryScore": 0.7153846153846154
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe4b"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb6"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-28T18:26:00.183290Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-25T18:26:00.183290Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-28T18:59:00.183290Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 17,
+    "failureCount": 4,
+    "masteryScore": 0.7476190476190476
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe4c"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdae"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-22T18:26:00.183294Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-22T18:26:00.183294Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-22T19:10:00.183294Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 12,
+    "failureCount": 12,
+    "masteryScore": 0.5
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe4d"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb4"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-22T18:26:00.183299Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-27T18:26:00.183299Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-22T18:35:00.183299Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 10,
+    "failureCount": 4,
+    "masteryScore": 0.6714285714285715
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe4e"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbc"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-06T18:26:00.183304Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-25T18:26:00.183304Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-06T18:32:00.183304Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 16,
+    "failureCount": 9,
+    "masteryScore": 0.612
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe4f"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb0"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-22T18:26:00.183309Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-22T18:26:00.183309Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-22T19:18:00.183309Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 15,
+    "failureCount": 8,
+    "masteryScore": 0.6217391304347826
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe50"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdad"
+    },
+    "lastReviewed": {
+      "$date": "2025-05-22T18:26:00.183313Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-08T18:26:00.183313Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-22T18:44:00.183313Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdca"
+    },
+    "successCount": 8,
+    "failureCount": 9,
+    "masteryScore": 0.4764705882352941
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe51"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb8"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-08T18:26:00.183323Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-20T18:26:00.183323Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-08T18:41:00.183323Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcb"
+    },
+    "successCount": 9,
+    "failureCount": 4,
+    "masteryScore": 0.6538461538461539
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe52"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbd"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-22T18:26:00.183332Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-30T18:26:00.183332Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-22T18:54:00.183332Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcb"
+    },
+    "successCount": 18,
+    "failureCount": 5,
+    "masteryScore": 0.7260869565217392
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe53"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb1"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-09T18:26:00.183337Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-15T18:26:00.183337Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-09T19:08:00.183337Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcb"
+    },
+    "successCount": 20,
+    "failureCount": 4,
+    "masteryScore": 0.7666666666666667
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe54"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb5"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-25T18:26:00.183344Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-10T18:26:00.183344Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-25T19:16:00.183344Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcb"
+    },
+    "successCount": 13,
+    "failureCount": 11,
+    "masteryScore": 0.5333333333333333
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe55"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbf"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-15T18:26:00.183349Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-03T18:26:00.183349Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-15T18:29:00.183349Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcb"
+    },
+    "successCount": 6,
+    "failureCount": 12,
+    "masteryScore": 0.3666666666666667
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe56"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdc0"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-04T18:26:00.183353Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-10T18:26:00.183353Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-04T18:53:00.183353Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcb"
+    },
+    "successCount": 12,
+    "failureCount": 9,
+    "masteryScore": 0.5571428571428572
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe57"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdae"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-18T18:26:00.183358Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-12T18:26:00.183358Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-18T18:32:00.183358Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcb"
+    },
+    "successCount": 0,
+    "failureCount": 0
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe58"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdaf"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-12T18:26:00.183362Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-20T18:26:00.183362Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-12T19:01:00.183362Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcb"
+    },
+    "successCount": 20,
+    "failureCount": 6,
+    "masteryScore": 0.7153846153846154
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe59"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb9"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-23T18:26:00.183367Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-07T18:26:00.183367Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-23T19:00:00.183367Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcb"
+    },
+    "successCount": 15,
+    "failureCount": 9,
+    "masteryScore": 0.6
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe5a"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdba"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-12T18:26:00.183371Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-08T18:26:00.183371Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-12T18:43:00.183371Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcb"
+    },
+    "successCount": 0,
+    "failureCount": 1,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe5b"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb9"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-28T18:26:00.183382Z"
+    },
+    "createdAt": {
+      "$date": "2025-08-01T18:26:00.183382Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-28T19:02:00.183382Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 0,
+    "failureCount": 1,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe5c"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb6"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-07T18:26:00.183387Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-16T18:26:00.183387Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-07T19:20:00.183387Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 10,
+    "failureCount": 6,
+    "masteryScore": 0.6
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe5d"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdba"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-13T18:26:00.183392Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-30T18:26:00.183392Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-13T19:08:00.183392Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 6,
+    "failureCount": 18,
+    "masteryScore": 0.30000000000000004
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe5e"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb1"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-07T18:26:00.183402Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-23T18:26:00.183402Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-07T19:24:00.183402Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 3,
+    "failureCount": 6,
+    "masteryScore": 0.3666666666666667
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe5f"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdae"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-30T18:26:00.183407Z"
+    },
+    "createdAt": {
+      "$date": "2025-08-02T18:26:00.183407Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-30T18:27:00.183407Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 12,
+    "failureCount": 7,
+    "masteryScore": 0.6052631578947368
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe60"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb2"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-24T18:26:00.183412Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-23T18:26:00.183412Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-24T18:51:00.183412Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 0,
+    "failureCount": 0
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe61"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdad"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-14T18:26:00.183416Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-27T18:26:00.183416Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-14T19:21:00.183416Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 8,
+    "failureCount": 7,
+    "masteryScore": 0.5266666666666667
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe62"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb7"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-22T18:26:00.183421Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-16T18:26:00.183421Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-22T19:23:00.183421Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 2,
+    "failureCount": 7,
+    "masteryScore": 0.2777777777777778
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe63"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbf"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-03T18:26:00.183425Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-25T18:26:00.183425Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-03T19:26:00.183425Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 5,
+    "failureCount": 6,
+    "masteryScore": 0.4636363636363636
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe64"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbb"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-07T18:26:00.183430Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-17T18:26:00.183430Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-07T18:26:00.183430Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 7,
+    "failureCount": 18,
+    "masteryScore": 0.32400000000000007
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe65"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdc0"
+    },
+    "lastReviewed": {
+      "$date": "2025-05-18T18:26:00.183435Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-17T18:26:00.183435Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-18T19:14:00.183435Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 2,
+    "failureCount": 8,
+    "masteryScore": 0.26
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe66"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb0"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-20T18:26:00.183440Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-28T18:26:00.183440Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-20T18:52:00.183440Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 12,
+    "failureCount": 10,
+    "masteryScore": 0.5363636363636364
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe67"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbd"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-01T18:26:00.183444Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-25T18:26:00.183444Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T19:11:00.183444Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 11,
+    "failureCount": 11,
+    "masteryScore": 0.5
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe68"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb4"
+    },
+    "lastReviewed": {
+      "$date": "2025-05-22T18:26:00.183449Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-13T18:26:00.183449Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-22T18:55:00.183449Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 7,
+    "failureCount": 12,
+    "masteryScore": 0.39473684210526316
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe69"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbc"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-24T18:26:00.183455Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-29T18:26:00.183455Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-24T18:26:00.183455Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 2,
+    "failureCount": 10,
+    "masteryScore": 0.23333333333333334
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe6a"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb3"
+    },
+    "lastReviewed": {
+      "$date": "2025-05-21T18:26:00.183460Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-19T18:26:00.183460Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-21T19:02:00.183460Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 10,
+    "failureCount": 7,
+    "masteryScore": 0.5705882352941177
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe6b"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdaf"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-10T18:26:00.183465Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-19T18:26:00.183465Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-10T18:26:00.183465Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcc"
+    },
+    "successCount": 0,
+    "failureCount": 1,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe6c"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb0"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-05T18:26:00.183473Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-13T18:26:00.183473Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-05T18:40:00.183473Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 2,
+    "failureCount": 8,
+    "masteryScore": 0.26
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe6d"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbe"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-19T18:26:00.183478Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-29T18:26:00.183478Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-19T18:53:00.183478Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 10,
+    "failureCount": 11,
+    "masteryScore": 0.4809523809523809
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe6e"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb9"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-19T18:26:00.183482Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-15T18:26:00.183482Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-19T19:09:00.183482Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 12,
+    "failureCount": 14,
+    "masteryScore": 0.46923076923076923
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe6f"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb1"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-14T18:26:00.183487Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-16T18:26:00.183487Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-14T19:04:00.183487Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 0,
+    "failureCount": 2,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe70"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbb"
+    },
+    "lastReviewed": {
+      "$date": "2025-07-29T18:26:00.183491Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-19T18:26:00.183491Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-29T19:06:00.183491Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 8,
+    "failureCount": 15,
+    "masteryScore": 0.37826086956521743
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe71"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb5"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-28T18:26:00.183496Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-31T18:26:00.183496Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-28T19:15:00.183496Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 3,
+    "failureCount": 13,
+    "masteryScore": 0.25
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe72"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdae"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-07T18:26:00.183501Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-02T18:26:00.183501Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-07T19:07:00.183501Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 7,
+    "failureCount": 12,
+    "masteryScore": 0.39473684210526316
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe73"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb6"
+    },
+    "lastReviewed": {
+      "$date": "2025-05-19T18:26:00.183505Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-14T18:26:00.183505Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-19T18:50:00.183505Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 0,
+    "failureCount": 2,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe74"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdaf"
+    },
+    "lastReviewed": {
+      "$date": "2025-05-16T18:26:00.183510Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-12T18:26:00.183510Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-16T18:30:00.183510Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 3,
+    "failureCount": 12,
+    "masteryScore": 0.26
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe75"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbf"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-08T18:26:00.183515Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-25T18:26:00.183515Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-08T18:31:00.183515Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 12,
+    "failureCount": 13,
+    "masteryScore": 0.484
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe76"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdc0"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-29T18:26:00.183519Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-05T18:26:00.183519Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-29T18:29:00.183519Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 0,
+    "failureCount": 1,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe77"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbc"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-07T18:26:00.183524Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-01T18:26:00.183524Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-07T19:03:00.183524Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 0,
+    "failureCount": 1,
+    "masteryScore": 0.2602739726027397
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe78"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb8"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-10T18:26:00.183531Z"
+    },
+    "createdAt": {
+      "$date": "2025-08-02T18:26:00.183531Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-10T18:29:00.183531Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 11,
+    "failureCount": 15,
+    "masteryScore": 0.43846153846153846
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe79"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb4"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-25T18:26:00.183535Z"
+    },
+    "createdAt": {
+      "$date": "2025-06-15T18:26:00.183535Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-25T18:46:00.183535Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 10,
+    "failureCount": 17,
+    "masteryScore": 0.39629629629629626
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe7a"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdbd"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-05T18:26:00.183540Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-31T18:26:00.183540Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-05T18:39:00.183540Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 4,
+    "failureCount": 8,
+    "masteryScore": 0.3666666666666667
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe7b"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb2"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-06T18:26:00.183545Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-24T18:26:00.183545Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-06T18:33:00.183545Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 3,
+    "failureCount": 15,
+    "masteryScore": 0.23333333333333334
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe7c"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdb3"
+    },
+    "lastReviewed": {
+      "$date": "2025-08-02T18:26:00.183549Z"
+    },
+    "createdAt": {
+      "$date": "2025-07-09T18:26:00.183549Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-02T19:05:00.183549Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 10,
+    "failureCount": 7,
+    "masteryScore": 0.5705882352941177
+  },
+  {
+    "_id": {
+      "$oid": "6891ce28b53503bf5b14fe7d"
+    },
+    "user": {
+      "$oid": "6891ce28b53503bf5b14fdba"
+    },
+    "lastReviewed": {
+      "$date": "2025-06-24T18:26:00.183554Z"
+    },
+    "createdAt": {
+      "$date": "2025-05-29T18:26:00.183554Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-24T19:02:00.183554Z"
+    },
+    "__v": 0,
+    "word": {
+      "$oid": "6891ce28b53503bf5b14fdcd"
+    },
+    "successCount": 12,
+    "failureCount": 18,
+    "masteryScore": 0.42000000000000004
+  }
+]

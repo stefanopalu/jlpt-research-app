@@ -1,35 +1,22 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ImageBackground } from 'react-native';
 import theme from '../../../theme';
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
+    resizeMode: 'cover',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: 'white',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: theme.colors.primary,
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 40,
   },
   buttonContainer: {
     width: '100%',
-    maxWidth: 300,
+    maxWidth: 400,
   },
   primaryButton: {
     backgroundColor: theme.colors.primary,
-    paddingVertical: 15,
+    paddingVertical: 20,
     paddingHorizontal: 30,
     borderRadius: 8,
     marginBottom: 15,
@@ -41,8 +28,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   secondaryButton: {
-    backgroundColor: 'transparent',
-    paddingVertical: 15,
+    backgroundColor: 'white',
+    paddingVertical: 20,
     paddingHorizontal: 30,
     borderRadius: 8,
     borderWidth: 2,
@@ -56,24 +43,22 @@ const styles = StyleSheet.create({
   },
 });
 
-const SessionComplete = ({ onNewSession, onGoHome, questionsCompleted = 5 }) => {
+const SessionComplete = ({ onNewSession, onGoHome }) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Session Complete! 🎉</Text>
-      <Text style={styles.subtitle}>
-        Great job! You completed {questionsCompleted} questions.
-      </Text>
-      
+    <ImageBackground
+      source={require('../../../assets/sakura.png')}
+      style={styles.background}
+    >
       <View style={styles.buttonContainer}>
         <Pressable style={styles.primaryButton} onPress={onNewSession}>
           <Text style={styles.primaryButtonText}>Start New Session</Text>
         </Pressable>
-        
+
         <Pressable style={styles.secondaryButton} onPress={onGoHome}>
-          <Text style={styles.secondaryButtonText}>Go Home</Text>
+          <Text style={styles.secondaryButtonText}>Home</Text>
         </Pressable>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 

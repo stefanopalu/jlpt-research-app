@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { useLocation, useNavigate } from 'react-router-native';
 import { useQuestionStudySession } from '../../hooks/useQuestionStudySession';
 import { useReadingStudySession } from '../../hooks/useReadingStudySession'; 
@@ -25,16 +25,19 @@ const QuestionManager = () => {
 
   const { user, loading: userLoading } = useCurrentUser({ required: true });
   const level = user?.studyLevel;
-  // Add debug logging for user data
-  console.log('=== USER DATA DEBUG ===');
-  console.log('User sessionLength:', user?.sessionLength);
-  console.log('User studySessionType:', user?.studySessionType);
-  console.log('User studyLevel:', user?.studyLevel);
-  console.log('========================');
-  
+
+  useEffect(() => {
+    if (!user && !userLoading) {
+      // Redirect to sign in if not authenticated and loading is finished
+      navigate('/signin');
+    }
+  }, [user, userLoading, navigate]);
+
+  if (userLoading) return <Text>Loading user data...</Text>;
+  if (!level) return <Text>User study level not set...</Text>;
+
   // Get session length from user, fallback to 10 if not available
   const questionsPerSession = user?.sessionLength ? parseInt(user.sessionLength, 10) : 10;
-  console.log('Calculated questionsPerSession:', questionsPerSession);
 
   // Use different hooks based on exercise type
   const isReadingBased = type === 'textgrammar';
@@ -62,6 +65,7 @@ const QuestionManager = () => {
 
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [incorrectAnswers, setIncorrectAnswers] = useState(0);
+  const [isProcessingAnswer, setIsProcessingAnswer] = useState(false);
 
   const [updateUserQuestionProgress] = useMutation(UPDATE_USER_QUESTION_PROGRESS);
   const [updateUserGrammarPointProgress] = useMutation(UPDATE_USER_GRAMMAR_POINT_PROGRESS);
@@ -77,10 +81,15 @@ const QuestionManager = () => {
   const READING_CONTENT_TYPES = ['textgrammar', 'shortpass', 'mediumpass', 'inforetrieval'];
   const needsReadingContent = READING_CONTENT_TYPES.includes(type);
 
-  if (userLoading) return <Text>Loading user data...</Text>;
-  if (!user) return <Text>User not found...</Text>;
-  if (!level) return <Text>User study level not set...</Text>;
-  if (loading || isRefetching) return <Text>Loading questions...</Text>;
+  if (loading || isRefetching) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#007AFF" />
+        <Text style={{ marginTop: 10, fontSize: 16 }}>Loading questions...</Text>
+      </View>
+    );
+  }
+
   if (error) return <Text>Error loading questions: {error.message}</Text>;
 
   if (!questions || questions.length === 0) {
@@ -126,73 +135,54 @@ const QuestionManager = () => {
   }
 
   const handleAnswerSelected = async (selectedAnswer) => {
+    if (isProcessingAnswer) return; // Prevent multiple clicks while processing
+
+    setIsProcessingAnswer(true);
+
     const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
     const responseTime = questionStartTime ? Date.now() - questionStartTime : 0;
 
-    if (isCorrect) {
-      setCorrectAnswers(prev => prev + 1);
-    } else {
-      setIncorrectAnswers(prev => prev + 1);
-    }
+    if (isCorrect) setCorrectAnswers(prev => prev + 1);
+    else setIncorrectAnswers(prev => prev + 1);
 
     try {
-      // Update question progress 
-      console.log('About to update question progress with:', {
-        questionId: currentQuestion.id,
-        isCorrect: isCorrect,
-        responseTime: responseTime,
-      });
+      // Update question progress
       await updateUserQuestionProgress({
         variables: {
           questionId: currentQuestion.id,
-          isCorrect: isCorrect,
-          responseTime: responseTime,
+          isCorrect,
+          responseTime,
         },
       });
-      console.log(`Question progress updated: ${isCorrect ? 'correct' : 'incorrect'}`);
 
-      // Update word progress for ALL words in the question
-      if (currentQuestion.words && currentQuestion.words.length > 0) {
-        for (const word of currentQuestion.words) {
-          await updateUserWordProgress({
-            variables: {
-              word: word,
-              isCorrect: isCorrect,
-            },
-          });
-          console.log(`Word progress updated for: ${word}`);
-        }
+      // Parallel update word progress
+      if (currentQuestion.words?.length > 0) {
+        await Promise.all(
+          currentQuestion.words.map(word =>
+            updateUserWordProgress({ variables: { word, isCorrect } }),
+          ),
+        );
       }
 
-      // Update grammar point progress for ALL grammar points in the question
-      if (currentQuestion.grammarPoints && currentQuestion.grammarPoints.length > 0) {
-        console.log('=== GRAMMAR PROGRESS UPDATE ===');
-        console.log('About to update grammar progress for:', currentQuestion.grammarPoints);
-        for (const grammarPoint of currentQuestion.grammarPoints) {
-          await updateUserGrammarPointProgress({
-            variables: {
-              GPname: grammarPoint,
-              isCorrect: isCorrect,
-            },
-          });
-          console.log(`Grammar point progress updated for: ${grammarPoint}`);
-        }
+      // Parallel update grammar points progress
+      if (currentQuestion.grammarPoints?.length > 0) {
+        await Promise.all(
+          currentQuestion.grammarPoints.map(GPname =>
+            updateUserGrammarPointProgress({ variables: { GPname, isCorrect } }),
+          ),
+        );
       }
-
     } catch (err) {
       console.error('Error updating progress:', err.message);
     }
 
-    // Short delay and then move to next question
     setTimeout(() => {
-      if (currentIndex + 1 < sessionTotal) { // Use dynamic total
-        setCurrentIndex(currentIndex + 1);
-      } else {
-        //Session complete
-        console.log('Quiz completed!');
-        setCurrentIndex(currentIndex + 1);
-      }
-    }, 1500);
+      setCurrentIndex(prevIndex => {
+        if (prevIndex + 1 < sessionTotal) return prevIndex + 1;
+        else return prevIndex + 1; // session complete
+      });
+      setIsProcessingAnswer(false);  // unlock buttons here
+    }, 100);
   };
 
   // Props to pass to child components
@@ -218,6 +208,7 @@ const QuestionManager = () => {
           {...questionProps}
           currentQuestionNumber={currentIndex + 1}
           totalQuestions={sessionTotal}
+          isProcessingAnswer={isProcessingAnswer}
         />
       )}
     </View>

@@ -1,0 +1,86 @@
+{
+  "analysis_timestamp": "2025-08-05T18:35:37.684200",
+  "total_items_analyzed": 5,
+  "items": [
+    {
+      "item_id": "684907e79bc1399760572285",
+      "item_type": "word",
+      "statistics": {
+        "total_responses": 11,
+        "total_users": 3,
+        "success_rate": 0.7272727272727273
+      },
+      "bkt_parameters": {
+        "prior_knowledge": 0.7865228102889348,
+        "learning_rate": 0.11640664861733199,
+        "slip_rate": 0.27715131092488365,
+        "guess_rate": 0.7536088286528339,
+        "forget_rate": 0.0
+      }
+    },
+    {
+      "item_id": "684907e79bc1399760572265",
+      "item_type": "word",
+      "statistics": {
+        "total_responses": 22,
+        "total_users": 3,
+        "success_rate": 0.8636363636363636
+      },
+      "bkt_parameters": {
+        "prior_knowledge": 0.048534228266012704,
+        "learning_rate": 0.39706258066876116,
+        "slip_rate": 0.08074326928941017,
+        "guess_rate": 0.6615640833916455,
+        "forget_rate": 0.0
+      }
+    },
+    {
+      "item_id": "684908069bc139976057229b",
+      "item_type": "word",
+      "statistics": {
+        "total_responses": 10,
+        "total_users": 3,
+        "success_rate": 1.0
+      },
+      "bkt_parameters": {
+        "prior_knowledge": 0.998642578603822,
+        "learning_rate": 0.8786272826991636,
+        "slip_rate": 0.0,
+        "guess_rate": 1.0,
+        "forget_rate": 0.0
+      }
+    },
+    {
+      "item_id": "684907e79bc139976057223b",
+      "item_type": "word",
+      "statistics": {
+        "total_responses": 13,
+        "total_users": 3,
+        "success_rate": 0.8461538461538461
+      },
+      "bkt_parameters": {
+        "prior_knowledge": 0.31495476262506544,
+        "learning_rate": 0.9999213185306907,
+        "slip_rate": 7.914249213382151e-05,
+        "guess_rate": 0.027251826656329966,
+        "forget_rate": 0.0
+      }
+    },
+    {
+      "item_id": "684907e79bc1399760572282",
+      "item_type": "word",
+      "statistics": {
+        "total_responses": 13,
+        "total_users": 3,
+        "success_rate": 0.9230769230769231
+      },
+      "bkt_parameters": {
+        "prior_knowledge": 0.5177986915489335,
+        "learning_rate": 0.9824708350694757,
+        "slip_rate": 0.00012497130894908401,
+        "guess_rate": 0.3115969472726654,
+        "forget_rate": 0.0
+      }
+    }
+  ]
+}

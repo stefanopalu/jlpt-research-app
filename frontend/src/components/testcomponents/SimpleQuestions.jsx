@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const SimpleQuestions = ({ currentQuestion, onAnswerSelected, currentQuestionNumber }) => {
+const SimpleQuestions = ({ currentQuestion, onAnswerSelected, currentQuestionNumber, isProcessingAnswer }) => {
   return (
     <View style={styles.container}>
       {/* Question Number Header */}
@@ -33,7 +33,8 @@ const SimpleQuestions = ({ currentQuestion, onAnswerSelected, currentQuestionNum
       {/* Original Question Renderer */}
       <QuestionRenderer 
         question={currentQuestion} 
-        onAnswerSelected={onAnswerSelected} 
+        onAnswerSelected={onAnswerSelected}
+        isProcessingAnswer={isProcessingAnswer} 
       />
     </View>
   );

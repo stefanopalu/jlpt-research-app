@@ -1,12 +1,12 @@
-import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useNavigate } from 'react-router-native';
-import { useState } from 'react';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { useFlashcardStudySession } from '../../hooks/useFlashcardStudySession';
 import BeginnerFlashcard from './BeginnerFlashcard';
 import AdvancedFlashcard from './AdvancedFlashcard';
 import SessionComplete from './SessionComplete';
+
 
 const FlashcardsManager = () => {
   const { user, loading: userLoading } = useCurrentUser({ required: true });
@@ -18,22 +18,38 @@ const FlashcardsManager = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isRefetching, setIsRefetching] = useState(false);
 
-  if (userLoading || wordsLoading || isRefetching) return <Text>Loading study session...</Text>;
+  useEffect(() => {
+    if (!user && !userLoading) {
+      // Redirect to sign in if not authenticated and loading is finished
+      navigate('/signin');
+    }
+  }, [user, userLoading, navigate]);
+
+  if (userLoading || wordsLoading || isRefetching) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#007AFF" />
+        <Text style={{ marginTop: 10, fontSize: 16 }}>Preparing your flashcards...</Text>
+      </View>
+    );
+  }
+  
   if (error) return <Text>Error loading study session: {error.message}</Text>;
+
   if (!words || words.length === 0) {
     return (
       <View>
         <Text>No words available for study. Great job - you are up to date!</Text>
-        <Pressable onPress={refetch}>
+        <TouchableOpacity onPress={refetch}>
           <Text>Refresh</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     );
   }
 
   const sessionSize = words.length;
 
-  // Check if session is complete
+  // Session complete logic...
   if (currentIndex >= sessionSize) {
     const handleNewSession = async () => {
       setIsRefetching(true);
@@ -59,7 +75,6 @@ const FlashcardsManager = () => {
       />
     );
   }
-
   // Handler for when a flashcard is completed
   const handleCardCompleted = () => {
     setCurrentIndex(prev => prev + 1);

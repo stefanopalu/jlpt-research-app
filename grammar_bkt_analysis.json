@@ -1,0 +1,22 @@
+{
+  "analysis_timestamp": "2025-08-05T18:35:37.625249",
+  "total_items_analyzed": 1,
+  "items": [
+    {
+      "item_id": "684bf1f39bc13997605752fe",
+      "item_type": "grammar",
+      "statistics": {
+        "total_responses": 114,
+        "total_users": 4,
+        "success_rate": 0.7192982456140351
+      },
+      "bkt_parameters": {
+        "prior_knowledge": 0.17323853786100513,
+        "learning_rate": 0.9687465514685096,
+        "slip_rate": 0.2634799497468302,
+        "guess_rate": 0.1455531396505425,
+        "forget_rate": 0.0
+      }
+    }
+  ]
+}

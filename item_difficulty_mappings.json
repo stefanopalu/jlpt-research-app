@@ -1,0 +1,32 @@
+{
+  "grammar_points": {
+    "easy": [
+      "6891ce28b53503bf5b14fdc1",
+      "6891ce28b53503bf5b14fdc2"
+    ],
+    "medium": [
+      "6891ce28b53503bf5b14fdc3",
+      "6891ce28b53503bf5b14fdc4"
+    ],
+    "hard": [
+      "6891ce28b53503bf5b14fdc5"
+    ]
+  },
+  "words": {
+    "easy": [
+      "6891ce28b53503bf5b14fdc6",
+      "6891ce28b53503bf5b14fdc7",
+      "6891ce28b53503bf5b14fdc8"
+    ],
+    "medium": [
+      "6891ce28b53503bf5b14fdc9",
+      "6891ce28b53503bf5b14fdca",
+      "6891ce28b53503bf5b14fdcb"
+    ],
+    "hard": [
+      "6891ce28b53503bf5b14fdcc",
+      "6891ce28b53503bf5b14fdcd"
+    ]
+  },
+  "generated_at": "2025-08-05T18:26:00.186124"
+}
