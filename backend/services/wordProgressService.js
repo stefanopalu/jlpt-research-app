@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const wordProgressService = {
   // Update progress for a word using kanji value
-  async updateProgress(userId, word, isCorrect) {
+  async updateProgress(userId, word, isCorrect, responseTime = null) {
     // First, find the word by kanji to get its ObjectId
     const wordObj = await Word.findOne({ kanji: word });
         
@@ -21,7 +21,7 @@ const wordProgressService = {
 
     if (progress) {
       // If there is an existing progress record, update it
-      progress.updateProgress(isCorrect);
+      progress.updateProgress(isCorrect, responseTime);
     } else {
       // If not, create new record with prior knowledge as starting mastery score
       progress = new UserWordProgress({
@@ -30,7 +30,7 @@ const wordProgressService = {
         masteryScore: wordObj.priorKnowledge,
       });
       
-      progress.updateProgress(isCorrect);
+      progress.updateProgress(isCorrect, responseTime);
     }
 
     await progress.save();

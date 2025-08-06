@@ -65,7 +65,7 @@ describe('grammarPointProgressService', () => {
       });
       
       // Verify progress update
-      expect(mockProgress.updateProgress).toHaveBeenCalledWith(isCorrect);
+      expect(mockProgress.updateProgress).toHaveBeenCalledWith(isCorrect, null);
       expect(mockProgress.save).toHaveBeenCalled();
       
       // Verify BKT service called
@@ -127,7 +127,7 @@ describe('grammarPointProgressService', () => {
       });
       
       // Verify progress update
-      expect(mockProgress.updateProgress).toHaveBeenCalledWith(isCorrect);
+      expect(mockProgress.updateProgress).toHaveBeenCalledWith(isCorrect, null);
       expect(mockProgress.save).toHaveBeenCalled();
       
       // Verify BKT service called
@@ -179,7 +179,7 @@ describe('grammarPointProgressService', () => {
       ).rejects.toThrow('BKT calculation failed');
 
       // Verify that progress was still updated (BKT runs after progress update)
-      expect(mockProgress.updateProgress).toHaveBeenCalledWith(true);
+      expect(mockProgress.updateProgress).toHaveBeenCalledWith(true, null);
       expect(mockProgress.save).toHaveBeenCalled();
     });
   });

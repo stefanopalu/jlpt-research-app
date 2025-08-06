@@ -65,7 +65,7 @@ describe('wordProgressService', () => {
       });
       
       // Verify progress update
-      expect(mockProgress.updateProgress).toHaveBeenCalledWith(isCorrect);
+      expect(mockProgress.updateProgress).toHaveBeenCalledWith(isCorrect, null);
       expect(mockProgress.save).toHaveBeenCalled();
       
       // Verify BKT service called
@@ -126,7 +126,7 @@ describe('wordProgressService', () => {
       
       // Verify progress update (should NOT create new progress)
       expect(UserWordProgress).not.toHaveBeenCalled();
-      expect(mockProgress.updateProgress).toHaveBeenCalledWith(isCorrect);
+      expect(mockProgress.updateProgress).toHaveBeenCalledWith(isCorrect, null);
       expect(mockProgress.save).toHaveBeenCalled();
       
       // Verify BKT service called
@@ -177,7 +177,7 @@ describe('wordProgressService', () => {
       ).rejects.toThrow('BKT calculation failed');
 
       // Verify that progress was still updated (BKT runs after progress update)
-      expect(mockProgress.updateProgress).toHaveBeenCalledWith(true);
+      expect(mockProgress.updateProgress).toHaveBeenCalledWith(true, null);
       expect(mockProgress.save).toHaveBeenCalled();
     });
 

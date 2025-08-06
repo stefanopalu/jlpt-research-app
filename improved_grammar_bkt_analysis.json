@@ -1,6 +1,13 @@
 {
-  "analysis_timestamp": "2025-08-06T16:50:57.280543",
+  "analysis_timestamp": "2025-08-06T16:54:12.115087",
   "total_items_analyzed": 25,
+  "analyzer_version": "improved_v2.0",
+  "improvements": [
+    "Uses actual learning sequences when available",
+    "Applies realistic parameter constraints",
+    "Better BKT model configuration",
+    "Improved fallback sequence generation"
+  ],
   "items": [
     {
       "item_id": "6893091cb17829ccd233b6b2",
@@ -11,10 +18,10 @@
         "success_rate": 0.7793964620187305
       },
       "bkt_parameters": {
-        "prior_knowledge": 7.771006475926874e-16,
-        "learning_rate": 0.07222023985964351,
-        "slip_rate": 0.9986700702714,
-        "guess_rate": 0.9999999998626163,
+        "prior_knowledge": 0.024137991179119793,
+        "learning_rate": 0.27785976467255846,
+        "slip_rate": 0.13861990231686,
+        "guess_rate": 0.4427545036613442,
         "forget_rate": 0.0
       }
     },
@@ -27,10 +34,10 @@
         "success_rate": 0.7390057361376673
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.9621964751373417,
-        "learning_rate": 0.0010056908147436582,
-        "slip_rate": 0.2535011347871074,
-        "guess_rate": 0.2982672468911564,
+        "prior_knowledge": 0.01,
+        "learning_rate": 0.2056736792652055,
+        "slip_rate": 0.1599965737382885,
+        "guess_rate": 0.47638863103971646,
         "forget_rate": 0.0
       }
     },
@@ -43,10 +50,10 @@
         "success_rate": 0.7410628019323672
       },
       "bkt_parameters": {
-        "prior_knowledge": 2.5342872462124085e-16,
-        "learning_rate": 0.08217022935730933,
-        "slip_rate": 0.9988857046064492,
-        "guess_rate": 0.9999999998951145,
+        "prior_knowledge": 0.09803976736370307,
+        "learning_rate": 0.2381303719550392,
+        "slip_rate": 0.1641441537657592,
+        "guess_rate": 0.4036733890968134,
         "forget_rate": 0.0
       }
     },
@@ -59,10 +66,10 @@
         "success_rate": 0.7375328083989501
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.8765556484540662,
-        "learning_rate": 0.0008871144544679952,
-        "slip_rate": 0.2372024721491672,
-        "guess_rate": 0.3678966619193633,
+        "prior_knowledge": 0.13292466514491733,
+        "learning_rate": 0.32059518166679163,
+        "slip_rate": 0.1734090442011038,
+        "guess_rate": 0.2657563772007711,
         "forget_rate": 0.0
       }
     },
@@ -75,10 +82,10 @@
         "success_rate": 0.7724489795918368
       },
       "bkt_parameters": {
-        "prior_knowledge": 3.092644119713875e-14,
-        "learning_rate": 0.06878905581927329,
-        "slip_rate": 0.9997103081413433,
-        "guess_rate": 0.9999999999261867,
+        "prior_knowledge": 0.04619827341205531,
+        "learning_rate": 0.25234907550165037,
+        "slip_rate": 0.14526078109363053,
+        "guess_rate": 0.441770551785995,
         "forget_rate": 0.0
       }
     },
@@ -91,10 +98,10 @@
         "success_rate": 0.7378472222222222
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.4636298556886382,
-        "learning_rate": 0.0003734606803889759,
-        "slip_rate": 0.19608176466880367,
-        "guess_rate": 0.665634891141195,
+        "prior_knowledge": 0.025094822610850883,
+        "learning_rate": 0.25018187003101383,
+        "slip_rate": 0.1438794609590701,
+        "guess_rate": 0.2985229393385495,
         "forget_rate": 0.0
       }
     },
@@ -107,10 +114,10 @@
         "success_rate": 0.7537227949599083
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.9926055196315001,
-        "learning_rate": 0.12357342661403993,
-        "slip_rate": 0.24598395751969296,
-        "guess_rate": 0.6167350563749879,
+        "prior_knowledge": 0.010638850403327706,
+        "learning_rate": 0.3041595479769695,
+        "slip_rate": 0.15501833280726224,
+        "guess_rate": 0.3456451576976896,
         "forget_rate": 0.0
       }
     },
@@ -123,10 +130,10 @@
         "success_rate": 0.7703777335984096
       },
       "bkt_parameters": {
-        "prior_knowledge": 2.3801200072770553e-16,
-        "learning_rate": 0.07227448037342084,
-        "slip_rate": 0.9992385550936973,
-        "guess_rate": 0.9999999998552599,
+        "prior_knowledge": 0.0120993124134674,
+        "learning_rate": 0.22794804439632807,
+        "slip_rate": 0.13304254495763973,
+        "guess_rate": 0.4378132461684925,
         "forget_rate": 0.0
       }
     },
@@ -139,10 +146,10 @@
         "success_rate": 0.7978187919463087
       },
       "bkt_parameters": {
-        "prior_knowledge": 1.3068528009929212e-16,
-        "learning_rate": 0.06641285651512649,
-        "slip_rate": 0.9984367712561042,
-        "guess_rate": 0.9999999993118626,
+        "prior_knowledge": 0.02269039319510719,
+        "learning_rate": 0.283827758772474,
+        "slip_rate": 0.12396476935578096,
+        "guess_rate": 0.45095449501037266,
         "forget_rate": 0.0
       }
     },
@@ -155,10 +162,10 @@
         "success_rate": 0.7419354838709677
       },
       "bkt_parameters": {
-        "prior_knowledge": 2.4364805978675754e-14,
-        "learning_rate": 0.07883219903946706,
-        "slip_rate": 0.9989852982034247,
-        "guess_rate": 0.9999999991836079,
+        "prior_knowledge": 0.01487545413915264,
+        "learning_rate": 0.2139890845527475,
+        "slip_rate": 0.1482013867906913,
+        "guess_rate": 0.4172798018791706,
         "forget_rate": 0.0
       }
     },
@@ -171,10 +178,10 @@
         "success_rate": 0.7511563367252544
       },
       "bkt_parameters": {
-        "prior_knowledge": 1.3679088648943788e-13,
-        "learning_rate": 0.0764602171097697,
-        "slip_rate": 0.9995578294716155,
-        "guess_rate": 0.9999999998833344,
+        "prior_knowledge": 0.044911268045688915,
+        "learning_rate": 0.24908732867957972,
+        "slip_rate": 0.15653059922040322,
+        "guess_rate": 0.41233725413666533,
         "forget_rate": 0.0
       }
     },
@@ -187,10 +194,10 @@
         "success_rate": 0.759447004608295
       },
       "bkt_parameters": {
-        "prior_knowledge": 7.81111129894763e-22,
-        "learning_rate": 0.07646641434935385,
-        "slip_rate": 0.9995827876178437,
-        "guess_rate": 0.9999999899923988,
+        "prior_knowledge": 0.07159751661853776,
+        "learning_rate": 0.24581252270292095,
+        "slip_rate": 0.14970529002656563,
+        "guess_rate": 0.42634931808931903,
         "forget_rate": 0.0
       }
     },
@@ -203,10 +210,10 @@
         "success_rate": 0.6453488372093024
       },
       "bkt_parameters": {
-        "prior_knowledge": 1.4373296493712642e-14,
-        "learning_rate": 0.08108233026366815,
-        "slip_rate": 0.9999719590488249,
-        "guess_rate": 0.9999999960237422,
+        "prior_knowledge": 0.01,
+        "learning_rate": 0.14580265672531884,
+        "slip_rate": 0.19716743625798147,
+        "guess_rate": 0.3277909750825909,
         "forget_rate": 0.0
       }
     },
@@ -219,10 +226,10 @@
         "success_rate": 0.6610389610389611
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.8623254820179104,
-        "learning_rate": 0.0008230926407988286,
-        "slip_rate": 0.32096981405417047,
-        "guess_rate": 0.45905267942272887,
+        "prior_knowledge": 0.028468027441455653,
+        "learning_rate": 0.15162987649636323,
+        "slip_rate": 0.18432025743049543,
+        "guess_rate": 0.3273451933462141,
         "forget_rate": 0.0
       }
     },
@@ -235,10 +242,10 @@
         "success_rate": 0.6104129263913824
       },
       "bkt_parameters": {
-        "prior_knowledge": 7.136733544467572e-12,
-        "learning_rate": 0.10589188262855685,
-        "slip_rate": 0.9998587216489783,
-        "guess_rate": 0.9999998129516057,
+        "prior_knowledge": 0.03400549318877092,
+        "learning_rate": 0.16872362640318134,
+        "slip_rate": 0.24164541059518996,
+        "guess_rate": 0.3036012106676903,
         "forget_rate": 0.0
       }
     },
@@ -251,10 +258,10 @@
         "success_rate": 0.6334563345633456
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.5689521797555945,
-        "learning_rate": 0.0004944859407999762,
-        "slip_rate": 0.3004541643831088,
-        "guess_rate": 0.5091480011858298,
+        "prior_knowledge": 0.04806182644740459,
+        "learning_rate": 0.18922493125287168,
+        "slip_rate": 0.23758242203723012,
+        "guess_rate": 0.2686935972987854,
         "forget_rate": 0.0
       }
     },
@@ -267,10 +274,10 @@
         "success_rate": 0.6471885336273429
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.928588196741522,
-        "learning_rate": 0.0052896977737185505,
-        "slip_rate": 0.3420045297016095,
-        "guess_rate": 0.3232415576483602,
+        "prior_knowledge": 0.02461327789923943,
+        "learning_rate": 0.19457574698574756,
+        "slip_rate": 0.22536156546788821,
+        "guess_rate": 0.29056737949865863,
         "forget_rate": 0.0
       }
     },
@@ -283,10 +290,10 @@
         "success_rate": 0.6496496496496497
       },
       "bkt_parameters": {
-        "prior_knowledge": 8.589513672230036e-18,
-        "learning_rate": 0.08475430942400176,
-        "slip_rate": 0.9998125520251836,
-        "guess_rate": 0.9999999382800157,
+        "prior_knowledge": 0.01,
+        "learning_rate": 0.16878701900762372,
+        "slip_rate": 0.21117918870755817,
+        "guess_rate": 0.33022108024500685,
         "forget_rate": 0.0
       }
     },
@@ -299,10 +306,10 @@
         "success_rate": 0.6402535657686212
       },
       "bkt_parameters": {
-        "prior_knowledge": 1.7202290318678533e-20,
-        "learning_rate": 0.091587910813264,
-        "slip_rate": 0.9999270723996863,
-        "guess_rate": 0.9999999908095993,
+        "prior_knowledge": 0.014952932829191107,
+        "learning_rate": 0.14018965047341864,
+        "slip_rate": 0.21562707484730784,
+        "guess_rate": 0.369673092649842,
         "forget_rate": 0.0
       }
     },
@@ -315,10 +322,10 @@
         "success_rate": 0.6244186046511628
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.8335301141222674,
-        "learning_rate": 0.0007302614074061988,
-        "slip_rate": 0.3460696096770763,
-        "guess_rate": 0.34034604436191784,
+        "prior_knowledge": 0.011113635498783647,
+        "learning_rate": 0.15332738956089825,
+        "slip_rate": 0.2218478597835291,
+        "guess_rate": 0.2890671995975703,
         "forget_rate": 0.0
       }
     },
@@ -331,10 +338,10 @@
         "success_rate": 0.49370277078085645
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.6318932215994023,
-        "learning_rate": 0.0095471937781777,
-        "slip_rate": 0.46602935625237923,
-        "guess_rate": 0.3853377893951597,
+        "prior_knowledge": 0.016402769778792837,
+        "learning_rate": 0.08778629131907006,
+        "slip_rate": 0.3221353052131459,
+        "guess_rate": 0.307484916213502,
         "forget_rate": 0.0
       }
     },
@@ -347,10 +354,10 @@
         "success_rate": 0.5152284263959391
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.77442870362161,
-        "learning_rate": 0.00024372197007691161,
-        "slip_rate": 0.4370077978299171,
-        "guess_rate": 0.08427759326090753,
+        "prior_knowledge": 0.045005137299679004,
+        "learning_rate": 0.09968987555512561,
+        "slip_rate": 0.25182135365805364,
+        "guess_rate": 0.1803452955711026,
         "forget_rate": 0.0
       }
     },
@@ -363,10 +370,10 @@
         "success_rate": 0.5
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.25563995466813527,
-        "learning_rate": 0.000252341228627676,
-        "slip_rate": 0.4031242030881525,
-        "guess_rate": 0.45500084800379587,
+        "prior_knowledge": 0.021258091792083777,
+        "learning_rate": 0.16805826859905643,
+        "slip_rate": 0.35,
+        "guess_rate": 0.22715283783618634,
         "forget_rate": 0.0
       }
     },
@@ -379,10 +386,10 @@
         "success_rate": 0.4645030425963489
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.7819096629770529,
-        "learning_rate": 0.0017019625442649773,
-        "slip_rate": 0.5018831555328154,
-        "guess_rate": 0.2522279788396789,
+        "prior_knowledge": 0.010651503339869578,
+        "learning_rate": 0.11554922661907646,
+        "slip_rate": 0.35,
+        "guess_rate": 0.2220574015114036,
         "forget_rate": 0.0
       }
     },
@@ -395,10 +402,10 @@
         "success_rate": 0.4421965317919075
       },
       "bkt_parameters": {
-        "prior_knowledge": 0.1678226783689465,
-        "learning_rate": 8.90653828472902e-05,
-        "slip_rate": 0.4074950307339883,
-        "guess_rate": 0.39536544256113215,
+        "prior_knowledge": 0.01,
+        "learning_rate": 0.06886992399868401,
+        "slip_rate": 0.32921914664887236,
+        "guess_rate": 0.2790848034980011,
         "forget_rate": 0.0
       }
     }

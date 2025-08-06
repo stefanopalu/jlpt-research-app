@@ -375,7 +375,7 @@ const resolvers = {
       }
     },
 
-    updateUserWordProgress: async (root, { word, isCorrect }, context) => {
+    updateUserWordProgress: async (root, { word, isCorrect, responseTime = null }, context) => {
       const userId = context.currentUser?._id;
 
       if (!userId) {
@@ -383,7 +383,7 @@ const resolvers = {
       }
 
       try {
-        const result = await wordProgressService.updateProgress(userId, word, isCorrect);
+        const result = await wordProgressService.updateProgress(userId, word, isCorrect, responseTime);
         return result;
       } catch (error) {
         console.error('Error message:', error.message);
@@ -391,7 +391,7 @@ const resolvers = {
       }
     },
     
-    updateUserGrammarPointProgress: async (root, { GPname, isCorrect }, context) => {
+    updateUserGrammarPointProgress: async (root, { GPname, isCorrect, responseTime = null }, context) => {
       const userId = context.currentUser?._id;
 
       if (!userId) {
@@ -399,7 +399,7 @@ const resolvers = {
       }
 
       try {
-        const result = await grammarPointProgressService.updateProgress(userId, GPname, isCorrect);
+        const result = await grammarPointProgressService.updateProgress(userId, GPname, isCorrect, responseTime);
         return result;
       } catch (error) {
         console.error('Error message:', error.message);

@@ -159,7 +159,7 @@ const QuestionManager = () => {
       if (currentQuestion.words?.length > 0) {
         await Promise.all(
           currentQuestion.words.map(word =>
-            updateUserWordProgress({ variables: { word, isCorrect } }),
+            updateUserWordProgress({ variables: { word, isCorrect, responseTime } }),
           ),
         );
       }
@@ -168,7 +168,7 @@ const QuestionManager = () => {
       if (currentQuestion.grammarPoints?.length > 0) {
         await Promise.all(
           currentQuestion.grammarPoints.map(GPname =>
-            updateUserGrammarPointProgress({ variables: { GPname, isCorrect } }),
+            updateUserGrammarPointProgress({ variables: { GPname, isCorrect, responseTime } }),
           ),
         );
       }

@@ -152,6 +152,12 @@ const typeDefs = gql`
     masteryRate: Float!
   }
 
+  type Attempt {
+    date: String!
+    isCorrect: Boolean!
+    responseTime: Int
+  }
+
   type UserWordProgress {
     id: ID!
     user: User!
@@ -159,6 +165,8 @@ const typeDefs = gql`
     successCount: Int!
     failureCount: Int!
     lastReviewed: String
+    masteryScore: Float
+    attempts: [Attempt!]!
   }
 
   type UserGrammarPointProgress {
@@ -168,6 +176,8 @@ const typeDefs = gql`
     successCount: Int!
     failureCount: Int!
     lastReviewed: String
+    masteryScore: Float
+    attempts: [Attempt!]!
   }
 
   type Query {
@@ -217,10 +227,12 @@ const typeDefs = gql`
     updateUserWordProgress(
       word: String!
       isCorrect: Boolean!
+      responseTime: Int
     ): UserWordProgress!
     updateUserGrammarPointProgress(
       GPname: String!
       isCorrect: Boolean!
+      responseTime: Int
     ): UserGrammarPointProgress!
     updateWord(
       id: ID!

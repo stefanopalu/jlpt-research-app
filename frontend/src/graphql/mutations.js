@@ -81,8 +81,8 @@ export const UPDATE_USER_QUESTION_PROGRESS = gql`
 `;
 
 export const UPDATE_USER_WORD_PROGRESS = gql`
-  mutation UpdateUserWordProgress($word: String!, $isCorrect: Boolean!) {
-    updateUserWordProgress(word: $word, isCorrect: $isCorrect) {
+  mutation UpdateUserWordProgress($word: String!, $isCorrect: Boolean!, $responseTime: Int) {
+    updateUserWordProgress(word: $word, isCorrect: $isCorrect, responseTime: $responseTime) {
       id
       successCount
       failureCount
@@ -97,8 +97,8 @@ export const UPDATE_USER_WORD_PROGRESS = gql`
 `;
 
 export const UPDATE_USER_GRAMMAR_POINT_PROGRESS = gql`
-  mutation UpdateUserGrammarPointProgress($GPname: String!, $isCorrect: Boolean!) {
-    updateUserGrammarPointProgress(GPname: $GPname, isCorrect: $isCorrect) {
+  mutation UpdateUserGrammarPointProgress($GPname: String!, $isCorrect: Boolean!, $responseTime: Int) {
+    updateUserGrammarPointProgress(GPname: $GPname, isCorrect: $isCorrect, responseTime: $responseTime) {
       id
       successCount
       failureCount

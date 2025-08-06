@@ -122,6 +122,7 @@ describe('GraphQL Resolvers', () => {
           'user123',
           '猫',
           false,
+          null,
         );
         expect(result).toEqual(mockProgress);
       });

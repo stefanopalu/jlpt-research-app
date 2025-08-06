@@ -5,42 +5,43 @@ const mongoose = require('mongoose');
 
 const grammarPointProgressService = {
   // Update progress for a grammar point using name
-  async updateProgress(userId, GPname, isCorrect) {
-    // First, find the grammar point by name to get its ObjectId
+  async updateProgress(userId, GPname, isCorrect, responseTime = null) {
+    // Find the grammar point by name
     const grammarPoint = await GrammarPoint.findOne({ name: GPname });
-        
     if (!grammarPoint) {
       throw new Error(`Grammar point not found with name: ${GPname}`);
     }
 
     console.log('GrammarPoint ObjectId:', grammarPoint._id);
-    
-    // Find existing progress record for the user and grammarPoint
+
+    // Find existing progress record
     let progress = await UserGrammarPointProgress.findOne({
-      user: userId, 
+      user: userId,
       grammarPoint: grammarPoint._id,
     });
 
     if (progress) {
-      // If it exist, update progress record
-      progress.updateProgress(isCorrect);
+      // Update existing progress with responseTime
+      progress.updateProgress(isCorrect, responseTime);
     } else {
-      // If it does not, create a new record with prior knowledge as starting mastery
+      // Create new progress record with prior knowledge and update it
       progress = new UserGrammarPointProgress({
         user: userId,
         grammarPoint: grammarPoint._id,
         masteryScore: grammarPoint.priorKnowledge,
       });
-      progress.updateProgress(isCorrect);
+      progress.updateProgress(isCorrect, responseTime);
     }
+
     await progress.save();
 
-    // Update BKT mastery score using formula in BKT service
+    // Update BKT mastery score
     await bktService.updateGrammarPointMastery(userId, grammarPoint._id, isCorrect);
 
     await progress.populate('grammarPoint');
     return progress;
   },
+
 
   // Get user's progress for all grammar points
   async getUserProgress(userId) {
